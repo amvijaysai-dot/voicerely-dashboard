@@ -1,0 +1,107 @@
+
+> voicerely-dashboard@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.10 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.1.13:3000
+- Environments: .env.local
+✓ Ready in 1083ms
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+
+(node:9680) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/vijay/projects/new/voicerely-dashboard/tailwind.config.ts?id=1784166636704 is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to \\?\C:\vijay\projects\new\voicerely-dashboard\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"timestamp":"2026-07-16T01:51:01.176Z","requestId":"9c20d698-0785-4247-a057-3177f4a2b53d","tenantId":"admin","userId":"admin","action":"auth.login_failed","success":false,"level":"warn","error":"invalid_credentials","meta":{"username":"admin"}}
+ POST /api/auth/login 401 in 743ms (next.js: 616ms, application-code: 126ms)
+ POST /api/admin/tenants 403 in 144ms (next.js: 55ms, proxy.ts: 77ms, application-code: 11ms)
+{"timestamp":"2026-07-16T01:51:21.981Z","requestId":"b89ebd97-1948-496c-b052-2076ca26b745","tenantId":"admin","userId":"admin","action":"auth.login_failed","success":false,"level":"warn","error":"invalid_credentials","meta":{"username":"admin"}}
+ POST /api/auth/login 401 in 71ms (next.js: 4ms, application-code: 67ms)
+ POST /api/admin/tenants 403 in 22ms (next.js: 4ms, proxy.ts: 4ms, application-code: 15ms)
+{"timestamp":"2026-07-16T01:51:51.315Z","requestId":"69d1e24d-6373-4a63-ab0e-ea647e3e3a8f","tenantId":"admin","userId":"admin","action":"auth.login","success":true,"level":"info","error":null,"meta":{"isAdmin":true}}
+ POST /api/auth/login 200 in 77ms (next.js: 2ms, application-code: 74ms)
+{"timestamp":"2026-07-16T01:51:51.511Z","requestId":"792b65a8-1f04-4add-8523-1ba209f99852","tenantId":"tenant_mrmuslat","userId":"admin","action":"tenant.create","success":true,"level":"info","error":null,"meta":{"username":"testco","clientName":"Test Co"}}
+[email:preview] Onboarding email to client@testco.com
+  Subject: Welcome to Voicerely — Your Dashboard Login
+Welcome to Voicerely, Test Co!
+
+Your analytics dashboard account is ready. Login details:
+Login URL: http://localhost:3000/login
+Username:  testco
+Password:  password123
+
+For your security, please change your password after your first login.
+— The Voicerely Team
+ POST /api/admin/tenants 201 in 105ms (next.js: 4ms, proxy.ts: 7ms, application-code: 94ms)
+{"timestamp":"2026-07-16T01:52:08.557Z","requestId":"775ca0c0-04d0-4b80-bac0-934e445e3fff","tenantId":"tenant_mrmuslat","userId":"tenant_mrmuslat","action":"auth.login","success":true,"level":"info","error":null,"meta":{"isAdmin":false}}
+ POST /api/auth/login 200 in 71ms (next.js: 2ms, application-code: 69ms)
+ GET /api/auth/me 200 in 57ms (next.js: 49ms, application-code: 8ms)
+ GET /billing 200 in 413ms (next.js: 188ms, proxy.ts: 7ms, application-code: 218ms)
+ GET /billing 200 in 150ms (next.js: 7ms, proxy.ts: 10ms, application-code: 132ms)
+ GET /billing 200 in 158ms (next.js: 8ms, proxy.ts: 12ms, application-code: 138ms)
+ GET /billing 200 in 157ms (next.js: 29ms, proxy.ts: 12ms, application-code: 116ms)
+ GET /billing 200 in 156ms (next.js: 45ms, proxy.ts: 12ms, application-code: 99ms)
+ GET /billing 200 in 156ms (next.js: 62ms, proxy.ts: 11ms, application-code: 83ms)
+ GET /billing 200 in 92ms (next.js: 7ms, proxy.ts: 4ms, application-code: 81ms)
+ GET /billing 200 in 86ms (next.js: 5ms, proxy.ts: 30ms, application-code: 50ms)
+ GET /billing 200 in 30ms (next.js: 4ms, proxy.ts: 5ms, application-code: 21ms)
+ GET /billing 200 in 316ms (next.js: 4ms, proxy.ts: 4ms, application-code: 307ms)
+ GET /api/auth/me 200 in 10ms (next.js: 3ms, application-code: 7ms)
+ GET /api/billing/payment-method 200 in 142ms (next.js: 121ms, proxy.ts: 5ms, application-code: 16ms)
+ GET /metrics 200 in 50ms (next.js: 30ms, proxy.ts: 3ms, application-code: 18ms)
+ GET / 200 in 50ms (next.js: 32ms, proxy.ts: 3ms, application-code: 15ms)
+ GET /api/auth/me 200 in 14ms (next.js: 5ms, application-code: 10ms)
+ GET /api/auth/me 200 in 162ms (next.js: 3ms, application-code: 159ms)
+ GET /api/calls?limit=1000 200 in 203ms (next.js: 107ms, proxy.ts: 17ms, application-code: 79ms)
+ GET /api/dashboard/metrics 200 in 209ms (next.js: 170ms, proxy.ts: 19ms, application-code: 20ms)
+ GET /api/calls?limit=1000 200 in 16ms (next.js: 3ms, proxy.ts: 5ms, application-code: 9ms)
+ GET /api/dashboard/metrics 200 in 16ms (next.js: 6ms, proxy.ts: 4ms, application-code: 7ms)
+ GET /calls 200 in 64ms (next.js: 43ms, proxy.ts: 3ms, application-code: 18ms)
+ GET /api/auth/me 200 in 11ms (next.js: 2ms, application-code: 9ms)
+ GET /api/calls?page=1&limit=20 200 in 19ms (next.js: 8ms, proxy.ts: 5ms, application-code: 6ms)
+ GET /api/auth/me 200 in 8ms (next.js: 3ms, application-code: 5ms)
+ GET /api/calls?page=1&limit=20 200 in 17ms (next.js: 3ms, proxy.ts: 8ms, application-code: 5ms)
+ GET /agents 200 in 75ms (next.js: 55ms, proxy.ts: 3ms, application-code: 18ms)
+ GET /api/auth/me 200 in 8ms (next.js: 3ms, application-code: 5ms)
+ GET /api/calls?limit=100 200 in 29ms (next.js: 9ms, proxy.ts: 7ms, application-code: 13ms)
+ GET /api/auth/me 200 in 13ms (next.js: 3ms, application-code: 10ms)
+ GET /api/calls?limit=100 200 in 12ms (next.js: 2ms, proxy.ts: 5ms, application-code: 5ms)
+ GET /billing 200 in 170ms (next.js: 5ms, proxy.ts: 5ms, application-code: 159ms)
+ GET /billing 200 in 175ms (next.js: 3ms, proxy.ts: 4ms, application-code: 168ms)
+ GET /billing 200 in 159ms (next.js: 12ms, proxy.ts: 8ms, application-code: 140ms)
+ GET /billing 200 in 160ms (next.js: 30ms, proxy.ts: 7ms, application-code: 123ms)
+ GET /billing 200 in 190ms (next.js: 49ms, proxy.ts: 9ms, application-code: 132ms)
+ GET /billing 200 in 196ms (next.js: 70ms, proxy.ts: 7ms, application-code: 120ms)
+ GET /billing 200 in 149ms (next.js: 7ms, proxy.ts: 6ms, application-code: 136ms)
+ GET /billing 200 in 109ms (next.js: 9ms, proxy.ts: 5ms, application-code: 95ms)
+ GET /billing 200 in 99ms (next.js: 17ms, proxy.ts: 37ms, application-code: 45ms)
+ GET /billing 200 in 108ms (next.js: 4ms, proxy.ts: 3ms, application-code: 101ms)
+ GET /api/auth/me 200 in 12ms (next.js: 4ms, application-code: 8ms)
+ GET /api/billing/payment-method 200 in 19ms (next.js: 8ms, proxy.ts: 4ms, application-code: 6ms)
+ GET / 200 in 25ms (next.js: 3ms, proxy.ts: 3ms, application-code: 19ms)
+ GET /api/auth/me 200 in 12ms (next.js: 6ms, application-code: 6ms)
+ GET /api/dashboard/metrics 200 in 30ms (next.js: 10ms, proxy.ts: 10ms, application-code: 9ms)
+ GET /api/calls?limit=1000 200 in 29ms (next.js: 13ms, proxy.ts: 8ms, application-code: 7ms)
+ GET /api/auth/me 200 in 10ms (next.js: 4ms, application-code: 6ms)
+ GET /api/dashboard/metrics 200 in 27ms (next.js: 5ms, proxy.ts: 8ms, application-code: 14ms)
+ GET /api/calls?limit=1000 200 in 29ms (next.js: 8ms, proxy.ts: 7ms, application-code: 13ms)
+ GET / 200 in 170ms (next.js: 4ms, proxy.ts: 3ms, application-code: 163ms)
+ GET /api/auth/me 200 in 9ms (next.js: 3ms, application-code: 6ms)
+ GET /api/dashboard/metrics 200 in 28ms (next.js: 11ms, proxy.ts: 5ms, application-code: 12ms)
+ GET /api/calls?limit=1000 200 in 31ms (next.js: 15ms, proxy.ts: 4ms, application-code: 12ms)
+ POST /api/auth/logout 200 in 47ms (next.js: 42ms, application-code: 4ms)
+ GET /login 200 in 48ms (next.js: 32ms, application-code: 17ms)
+{"timestamp":"2026-07-16T01:56:27.350Z","requestId":"72f16add-b509-4edf-a5ad-ce5c0a5d2035","tenantId":"admin","userId":"admin","action":"auth.login_failed","success":false,"level":"warn","error":"invalid_credentials","meta":{"username":"admin"}}
+ POST /api/auth/login 401 in 70ms (next.js: 3ms, application-code: 68ms)
+{"timestamp":"2026-07-16T01:56:30.884Z","requestId":"efef544f-9b1a-4ae2-ad1d-6d9209172b99","tenantId":"admin","userId":"admin","action":"auth.login_failed","success":false,"level":"warn","error":"invalid_credentials","meta":{"username":"admin"}}
+ POST /api/auth/login 401 in 66ms (next.js: 2ms, application-code: 64ms)
+{"timestamp":"2026-07-16T01:56:31.812Z","requestId":"05cd5cbd-a344-4331-bf6f-7d7246d613b4","tenantId":"admin","userId":"admin","action":"auth.login_failed","success":false,"level":"warn","error":"invalid_credentials","meta":{"username":"admin"}}
+ POST /api/auth/login 401 in 66ms (next.js: 3ms, application-code: 64ms)
+ GET /login 200 in 56ms (next.js: 4ms, application-code: 52ms)
+{"timestamp":"2026-07-16T01:56:34.874Z","requestId":"e0ab652c-9ad2-46bf-9f8a-147eaf75680a","tenantId":null,"userId":null,"action":"auth.login_validation_failed","success":false,"level":"warn","error":"invalid_request_body","meta":{"username":"Username is required","password":"Password is required"}}
+ POST /api/auth/login 400 in 8ms (next.js: 2ms, application-code: 5ms)
+{"timestamp":"2026-07-16T01:56:55.024Z","requestId":"931bc247-f286-43af-85c8-de837214edc5","tenantId":"admin","userId":"admin","action":"auth.login_failed","success":false,"level":"warn","error":"invalid_credentials","meta":{"username":"admin"}}
+ POST /api/auth/login 401 in 78ms (next.js: 4ms, application-code: 74ms)
+{"timestamp":"2026-07-16T01:56:55.848Z","requestId":"11d94ca3-ebee-4a90-9cba-3ed04cbd942b","tenantId":"admin","userId":"admin","action":"auth.login_failed","success":false,"level":"warn","error":"invalid_credentials","meta":{"username":"admin"}}
+ POST /api/auth/login 401 in 70ms (next.js: 3ms, application-code: 67ms)

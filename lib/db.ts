@@ -1,0 +1,147 @@
+// lib/db.ts
+//
+// Storage adapter (Repository pattern). Pure file I/O for the Tenant flat
+// file — NO encryption, NO business logic. The repository layer
+// (lib/repositories/tenantRepository.ts) owns encryption + querying. This
+// file is the single place to swap for Prisma + Supabase (PostgreSQL).
+
+import fs from "node:fs";
+import path from "node:path";
+import { hashSync } from "bcryptjs";
+
+export type BillingModel = "hybrid" | "metered_maintenance" | "pure_per_minute";
+
+export interface Tenant {
+  id: string;
+  clientName: string;
+  username: string;
+  passwordHash: string;
+  allowedMinutes: number;
+  usedMinutes: number;
+  perMinuteRate: number;
+  retellApiKey: string; // stored encrypted by the repository layer
+  status: "active" | "suspended";
+  isAdmin?: boolean;
+  createdAt: string;
+  /** Retell agent ids owned by this tenant (used to attribute webhooks). */
+  agentIds?: string[];
+  /** Billing model for flexible pricing options. */
+  billingModel?: BillingModel;
+  /** Base monthly fee (for hybrid and metered_maintenance models). */
+  baseMonthlyFee?: number;
+  /** Included minutes in base fee (for hybrid model). */
+  includedMinutes?: number;
+  /** Client contact email address (used for onboarding + notifications). */
+  email?: string;
+  /** Payment method for billing (Paddle customer ID). */
+  paddleCustomerId?: string;
+  /** Payment method card brand (e.g., "Visa", "Mastercard"). */
+  cardBrand?: string;
+  /** Last 4 digits of the payment card. */
+  cardLast4?: string;
+}
+
+/** A single ingested call record, stored per tenant in the call-log history. */
+export interface CallLog {
+  callId: string;
+  tenantId: string;
+  agentId: string;
+  totalDurationSeconds: number;
+  transcript: string;
+  audioUrl: string;
+  disconnectionReason?: string | null;
+  sentiment?: string | null;
+  createdAt: string | Date;
+  // ---- Anomaly & diagnostic markers (per call) ----
+  /** Agent fabricated facts not grounded in the retrieved data. */
+  hallucinationDetected?: boolean;
+  /** Agent diverged from the approved conversation script. */
+  scriptDeviation?: boolean;
+  /** Agent failed to capture required information from the caller. */
+  missedInformation?: boolean;
+  /** Count of times the agent interrupted the caller. */
+  interruptionCount?: number;
+  /** Share of speaking time held by the agent (0..1). */
+  agentTalkRatio?: number;
+  /** Free-text aggregate of detected mistakes for this call. */
+  mistakeSummary?: string | null;
+  /** Concrete instruction change recommended for the agent's prompt. */
+  recommendedPromptCorrection?: string | null;
+}
+
+const DATA_DIR = path.join(process.cwd(), "data");
+const DATA_FILE = path.join(DATA_DIR, "tenants.json");
+
+function ensureStore(): void {
+  if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+  if (!fs.existsSync(DATA_FILE)) {
+    // Seed a Super-Admin so the portal is usable on first run.
+    const seed: Tenant[] = [
+      {
+        id: "admin",
+        clientName: "Voicerely Super Admin",
+        username: "admin",
+        passwordHash: "", // set below via hashSync at runtime
+        allowedMinutes: 0,
+        usedMinutes: 0,
+        perMinuteRate: 0,
+        retellApiKey: "",
+        status: "active",
+        isAdmin: true,
+        createdAt: new Date().toISOString(),
+      },
+    ];
+    fs.writeFileSync(DATA_FILE, JSON.stringify(seed, null, 2));
+  }
+
+  // One-time: set a default Super-Admin password on first run.
+  const tenants = JSON.parse(fs.readFileSync(DATA_FILE, "utf8")) as Tenant[];
+  const admin = tenants.find((t) => t.id === "admin");
+  if (admin && !admin.passwordHash) {
+    admin.passwordHash = hashSync("admin123", 10);
+    fs.writeFileSync(DATA_FILE, JSON.stringify(tenants, null, 2));
+  }
+}
+
+/** Raw read — returns whatever is on disk (retellApiKey still encrypted). */
+export function readTenantsRaw(): Tenant[] {
+  ensureStore();
+  try {
+    return JSON.parse(fs.readFileSync(DATA_FILE, "utf8")) as Tenant[];
+  } catch {
+    return [];
+  }
+}
+
+/** Raw write — persists exactly the provided records. */
+export function writeTenantsRaw(tenants: Tenant[]): void {
+  ensureStore();
+  fs.writeFileSync(DATA_FILE, JSON.stringify(tenants, null, 2));
+}
+
+// ---- Call-log history (per tenant) --------------------------------------
+
+const CALLS_FILE = path.join(DATA_DIR, "calls.json");
+
+function ensureCallsStore(): void {
+  if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+  if (!fs.existsSync(CALLS_FILE)) {
+    fs.writeFileSync(CALLS_FILE, JSON.stringify({} as Record<string, CallLog[]>));
+  }
+}
+
+/** Raw read of all call logs, keyed by tenantId. */
+export function readCallsRaw(): Record<string, CallLog[]> {
+  ensureCallsStore();
+  try {
+    return JSON.parse(fs.readFileSync(CALLS_FILE, "utf8")) as Record<string, CallLog[]>;
+  } catch {
+    return {};
+  }
+}
+
+/** Raw write of the full call-log map. */
+export function writeCallsRaw(map: Record<string, CallLog[]>): void {
+  ensureCallsStore();
+  fs.writeFileSync(CALLS_FILE, JSON.stringify(map, null, 2));
+}

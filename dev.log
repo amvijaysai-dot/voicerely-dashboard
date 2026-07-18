@@ -1,0 +1,4053 @@
+
+> voicerely-dashboard@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.10 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.1.13:3000
+- Environments: .env.local
+✓ Ready in 836ms
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+
+{"timestamp":"2026-07-13T11:16:17.901Z","requestId":"8a8aa167-b90b-4f65-abb4-5ccec899a6b4","tenantId":"admin","userId":"admin","action":"auth.login","success":true,"level":"info","error":null,"meta":{"isAdmin":true}}
+ POST /api/auth/login 200 in 713ms (next.js: 585ms, application-code: 128ms)
+{"timestamp":"2026-07-13T11:16:18.092Z","requestId":"5d3da13d-a755-4173-aee8-4091b7171783","tenantId":"tenant_mrj4mwx7","userId":"admin","action":"tenant.create","success":true,"level":"info","error":null,"meta":{"username":"testclinic","clientName":"Test Clinic"}}
+ POST /api/admin/tenants 201 in 159ms (next.js: 80ms, application-code: 80ms)
+{"timestamp":"2026-07-13T11:16:18.171Z","requestId":"1554b81e-df90-48f8-b484-3dc8708e26f8","tenantId":"tenant_mrj4mwx7","userId":"tenant_mrj4mwx7","action":"calllog.append","success":true,"level":"info","error":null,"meta":{"callId":"tc_call_001","agentId":"agent_testclinic","duration":184}}
+{"timestamp":"2026-07-13T11:16:18.174Z","requestId":"5e3a41d3-3990-455a-834c-8d8281c8dcab","tenantId":"tenant_mrj4mwx7","userId":"tenant_mrj4mwx7","action":"tenant.minutes_increment","success":true,"level":"info","error":null,"meta":{"addedMinutes":4,"usedMinutes":4}}
+{"timestamp":"2026-07-13T11:16:18.175Z","requestId":"93a9fe94-9711-420c-b02c-b13de8afbdc3","tenantId":"tenant_mrj4mwx7","userId":"tenant_mrj4mwx7","action":"webhook.received_successfully","success":true,"level":"info","error":null,"meta":{"callId":"tc_call_001","agentId":"agent_testclinic","durationSeconds":184,"minutesAdded":4}}
+ POST /api/webhooks/retell 200 in 75ms (next.js: 56ms, application-code: 19ms)
+{"timestamp":"2026-07-13T11:16:18.217Z","requestId":"8e813d96-69b0-49ca-8bf9-3ccc98835fac","tenantId":"tenant_mrj4mwx7","userId":"tenant_mrj4mwx7","action":"calllog.append","success":true,"level":"info","error":null,"meta":{"callId":"tc_call_002","agentId":"agent_testclinic","duration":96}}
+{"timestamp":"2026-07-13T11:16:18.219Z","requestId":"710f0c86-f37e-41dc-8f35-ad54927159c5","tenantId":"tenant_mrj4mwx7","userId":"tenant_mrj4mwx7","action":"tenant.minutes_increment","success":true,"level":"info","error":null,"meta":{"addedMinutes":2,"usedMinutes":6}}
+{"timestamp":"2026-07-13T11:16:18.220Z","requestId":"847ac9ea-4e25-44c6-8f02-cf3c6d970597","tenantId":"tenant_mrj4mwx7","userId":"tenant_mrj4mwx7","action":"webhook.received_successfully","success":true,"level":"info","error":null,"meta":{"callId":"tc_call_002","agentId":"agent_testclinic","durationSeconds":96,"minutesAdded":2}}
+ POST /api/webhooks/retell 200 in 22ms (next.js: 4ms, application-code: 18ms)
+{"timestamp":"2026-07-13T11:16:18.306Z","requestId":"5de41b1c-5cf1-4d32-ad57-4a6ef2109308","tenantId":"tenant_mrj4mwx7","userId":"tenant_mrj4mwx7","action":"auth.login","success":true,"level":"info","error":null,"meta":{"isAdmin":false}}
+ POST /api/auth/login 200 in 76ms (next.js: 4ms, application-code: 72ms)
+ GET /api/billing/summary 200 in 63ms (next.js: 50ms, application-code: 13ms)
+(node:17212) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/vijay/projects/new/voicerely-dashboard/tailwind.config.ts?id=1783941378787 is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to \\?\C:\vijay\projects\new\voicerely-dashboard\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"timestamp":"2026-07-13T11:16:31.004Z","requestId":"e400abb3-f0ab-4249-82b8-e9bf8a5455df","tenantId":"tenant_mrj4mwx7","userId":"tenant_mrj4mwx7","action":"auth.login","success":true,"level":"info","error":null,"meta":{"isAdmin":false}}
+ POST /api/auth/login 200 in 77ms (next.js: 3ms, application-code: 74ms)
+ GET /api/billing/summary 200 in 25ms (next.js: 2ms, application-code: 23ms)
+{"timestamp":"2026-07-13T11:17:04.616Z","requestId":"6240f4ed-a654-4434-9a90-acee02ff96ae","tenantId":"admin","userId":"admin","action":"auth.login","success":true,"level":"info","error":null,"meta":{"isAdmin":true}}
+ POST /api/auth/login 200 in 83ms (next.js: 5ms, application-code: 78ms)
+ GET /api/admin/tenants 200 in 11ms (next.js: 2ms, application-code: 9ms)
+{"timestamp":"2026-07-13T11:18:07.975Z","requestId":"11f41886-7b74-4d07-b3e2-a70e06c1e339","tenantId":"admin","userId":"admin","action":"auth.login","success":true,"level":"info","error":null,"meta":{"isAdmin":true}}
+ POST /api/auth/login 200 in 82ms (next.js: 3ms, application-code: 79ms)
+{"timestamp":"2026-07-13T11:18:08.087Z","requestId":"79fc015f-ad0b-47c1-bcce-24f840ccb422","tenantId":"tenant_mrj4p9sm","userId":"admin","action":"tenant.create_failed","success":false,"level":"warn","error":"username_taken"}
+ POST /api/admin/tenants 409 in 102ms (next.js: 5ms, application-code: 97ms)
+{"timestamp":"2026-07-13T11:18:08.123Z","requestId":"d14f74cd-9853-481e-83f2-a26925c7e875","tenantId":"tenant_mrj4mwx7","userId":"tenant_mrj4mwx7","action":"calllog.append_skipped","success":true,"level":"info","error":null,"meta":{"callId":"tc_call_001","reason":"duplicate"}}
+{"timestamp":"2026-07-13T11:18:08.123Z","requestId":"1c5a42de-9095-47cd-8b00-5f03a00ee0d4","tenantId":"tenant_mrj4mwx7","userId":"tenant_mrj4mwx7","action":"webhook.received_successfully","success":true,"level":"info","error":null,"meta":{"callId":"tc_call_001","agentId":"agent_testclinic","durationSeconds":184,"minutesAdded":4}}
+ POST /api/webhooks/retell 200 in 13ms (next.js: 5ms, application-code: 9ms)
+{"timestamp":"2026-07-13T11:18:08.140Z","requestId":"8ce00587-ab7e-43d3-a1f9-384ee3fbd7cf","tenantId":"tenant_mrj4mwx7","userId":"tenant_mrj4mwx7","action":"calllog.append_skipped","success":true,"level":"info","error":null,"meta":{"callId":"tc_call_002","reason":"duplicate"}}
+{"timestamp":"2026-07-13T11:18:08.140Z","requestId":"e7995434-bd7d-485d-bb98-7c836009b366","tenantId":"tenant_mrj4mwx7","userId":"tenant_mrj4mwx7","action":"webhook.received_successfully","success":true,"level":"info","error":null,"meta":{"callId":"tc_call_002","agentId":"agent_testclinic","durationSeconds":96,"minutesAdded":2}}
+ POST /api/webhooks/retell 200 in 10ms (next.js: 3ms, application-code: 7ms)
+ GET /api/admin/tenants 200 in 11ms (next.js: 4ms, application-code: 8ms)
+{"timestamp":"2026-07-13T11:18:08.253Z","requestId":"a307b127-3fe0-45cf-bd07-7fbe7f210d15","tenantId":"tenant_mrj4mwx7","userId":"tenant_mrj4mwx7","action":"auth.login","success":true,"level":"info","error":null,"meta":{"isAdmin":false}}
+ POST /api/auth/login 200 in 81ms (next.js: 2ms, application-code: 78ms)
+ GET /api/billing/summary 200 in 9ms (next.js: 2ms, application-code: 7ms)
+ GET /admin 200 in 666ms (next.js: 132ms, proxy.ts: 112ms, application-code: 421ms)
+✓ Compiled in 294ms
+ GET /admin 200 in 192ms (next.js: 69ms, proxy.ts: 33ms, application-code: 90ms)
+{"timestamp":"2026-07-13T11:18:53.042Z","requestId":"e368bf30-58e6-42a0-b535-8d1bfec87197","tenantId":"admin","userId":"admin","action":"auth.login","success":true,"level":"info","error":null,"meta":{"isAdmin":true}}
+ POST /api/auth/login 200 in 331ms (next.js: 198ms, application-code: 133ms)
+{"timestamp":"2026-07-13T11:18:53.213Z","requestId":"57245fa2-90bd-4e5c-8606-fb32565f4d94","tenantId":"tenant_mrj4q8m5","userId":"admin","action":"tenant.create_failed","success":false,"level":"warn","error":"username_taken"}
+ POST /api/admin/tenants 409 in 159ms (next.js: 59ms, application-code: 100ms)
+{"timestamp":"2026-07-13T11:18:53.308Z","requestId":"71916b61-2c0f-48bf-8d81-e70c73f73ba7","tenantId":"tenant_mrj4mwx7","userId":"tenant_mrj4mwx7","action":"calllog.append_skipped","success":true,"level":"info","error":null,"meta":{"callId":"tc_call_001","reason":"duplicate"}}
+{"timestamp":"2026-07-13T11:18:53.310Z","requestId":"9d787796-2f20-421a-9ef1-721858f7f606","tenantId":"tenant_mrj4mwx7","userId":"tenant_mrj4mwx7","action":"webhook.received_successfully","success":true,"level":"info","error":null,"meta":{"callId":"tc_call_001","agentId":"agent_testclinic","durationSeconds":184,"minutesAdded":4}}
+ POST /api/webhooks/retell 200 in 90ms (next.js: 76ms, application-code: 15ms)
+{"timestamp":"2026-07-13T11:18:53.345Z","requestId":"b1a2144f-997b-488f-97f5-47e7eb70d838","tenantId":"tenant_mrj4mwx7","userId":"tenant_mrj4mwx7","action":"calllog.append_skipped","success":true,"level":"info","error":null,"meta":{"callId":"tc_call_002","reason":"duplicate"}}
+{"timestamp":"2026-07-13T11:18:53.347Z","requestId":"cff8245c-065f-41db-8134-bb0c60db015d","tenantId":"tenant_mrj4mwx7","userId":"tenant_mrj4mwx7","action":"webhook.received_successfully","success":true,"level":"info","error":null,"meta":{"callId":"tc_call_002","agentId":"agent_testclinic","durationSeconds":96,"minutesAdded":2}}
+ POST /api/webhooks/retell 200 in 20ms (next.js: 4ms, application-code: 17ms)
+ GET /api/admin/tenants 200 in 17ms (next.js: 4ms, application-code: 12ms)
+{"timestamp":"2026-07-13T11:18:53.466Z","requestId":"1aa2e569-3e16-4c0c-8eda-810fca48645f","tenantId":"tenant_mrj4mwx7","userId":"tenant_mrj4mwx7","action":"auth.login","success":true,"level":"info","error":null,"meta":{"isAdmin":false}}
+ POST /api/auth/login 200 in 79ms (next.js: 4ms, application-code: 74ms)
+ GET /api/billing/summary 200 in 70ms (next.js: 63ms, application-code: 7ms)
+{"timestamp":"2026-07-13T11:19:27.856Z","requestId":"638219f5-d6c2-420d-87a0-ae81e8f5f965","tenantId":"admin","userId":"admin","action":"auth.login","success":true,"level":"info","error":null,"meta":{"isAdmin":true}}
+ POST /api/auth/login 200 in 83ms (next.js: 3ms, application-code: 80ms)
+{"timestamp":"2026-07-13T11:19:27.952Z","requestId":"662b957b-c8a4-4f58-8aaf-78ed49361e30","tenantId":"tenant_mrj4qzf3","userId":"admin","action":"tenant.create_failed","success":false,"level":"warn","error":"username_taken"}
+ POST /api/admin/tenants 409 in 86ms (next.js: 5ms, application-code: 82ms)
+{"timestamp":"2026-07-13T11:19:27.986Z","requestId":"cb2d67e6-7fc8-4ffd-aa62-92031935fe33","tenantId":"tenant_mrj4mwx7","userId":"tenant_mrj4mwx7","action":"calllog.append_skipped","success":true,"level":"info","error":null,"meta":{"callId":"tc_call_001","reason":"duplicate"}}
+{"timestamp":"2026-07-13T11:19:27.987Z","requestId":"1065a791-754c-4aee-9323-617792cc6564","tenantId":"tenant_mrj4mwx7","userId":"tenant_mrj4mwx7","action":"webhook.received_successfully","success":true,"level":"info","error":null,"meta":{"callId":"tc_call_001","agentId":"agent_testclinic","durationSeconds":184,"minutesAdded":4}}
+ POST /api/webhooks/retell 200 in 19ms (next.js: 6ms, application-code: 14ms)
+{"timestamp":"2026-07-13T11:19:28.003Z","requestId":"a81b51b8-07bd-45df-9c89-9ce5173b3bdf","tenantId":"tenant_mrj4mwx7","userId":"tenant_mrj4mwx7","action":"calllog.append_skipped","success":true,"level":"info","error":null,"meta":{"callId":"tc_call_002","reason":"duplicate"}}
+{"timestamp":"2026-07-13T11:19:28.004Z","requestId":"46877671-4488-4dfb-8e2c-0b4d84bb2e55","tenantId":"tenant_mrj4mwx7","userId":"tenant_mrj4mwx7","action":"webhook.received_successfully","success":true,"level":"info","error":null,"meta":{"callId":"tc_call_002","agentId":"agent_testclinic","durationSeconds":96,"minutesAdded":2}}
+ POST /api/webhooks/retell 200 in 10ms (next.js: 3ms, application-code: 7ms)
+ GET /api/admin/tenants 200 in 17ms (next.js: 3ms, application-code: 14ms)
+{"timestamp":"2026-07-13T11:19:28.118Z","requestId":"e497b3cc-8b10-4945-84ba-0c997a19ecd1","tenantId":"tenant_mrj4mwx7","userId":"tenant_mrj4mwx7","action":"auth.login","success":true,"level":"info","error":null,"meta":{"isAdmin":false}}
+ POST /api/auth/login 200 in 80ms (next.js: 3ms, application-code: 77ms)
+ GET /api/billing/summary 200 in 19ms (next.js: 3ms, application-code: 16ms)
+ GET /billing 200 in 297ms (next.js: 54ms, proxy.ts: 14ms, application-code: 230ms)
+ GET / 200 in 29ms (next.js: 4ms, proxy.ts: 4ms, application-code: 21ms)
+ GET /api/billing/summary 200 in 58ms (next.js: 3ms, application-code: 54ms)
+ GET /api/calls?limit=1000 200 in 63ms (next.js: 49ms, application-code: 14ms)
+ GET /api/billing/summary 200 in 21ms (next.js: 4ms, application-code: 17ms)
+ GET /api/calls?limit=1000 200 in 22ms (next.js: 9ms, application-code: 13ms)
+ GET /billing 200 in 36ms (next.js: 4ms, proxy.ts: 5ms, application-code: 27ms)
+ GET / 200 in 33ms (next.js: 6ms, proxy.ts: 6ms, application-code: 20ms)
+ GET /api/billing/summary 200 in 24ms (next.js: 6ms, application-code: 18ms)
+ GET /api/calls?limit=1000 200 in 28ms (next.js: 16ms, application-code: 13ms)
+ GET /api/billing/summary 200 in 10ms (next.js: 3ms, application-code: 7ms)
+ GET /api/calls?limit=1000 200 in 18ms (next.js: 5ms, application-code: 12ms)
+ GET /metrics 200 in 74ms (next.js: 36ms, application-code: 37ms)
+ GET /calls 200 in 100ms (next.js: 42ms, proxy.ts: 7ms, application-code: 51ms)
+ GET /calls 200 in 43ms (next.js: 10ms, proxy.ts: 10ms, application-code: 23ms)
+ GET /api/calls?limit=100 200 in 17ms (next.js: 4ms, application-code: 13ms)
+ GET /api/calls?limit=100 200 in 25ms (next.js: 3ms, application-code: 22ms)
+ GET /billing 200 in 28ms (next.js: 4ms, proxy.ts: 4ms, application-code: 20ms)
+(node:28244) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/vijay/projects/new/voicerely-dashboard/tailwind.config.ts?id=1783941866749 is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to \\?\C:\vijay\projects\new\voicerely-dashboard\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✓ Compiled in 681ms
+✓ Compiled in 168ms
+✓ Compiled in 165ms
+✓ Compiled in 1099ms
+ GET /admin 200 in 191ms (next.js: 30ms, proxy.ts: 73ms, application-code: 87ms)
+ GET /admin 200 in 400ms (next.js: 65ms, proxy.ts: 61ms, application-code: 274ms)
+ GET /admin 200 in 190ms (next.js: 63ms, proxy.ts: 73ms, application-code: 55ms)
+ GET /admin 200 in 2.5s (next.js: 1472ms, proxy.ts: 9ms, application-code: 1046ms)
+ GET /admin 200 in 372ms (next.js: 121ms, proxy.ts: 9ms, application-code: 242ms)
+✓ Compiled in 154ms
+✓ Compiled in 476ms
+ GET /admin 200 in 674ms (next.js: 278ms, proxy.ts: 94ms, application-code: 302ms)
+ GET /admin 200 in 307ms (next.js: 4ms, proxy.ts: 7ms, application-code: 296ms)
+ GET /admin 200 in 264ms (next.js: 9ms, proxy.ts: 20ms, application-code: 235ms)
+ GET /admin 200 in 254ms (next.js: 75ms, proxy.ts: 11ms, application-code: 169ms)
+ GET /admin 200 in 257ms (next.js: 44ms, proxy.ts: 12ms, application-code: 201ms)
+ GET /admin 200 in 296ms (next.js: 103ms, proxy.ts: 10ms, application-code: 183ms)
+ GET /admin 200 in 245ms (next.js: 15ms, proxy.ts: 8ms, application-code: 223ms)
+ GET /admin 200 in 178ms (next.js: 9ms, proxy.ts: 6ms, application-code: 163ms)
+ GET /admin 200 in 130ms (next.js: 10ms, proxy.ts: 18ms, application-code: 102ms)
+ GET /admin 200 in 121ms (next.js: 44ms, proxy.ts: 12ms, application-code: 64ms)
+✓ Compiled in 181ms
+ GET /admin 200 in 251ms (next.js: 156ms, proxy.ts: 22ms, application-code: 73ms)
+✓ Compiled in 503ms
+ GET /admin 200 in 288ms (next.js: 92ms, proxy.ts: 23ms, application-code: 173ms)
+ GET /admin 200 in 112ms (next.js: 9ms, proxy.ts: 7ms, application-code: 96ms)
+ GET /admin 200 in 48ms (next.js: 6ms, proxy.ts: 9ms, application-code: 33ms)
+✓ Compiled in 147ms
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⨯ ReferenceError: AdminSidebarIcon is not defined
+    at <unknown> (app\(admin)\AdminPortal.tsx:263:12)
+    at Array.map (<anonymous>)
+    at AdminPortal (app\(admin)\AdminPortal.tsx:260:5)
+  261 |     key: item.key,
+  262 |     label: item.label,
+> 263 |     icon: <AdminSidebarIcon name={item.icon} />,
+      |            ^
+  264 |     active: activeTab === item.key,
+  265 |     onClick: () => setActiveTab(item.key as AdminTab),
+  266 |   })); {
+  digest: '3016736410'
+}
+ GET /admin 500 in 467ms (next.js: 89ms, proxy.ts: 22ms, application-code: 356ms)
+✓ Compiled in 148ms
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /admin 200 in 303ms (next.js: 100ms, proxy.ts: 35ms, application-code: 168ms)
+✓ Compiled in 631ms
+ GET /admin 200 in 333ms (next.js: 150ms, proxy.ts: 8ms, application-code: 176ms)
+ GET /admin 200 in 136ms (next.js: 77ms, proxy.ts: 7ms, application-code: 52ms)
+ GET /admin 200 in 631ms (next.js: 161ms, proxy.ts: 35ms, application-code: 435ms)
+ GET /admin 200 in 151ms (next.js: 40ms, proxy.ts: 14ms, application-code: 97ms)
+ GET /admin 200 in 154ms (next.js: 11ms, proxy.ts: 16ms, application-code: 127ms)
+ GET /admin 200 in 613ms (next.js: 29ms, proxy.ts: 219ms, application-code: 365ms)
+✓ Compiled in 193ms
+ GET /admin 200 in 168ms (next.js: 85ms, proxy.ts: 16ms, application-code: 67ms)
+✓ Compiled in 156ms
+ GET /admin 200 in 164ms (next.js: 81ms, proxy.ts: 15ms, application-code: 68ms)
+✓ Compiled in 158ms
+ GET /admin 200 in 265ms (next.js: 127ms, proxy.ts: 42ms, application-code: 96ms)
+✓ Compiled in 208ms
+ GET /admin 200 in 463ms (next.js: 113ms, proxy.ts: 19ms, application-code: 331ms)
+ GET /admin 200 in 260ms (next.js: 4ms, proxy.ts: 8ms, application-code: 247ms)
+ GET /admin 200 in 268ms (next.js: 11ms, proxy.ts: 38ms, application-code: 219ms)
+ GET /admin 200 in 267ms (next.js: 35ms, proxy.ts: 37ms, application-code: 195ms)
+ GET /admin 200 in 266ms (next.js: 72ms, proxy.ts: 36ms, application-code: 158ms)
+ GET /admin 200 in 265ms (next.js: 101ms, proxy.ts: 35ms, application-code: 129ms)
+ GET /admin 200 in 65ms (next.js: 8ms, proxy.ts: 7ms, application-code: 50ms)
+✓ Compiled in 134ms
+ GET /admin 200 in 127ms (next.js: 62ms, proxy.ts: 13ms, application-code: 52ms)
+✓ Compiled in 159ms
+ GET /admin 200 in 188ms (next.js: 110ms, proxy.ts: 21ms, application-code: 57ms)
+✓ Compiled in 108ms
+✓ Compiled in 163ms
+ GET /admin 200 in 160ms (next.js: 65ms, proxy.ts: 27ms, application-code: 68ms)
+{"timestamp":"2026-07-13T11:36:10.826Z","requestId":"67fec5f1-1629-4755-a113-873fcda3cf38","tenantId":"admin","userId":"admin","action":"auth.login","success":true,"level":"info","error":null,"meta":{"isAdmin":true}}
+ POST /api/auth/login 200 in 255ms (next.js: 143ms, application-code: 112ms)
+ GET /admin 200 in 157ms (next.js: 4ms, proxy.ts: 6ms, application-code: 147ms)
+ GET / 200 in 186ms (next.js: 86ms, proxy.ts: 4ms, application-code: 96ms)
+ GET /metrics 200 in 358ms (next.js: 174ms, application-code: 184ms)
+ GET /calls 200 in 257ms (next.js: 92ms, proxy.ts: 4ms, application-code: 161ms)
+ GET /login?next=%2F 200 in 158ms (next.js: 64ms, application-code: 93ms)
+ GET /billing 200 in 532ms (next.js: 88ms, proxy.ts: 4ms, application-code: 441ms)
+ GET /billing 200 in 382ms (next.js: 86ms, proxy.ts: 53ms, application-code: 244ms)
+ GET /billing 200 in 235ms (next.js: 9ms, proxy.ts: 26ms, application-code: 200ms)
+ GET /billing 200 in 235ms (next.js: 38ms, proxy.ts: 26ms, application-code: 171ms)
+ GET /billing 200 in 229ms (next.js: 130ms, proxy.ts: 20ms, application-code: 79ms)
+ GET /billing 200 in 236ms (next.js: 103ms, proxy.ts: 25ms, application-code: 107ms)
+ GET /billing 200 in 199ms (next.js: 81ms, proxy.ts: 37ms, application-code: 81ms)
+ GET /billing 200 in 266ms (next.js: 10ms, proxy.ts: 5ms, application-code: 250ms)
+ GET /billing 200 in 211ms (next.js: 104ms, proxy.ts: 36ms, application-code: 71ms)
+ GET /billing 200 in 227ms (next.js: 14ms, proxy.ts: 6ms, application-code: 207ms)
+ GET /billing 200 in 210ms (next.js: 125ms, proxy.ts: 36ms, application-code: 49ms)
+ GET /billing 200 in 233ms (next.js: 17ms, proxy.ts: 30ms, application-code: 186ms)
+ GET / 200 in 25ms (next.js: 3ms, proxy.ts: 3ms, application-code: 18ms)
+ GET /api/calls?limit=1000 200 in 74ms (next.js: 32ms, application-code: 42ms)
+ GET /api/billing/summary 200 in 76ms (next.js: 65ms, application-code: 10ms)
+ GET /api/calls?limit=1000 200 in 10ms (next.js: 2ms, application-code: 8ms)
+ GET /api/billing/summary 200 in 12ms (next.js: 5ms, application-code: 6ms)
+ GET /metrics 200 in 20ms (next.js: 3ms, application-code: 17ms)
+ GET / 200 in 20ms (next.js: 4ms, proxy.ts: 3ms, application-code: 14ms)
+ GET /api/calls?limit=1000 200 in 13ms (next.js: 2ms, application-code: 11ms)
+ GET /api/billing/summary 200 in 14ms (next.js: 7ms, application-code: 8ms)
+ GET /api/calls?limit=1000 200 in 10ms (next.js: 1832µs, application-code: 8ms)
+ GET /api/billing/summary 200 in 12ms (next.js: 5ms, application-code: 6ms)
+ GET /calls 200 in 22ms (next.js: 3ms, proxy.ts: 3ms, application-code: 16ms)
+ GET /api/calls?limit=100 200 in 11ms (next.js: 3ms, application-code: 8ms)
+ GET /api/calls?limit=100 200 in 19ms (next.js: 1688µs, application-code: 17ms)
+ GET /metrics 200 in 19ms (next.js: 3ms, application-code: 16ms)
+ GET /billing 200 in 23ms (next.js: 3ms, proxy.ts: 3ms, application-code: 17ms)
+✓ Compiled in 162ms
+ GET /admin 200 in 347ms (next.js: 223ms, proxy.ts: 35ms, application-code: 89ms)
+ GET /billing 200 in 352ms (next.js: 68ms, proxy.ts: 29ms, application-code: 255ms)
+✓ Compiled in 223ms
+ GET /admin 200 in 1006ms (next.js: 160ms, proxy.ts: 25ms, application-code: 821ms)
+ GET /billing 200 in 1012ms (next.js: 79ms, proxy.ts: 27ms, application-code: 906ms)
+ GET /admin 200 in 207ms (next.js: 66ms, proxy.ts: 13ms, application-code: 127ms)
+ GET /billing 200 in 211ms (next.js: 12ms, proxy.ts: 14ms, application-code: 184ms)
+✓ Compiled in 173ms
+ GET /admin 200 in 516ms (next.js: 382ms, proxy.ts: 40ms, application-code: 95ms)
+ GET /billing 200 in 523ms (next.js: 113ms, proxy.ts: 42ms, application-code: 368ms)
+ GET / 200 in 207ms (next.js: 163ms, proxy.ts: 11ms, application-code: 32ms)
+ GET /api/calls?limit=1000 200 in 183ms (next.js: 114ms, application-code: 69ms)
+ GET /api/billing/summary 200 in 185ms (next.js: 155ms, application-code: 29ms)
+ GET /api/calls?limit=1000 200 in 14ms (next.js: 3ms, application-code: 11ms)
+ GET /api/billing/summary 200 in 15ms (next.js: 8ms, application-code: 8ms)
+ GET /metrics 200 in 111ms (next.js: 79ms, application-code: 33ms)
+ GET /calls 200 in 152ms (next.js: 108ms, proxy.ts: 5ms, application-code: 39ms)
+ GET /api/calls?limit=100 200 in 27ms (next.js: 3ms, application-code: 24ms)
+ GET /api/calls?limit=100 200 in 14ms (next.js: 1996µs, application-code: 12ms)
+ GET /billing 200 in 28ms (next.js: 4ms, proxy.ts: 3ms, application-code: 21ms)
+ GET / 200 in 21ms (next.js: 4ms, proxy.ts: 3ms, application-code: 14ms)
+ GET /api/calls?limit=1000 200 in 18ms (next.js: 4ms, application-code: 14ms)
+ GET /api/billing/summary 200 in 20ms (next.js: 9ms, application-code: 11ms)
+ GET /api/calls?limit=1000 200 in 13ms (next.js: 3ms, application-code: 9ms)
+ GET /api/billing/summary 200 in 16ms (next.js: 6ms, application-code: 10ms)
+ GET /metrics 200 in 44ms (next.js: 13ms, application-code: 31ms)
+ GET /calls 200 in 23ms (next.js: 3ms, proxy.ts: 3ms, application-code: 16ms)
+ GET /api/calls?limit=100 200 in 19ms (next.js: 5ms, application-code: 14ms)
+ GET /api/calls?limit=100 200 in 13ms (next.js: 2ms, application-code: 11ms)
+ GET /billing 200 in 30ms (next.js: 6ms, proxy.ts: 3ms, application-code: 22ms)
+ GET /metrics 200 in 27ms (next.js: 3ms, application-code: 25ms)
+✓ Compiled in 358ms
+ GET /metrics 200 in 319ms (next.js: 125ms, application-code: 194ms)
+ GET /admin 200 in 353ms (next.js: 229ms, proxy.ts: 33ms, application-code: 90ms)
+✓ Compiled in 165ms
+ GET /metrics 200 in 185ms (next.js: 53ms, application-code: 132ms)
+ GET /admin 200 in 202ms (next.js: 117ms, proxy.ts: 16ms, application-code: 70ms)
+✓ Compiled in 182ms
+ GET /metrics 200 in 219ms (next.js: 60ms, application-code: 159ms)
+ GET /admin 200 in 243ms (next.js: 115ms, proxy.ts: 22ms, application-code: 106ms)
+✓ Compiled in 169ms
+ GET /metrics 200 in 305ms (next.js: 49ms, application-code: 255ms)
+ GET /admin 200 in 320ms (next.js: 129ms, proxy.ts: 15ms, application-code: 176ms)
+ GET /metrics 200 in 111ms (next.js: 46ms, application-code: 66ms)
+ GET /admin 200 in 87ms (next.js: 6ms, proxy.ts: 44ms, application-code: 38ms)
+✓ Compiled in 1491ms
+ GET /metrics 200 in 373ms (next.js: 81ms, application-code: 292ms)
+ GET /admin 200 in 762ms (next.js: 156ms, proxy.ts: 379ms, application-code: 227ms)
+ GET /metrics 200 in 160ms (next.js: 21ms, application-code: 138ms)
+ GET /metrics 200 in 148ms (next.js: 35ms, application-code: 113ms)
+ GET /metrics 200 in 118ms (next.js: 38ms, application-code: 80ms)
+ GET /admin 200 in 204ms (next.js: 35ms, proxy.ts: 23ms, application-code: 146ms)
+ GET /metrics 200 in 198ms (next.js: 9ms, application-code: 190ms)
+ GET /admin 200 in 168ms (next.js: 9ms, proxy.ts: 8ms, application-code: 151ms)
+ GET /admin 200 in 163ms (next.js: 55ms, proxy.ts: 4ms, application-code: 104ms)
+ GET /admin 200 in 121ms (next.js: 12ms, proxy.ts: 67ms, application-code: 42ms)
+ GET /metrics 200 in 320ms (next.js: 84ms, application-code: 236ms)
+ GET /metrics 200 in 180ms (next.js: 5ms, application-code: 175ms)
+ GET /admin 200 in 350ms (next.js: 47ms, proxy.ts: 144ms, application-code: 158ms)
+ GET /metrics 200 in 119ms (next.js: 23ms, application-code: 96ms)
+ GET /metrics 200 in 121ms (next.js: 4ms, application-code: 118ms)
+ GET /metrics 200 in 121ms (next.js: 42ms, application-code: 78ms)
+ GET /metrics 200 in 190ms (next.js: 3ms, application-code: 186ms)
+ GET /metrics 200 in 166ms (next.js: 3ms, application-code: 163ms)
+ GET /metrics 200 in 168ms (next.js: 4ms, application-code: 164ms)
+ GET /metrics 200 in 135ms (next.js: 26ms, application-code: 109ms)
+ GET /metrics 200 in 135ms (next.js: 52ms, application-code: 83ms)
+ GET /metrics 200 in 143ms (next.js: 57ms, application-code: 86ms)
+ GET /metrics 200 in 164ms (next.js: 5ms, application-code: 159ms)
+ GET /metrics 200 in 137ms (next.js: 7ms, application-code: 130ms)
+ GET /metrics 200 in 127ms (next.js: 4ms, application-code: 123ms)
+ GET /metrics 200 in 106ms (next.js: 4ms, application-code: 102ms)
+ GET /metrics 200 in 106ms (next.js: 23ms, application-code: 83ms)
+ GET /metrics 200 in 93ms (next.js: 5ms, application-code: 88ms)
+ GET /metrics 200 in 145ms (next.js: 4ms, application-code: 141ms)
+ GET /metrics 200 in 125ms (next.js: 6ms, application-code: 119ms)
+ GET /metrics 200 in 124ms (next.js: 4ms, application-code: 119ms)
+ GET /metrics 200 in 102ms (next.js: 21ms, application-code: 81ms)
+ GET /metrics 200 in 125ms (next.js: 3ms, application-code: 121ms)
+ GET /metrics 200 in 94ms (next.js: 4ms, application-code: 90ms)
+ GET /metrics 200 in 253ms (next.js: 4ms, application-code: 249ms)
+ GET /metrics 200 in 225ms (next.js: 5ms, application-code: 220ms)
+ GET /metrics 200 in 215ms (next.js: 7ms, application-code: 208ms)
+ GET /metrics 200 in 213ms (next.js: 35ms, application-code: 178ms)
+ GET /metrics 200 in 184ms (next.js: 38ms, application-code: 146ms)
+ GET /metrics 200 in 174ms (next.js: 34ms, application-code: 141ms)
+ GET /metrics 200 in 144ms (next.js: 3ms, application-code: 141ms)
+ GET /metrics 200 in 122ms (next.js: 6ms, application-code: 116ms)
+ GET /metrics 200 in 129ms (next.js: 24ms, application-code: 105ms)
+ GET /metrics 200 in 131ms (next.js: 5ms, application-code: 126ms)
+ GET /metrics 200 in 87ms (next.js: 5ms, application-code: 82ms)
+ GET /metrics 200 in 115ms (next.js: 24ms, application-code: 91ms)
+ GET /metrics 200 in 117ms (next.js: 5ms, application-code: 113ms)
+ GET /admin 200 in 254ms (next.js: 9ms, proxy.ts: 31ms, application-code: 214ms)
+ GET /admin 200 in 229ms (next.js: 3ms, proxy.ts: 5ms, application-code: 220ms)
+ GET /admin 200 in 202ms (next.js: 12ms, proxy.ts: 14ms, application-code: 177ms)
+ GET /admin 200 in 200ms (next.js: 69ms, proxy.ts: 12ms, application-code: 119ms)
+ GET /admin 200 in 201ms (next.js: 45ms, proxy.ts: 13ms, application-code: 144ms)
+ GET /admin 200 in 224ms (next.js: 15ms, proxy.ts: 91ms, application-code: 118ms)
+ GET /admin 200 in 235ms (next.js: 4ms, proxy.ts: 4ms, application-code: 227ms)
+ GET /admin 200 in 235ms (next.js: 12ms, proxy.ts: 5ms, application-code: 218ms)
+ GET /admin 200 in 232ms (next.js: 11ms, proxy.ts: 33ms, application-code: 187ms)
+ GET /admin 200 in 231ms (next.js: 40ms, proxy.ts: 32ms, application-code: 159ms)
+ GET /admin 200 in 233ms (next.js: 62ms, proxy.ts: 34ms, application-code: 137ms)
+ GET /admin 200 in 227ms (next.js: 11ms, proxy.ts: 108ms, application-code: 108ms)
+ GET /admin 200 in 206ms (next.js: 7ms, proxy.ts: 4ms, application-code: 195ms)
+ GET /admin 200 in 175ms (next.js: 11ms, proxy.ts: 3ms, application-code: 161ms)
+ GET /admin 200 in 206ms (next.js: 33ms, proxy.ts: 6ms, application-code: 166ms)
+ GET /admin 200 in 205ms (next.js: 33ms, proxy.ts: 28ms, application-code: 144ms)
+ GET /admin 200 in 185ms (next.js: 65ms, proxy.ts: 9ms, application-code: 111ms)
+ GET /admin 200 in 214ms (next.js: 41ms, proxy.ts: 60ms, application-code: 113ms)
+ GET /admin 200 in 226ms (next.js: 6ms, proxy.ts: 4ms, application-code: 216ms)
+ GET /admin 200 in 196ms (next.js: 9ms, proxy.ts: 5ms, application-code: 182ms)
+ GET /admin 200 in 219ms (next.js: 12ms, proxy.ts: 34ms, application-code: 173ms)
+ GET /admin 200 in 220ms (next.js: 32ms, proxy.ts: 37ms, application-code: 151ms)
+ GET /admin 200 in 190ms (next.js: 64ms, proxy.ts: 7ms, application-code: 119ms)
+ GET /admin 200 in 193ms (next.js: 49ms, proxy.ts: 11ms, application-code: 133ms)
+ GET /admin 200 in 189ms (next.js: 4ms, proxy.ts: 3ms, application-code: 181ms)
+ GET /admin 200 in 169ms (next.js: 10ms, proxy.ts: 7ms, application-code: 152ms)
+ GET /admin 200 in 192ms (next.js: 34ms, proxy.ts: 6ms, application-code: 153ms)
+ GET /admin 200 in 190ms (next.js: 41ms, proxy.ts: 31ms, application-code: 118ms)
+ GET /admin 200 in 198ms (next.js: 65ms, proxy.ts: 6ms, application-code: 127ms)
+ GET /admin 200 in 171ms (next.js: 6ms, proxy.ts: 53ms, application-code: 113ms)
+ GET /admin 200 in 168ms (next.js: 4ms, proxy.ts: 4ms, application-code: 160ms)
+ GET /admin 200 in 141ms (next.js: 7ms, proxy.ts: 9ms, application-code: 125ms)
+ GET /admin 200 in 130ms (next.js: 8ms, proxy.ts: 43ms, application-code: 79ms)
+ GET /admin 200 in 99ms (next.js: 28ms, proxy.ts: 12ms, application-code: 59ms)
+ GET /admin 200 in 91ms (next.js: 55ms, proxy.ts: 6ms, application-code: 30ms)
+✓ Compiled in 456ms
+✓ Finished filesystem cache database compaction in 44s
+✓ Compiled in 203ms
+⚠ Fast Refresh had to perform a full reload when ./app/(dashboard)/layout.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+⨯ ReferenceError: Bot is not defined
+    at module evaluation (app\(dashboard)\layout.tsx:15:45)
+  13 |   { href: "/metrics", label: "Metrics", icon: BarChart3 },
+  14 |   { href: "/calls", label: "Live Logs", icon: PhoneCall },
+> 15 |   { href: "/agents", label: "Agents", icon: Bot },
+     |                                             ^
+  16 |   { href: "/billing", label: "Billing", icon: Receipt },
+  17 | ];
+  18 | {
+  digest: '2378836783'
+}
+ GET /metrics 200 in 1279ms (next.js: 82ms, application-code: 1196ms)
+ GET /metrics 200 in 98ms (next.js: 11ms, application-code: 87ms)
+ GET /admin 200 in 1318ms (next.js: 167ms, proxy.ts: 32ms, application-code: 1119ms)
+ GET /metrics 500 in 1152ms (next.js: 96ms, application-code: 1057ms)
+ GET /admin 200 in 1035ms (next.js: 39ms, proxy.ts: 933ms, application-code: 63ms)
+✓ Compiled in 284ms
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload when ./app/(dashboard)/layout.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /admin 200 in 630ms (next.js: 119ms, proxy.ts: 34ms, application-code: 476ms)
+ GET /metrics 200 in 759ms (next.js: 309ms, application-code: 450ms)
+ GET /admin 200 in 415ms (next.js: 11ms, proxy.ts: 120ms, application-code: 285ms)
+ GET /admin 200 in 387ms (next.js: 16ms, proxy.ts: 14ms, application-code: 357ms)
+ GET /admin 200 in 375ms (next.js: 13ms, proxy.ts: 46ms, application-code: 315ms)
+ GET /admin 200 in 373ms (next.js: 51ms, proxy.ts: 48ms, application-code: 274ms)
+ GET /admin 200 in 225ms (next.js: 9ms, proxy.ts: 25ms, application-code: 190ms)
+ GET /admin 200 in 201ms (next.js: 13ms, proxy.ts: 48ms, application-code: 140ms)
+ GET /admin 200 in 160ms (next.js: 51ms, proxy.ts: 10ms, application-code: 100ms)
+ GET /admin 200 in 62ms (next.js: 10ms, proxy.ts: 4ms, application-code: 48ms)
+{"timestamp":"2026-07-13T12:14:00.733Z","requestId":"e1f7dfa4-800d-49cc-93a7-330e510330c0","tenantId":"admin","userId":"admin","action":"auth.login","success":true,"level":"info","error":null,"meta":{"isAdmin":true}}
+ POST /api/auth/login 200 in 338ms (next.js: 230ms, application-code: 108ms)
+ GET /agents 200 in 2.9s (next.js: 2.8s, application-code: 44ms)
+ GET /billing 200 in 174ms (next.js: 61ms, proxy.ts: 3ms, application-code: 109ms)
+ GET / 200 in 280ms (next.js: 131ms, proxy.ts: 4ms, application-code: 146ms)
+{"timestamp":"2026-07-13T12:14:16.055Z","requestId":"db615111-f874-4186-a2d9-1d0c2947d0b6","tenantId":"admin","userId":"admin","action":"auth.login","success":true,"level":"info","error":null,"meta":{"isAdmin":true}}
+ POST /api/auth/login 200 in 74ms (next.js: 3ms, application-code: 71ms)
+ GET /billing 200 in 61ms (next.js: 3ms, proxy.ts: 3ms, application-code: 54ms)
+ GET /agents 200 in 99ms (next.js: 24ms, application-code: 75ms)
+ GET /api/calls?limit=100 200 in 210ms (next.js: 82ms, application-code: 128ms)
+ GET /api/auth/me 200 in 217ms (next.js: 204ms, application-code: 12ms)
+ GET /api/calls?limit=100 200 in 16ms (next.js: 6ms, application-code: 10ms)
+ GET /api/auth/me 200 in 11ms (next.js: 1902µs, application-code: 9ms)
+ GET / 200 in 29ms (next.js: 5ms, proxy.ts: 9ms, application-code: 15ms)
+ GET /api/calls?limit=1000 200 in 53ms (next.js: 3ms, application-code: 50ms)
+ GET /api/billing/summary 200 in 55ms (next.js: 44ms, application-code: 11ms)
+ GET /api/calls?limit=1000 200 in 19ms (next.js: 3ms, application-code: 16ms)
+ GET /api/billing/summary 200 in 21ms (next.js: 7ms, application-code: 14ms)
+ GET /metrics 200 in 20ms (next.js: 3ms, application-code: 17ms)
+ GET /agents 200 in 24ms (next.js: 4ms, application-code: 20ms)
+ GET /api/calls?limit=100 200 in 28ms (next.js: 6ms, application-code: 23ms)
+ GET /api/auth/me 200 in 30ms (next.js: 12ms, application-code: 18ms)
+ GET /api/calls?limit=100 200 in 12ms (next.js: 1764µs, application-code: 10ms)
+ GET /api/auth/me 200 in 10ms (next.js: 1820µs, application-code: 8ms)
+ GET /calls 200 in 140ms (next.js: 95ms, proxy.ts: 3ms, application-code: 42ms)
+ GET /api/calls?limit=100 200 in 12ms (next.js: 3ms, application-code: 9ms)
+ GET /api/calls?limit=100 200 in 20ms (next.js: 3ms, application-code: 16ms)
+ GET /billing 200 in 96ms (next.js: 69ms, proxy.ts: 3ms, application-code: 24ms)
+ GET / 200 in 29ms (next.js: 3ms, proxy.ts: 3ms, application-code: 23ms)
+ GET /api/calls?limit=1000 200 in 12ms (next.js: 3ms, application-code: 9ms)
+ GET /api/billing/summary 200 in 13ms (next.js: 6ms, application-code: 7ms)
+ GET /api/calls?limit=1000 200 in 10ms (next.js: 2ms, application-code: 8ms)
+ GET /api/billing/summary 200 in 12ms (next.js: 5ms, application-code: 7ms)
+ GET /metrics 200 in 26ms (next.js: 3ms, application-code: 23ms)
+ GET /calls 200 in 28ms (next.js: 4ms, proxy.ts: 3ms, application-code: 21ms)
+ GET /api/calls?limit=100 200 in 12ms (next.js: 3ms, application-code: 9ms)
+ GET /api/calls?limit=100 200 in 7ms (next.js: 2ms, application-code: 5ms)
+ GET /agents 200 in 19ms (next.js: 2ms, application-code: 16ms)
+ GET /api/calls?limit=100 200 in 16ms (next.js: 4ms, application-code: 12ms)
+ GET /api/auth/me 200 in 18ms (next.js: 10ms, application-code: 9ms)
+ GET /api/calls?limit=100 200 in 12ms (next.js: 1545µs, application-code: 10ms)
+ GET /api/auth/me 200 in 9ms (next.js: 3ms, application-code: 6ms)
+ GET /billing 200 in 25ms (next.js: 3ms, proxy.ts: 3ms, application-code: 19ms)
+ GET /agents 200 in 17ms (next.js: 2ms, application-code: 14ms)
+ GET /api/auth/me 200 in 13ms (next.js: 4ms, application-code: 10ms)
+ GET /api/calls?limit=100 200 in 15ms (next.js: 7ms, application-code: 8ms)
+ GET /api/auth/me 200 in 10ms (next.js: 2ms, application-code: 8ms)
+ GET /api/calls?limit=100 200 in 7ms (next.js: 1814µs, application-code: 6ms)
+ GET /calls 200 in 24ms (next.js: 3ms, proxy.ts: 3ms, application-code: 18ms)
+ GET /api/calls?limit=100 200 in 9ms (next.js: 3ms, application-code: 6ms)
+ GET /api/calls?limit=100 200 in 21ms (next.js: 2ms, application-code: 19ms)
+ GET /metrics 200 in 18ms (next.js: 3ms, application-code: 15ms)
+ GET / 200 in 23ms (next.js: 3ms, proxy.ts: 3ms, application-code: 17ms)
+ GET /api/calls?limit=1000 200 in 15ms (next.js: 3ms, application-code: 13ms)
+ GET /api/billing/summary 200 in 37ms (next.js: 6ms, application-code: 30ms)
+ GET /api/calls?limit=1000 200 in 34ms (next.js: 12ms, application-code: 22ms)
+ GET /api/billing/summary 200 in 32ms (next.js: 18ms, application-code: 14ms)
+ GET /billing 200 in 29ms (next.js: 3ms, proxy.ts: 4ms, application-code: 22ms)
+ GET /agents 200 in 18ms (next.js: 2ms, application-code: 16ms)
+ GET /api/auth/me 200 in 14ms (next.js: 2ms, application-code: 12ms)
+ GET /api/calls?limit=100 200 in 16ms (next.js: 8ms, application-code: 7ms)
+ GET /api/auth/me 200 in 13ms (next.js: 2ms, application-code: 11ms)
+ GET /api/calls?limit=100 200 in 14ms (next.js: 6ms, application-code: 9ms)
+ GET /calls 200 in 20ms (next.js: 3ms, proxy.ts: 3ms, application-code: 15ms)
+ GET /api/calls?limit=100 200 in 17ms (next.js: 2ms, application-code: 15ms)
+ GET /api/calls?limit=100 200 in 6ms (next.js: 1469µs, application-code: 5ms)
+ GET /metrics 200 in 20ms (next.js: 4ms, application-code: 17ms)
+ GET / 200 in 20ms (next.js: 3ms, proxy.ts: 3ms, application-code: 15ms)
+ GET /api/calls?limit=1000 200 in 16ms (next.js: 7ms, application-code: 9ms)
+ GET /api/billing/summary 200 in 17ms (next.js: 11ms, application-code: 6ms)
+ GET /api/calls?limit=1000 200 in 10ms (next.js: 1972µs, application-code: 8ms)
+ GET /api/billing/summary 200 in 11ms (next.js: 5ms, application-code: 6ms)
+✓ Compiled in 825ms
+✓ Compiled in 165ms
+✓ Compiled in 457ms
+✓ Compiled in 245ms
+✓ Compiled in 241ms
+✓ Compiled in 346ms
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /admin 200 in 3.8s (next.js: 1642ms, proxy.ts: 1010ms, application-code: 1141ms)
+ GET /admin 200 in 418ms (next.js: 127ms, proxy.ts: 234ms, application-code: 58ms)
+ GET / 200 in 561ms (next.js: 219ms, proxy.ts: 204ms, application-code: 139ms)
+ GET / 200 in 1248ms (next.js: 11ms, proxy.ts: 15ms, application-code: 1223ms)
+ GET /admin 200 in 5.2s (next.js: 1440ms, proxy.ts: 699ms, application-code: 3.1s)
+ GET / 200 in 2.5s (next.js: 23ms, proxy.ts: 18ms, application-code: 2.5s)
+ GET / 200 in 2.6s (next.js: 53ms, proxy.ts: 14ms, application-code: 2.5s)
+ GET / 200 in 3.0s (next.js: 380ms, proxy.ts: 736ms, application-code: 1911ms)
+ GET / 200 in 1556ms (next.js: 993ms, proxy.ts: 61ms, application-code: 503ms)
+ GET / 200 in 3.1s (next.js: 798ms, proxy.ts: 46ms, application-code: 2.3s)
+ GET / 200 in 2.3s (next.js: 130ms, proxy.ts: 58ms, application-code: 2.1s)
+ GET /api/calls?limit=1000 200 in 492ms (next.js: 313ms, application-code: 178ms)
+ GET /api/billing/summary 200 in 494ms (next.js: 476ms, application-code: 18ms)
+ GET /agents 200 in 122ms (next.js: 84ms, application-code: 38ms)
+ GET /api/calls?limit=100 200 in 72ms (next.js: 3ms, application-code: 69ms)
+ GET /api/auth/me 200 in 72ms (next.js: 61ms, application-code: 11ms)
+ GET /api/calls?limit=100 200 in 31ms (next.js: 12ms, application-code: 19ms)
+ GET /api/auth/me 200 in 27ms (next.js: 20ms, application-code: 7ms)
+ GET /agents 200 in 364ms (next.js: 30ms, application-code: 334ms)
+ GET /api/auth/me 200 in 18ms (next.js: 6ms, application-code: 13ms)
+ GET /api/calls?limit=100 200 in 26ms (next.js: 3ms, application-code: 23ms)
+✓ Finished filesystem cache database compaction in 26.2s
+ GET /admin 200 in 496ms (next.js: 29ms, proxy.ts: 162ms, application-code: 305ms)
+ GET /agents 200 in 85ms (next.js: 6ms, application-code: 79ms)
+ GET /api/auth/me 200 in 26ms (next.js: 5ms, application-code: 21ms)
+ GET /api/calls?limit=100 200 in 28ms (next.js: 11ms, application-code: 18ms)
+✓ Compiled in 1001ms
+✓ Compiled in 327ms
+ GET /admin 200 in 124ms (next.js: 7ms, proxy.ts: 3ms, application-code: 113ms)
+ GET /agents 200 in 263ms (next.js: 18ms, application-code: 245ms)
+ GET /api/auth/me 200 in 28ms (next.js: 8ms, application-code: 20ms)
+ GET /api/calls?limit=100 200 in 40ms (next.js: 12ms, application-code: 28ms)
+✓ Compiled in 621ms
+⨯ ReferenceError: Mic is not defined
+    at DashboardLayout (app\(dashboard)\layout.tsx:60:12)
+  58 |       <aside className="hidden lg:flex w-64 shrink-0 flex-col border-r border-border bg-ba...
+  59 |         <div className="flex items-center gap-2 px-6 h-16 border-b border-border">
+> 60 |           <Mic className="w-5 h-5 text-accent" />
+     |            ^
+  61 |           <span className="font-semibold tracking-tight text-foreground">Voicerely</span>
+  62 |         </div>
+  63 |         <nav className="flex flex-col py-4"> {
+  digest: '420255965'
+}
+ GET /agents 200 in 2.3s (next.js: 546ms, application-code: 1766ms)
+ GET /agents 200 in 258ms (next.js: 116ms, application-code: 142ms)
+ GET /admin 200 in 2.6s (next.js: 1051ms, proxy.ts: 173ms, application-code: 1392ms)
+ GET /agents 500 in 2.4s (next.js: 643ms, application-code: 1801ms)
+ GET /admin 200 in 508ms (next.js: 178ms, proxy.ts: 162ms, application-code: 169ms)
+ GET /admin 200 in 184ms (next.js: 6ms, proxy.ts: 10ms, application-code: 169ms)
+ GET /admin 200 in 183ms (next.js: 26ms, proxy.ts: 9ms, application-code: 148ms)
+ GET /admin 200 in 206ms (next.js: 49ms, proxy.ts: 9ms, application-code: 148ms)
+ GET /admin 200 in 153ms (next.js: 5ms, proxy.ts: 6ms, application-code: 141ms)
+ GET /admin 200 in 152ms (next.js: 38ms, proxy.ts: 4ms, application-code: 110ms)
+ GET /admin 200 in 88ms (next.js: 5ms, proxy.ts: 13ms, application-code: 69ms)
+ GET /admin 200 in 50ms (next.js: 5ms, proxy.ts: 6ms, application-code: 39ms)
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+✓ Compiled in 768ms
+⨯ ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  [90m22 |[0m       =[32m"http://www.w3.org/2000/svg"[0m
+  [90m23 |[0m  width=[32m"2400.000000pt"[0m height=[32m"2040.000000pt"[0m viewBox=[32m"0 0 2400.000000 2040.000000"[0m
+[31m[1m>[0m [90m24 |[0m  preserveAspectRatio=[32m"xMidYMid meet"[0m>
+  [90m   |[0m                                     [31m[1m^[0m
+  [90m25 |[0m
+  [90m26 |[0m <g transform=[32m"translate(0.000000,2040.000000) scale(0.100000,-0.100000)"[0m
+  [90m27 |[0m fill=[32m"currentColor"[0m stroke=[32m"none"[0m>
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+
+ GET /agents 500 in 1629ms (next.js: 799ms, application-code: 830ms)
+ GET /admin 500 in 1831ms (next.js: 1616ms, proxy.ts: 200ms, application-code: 15ms)
+ GET /admin 500 in 94ms (next.js: 29ms, proxy.ts: 12ms, application-code: 53ms)
+ GET /admin 500 in 121ms (next.js: 35ms, proxy.ts: 56ms, application-code: 31ms)
+ GET /admin 500 in 98ms (next.js: 56ms, proxy.ts: 10ms, application-code: 32ms)
+[browser] Uncaught Error: ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+
+    at <unknown> (Error: ./components/Logo.tsx:24:37)
+    at <unknown> (Error: (./components/Logo.tsx:24:37)
+[browser] Uncaught Error: ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+
+    at <unknown> (Error: ./components/Logo.tsx:24:37)
+    at <unknown> (Error: (./components/Logo.tsx:24:37)
+⨯ ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  [90m22 |[0m       =[32m"http://www.w3.org/2000/svg"[0m
+  [90m23 |[0m  width=[32m"2400.000000pt"[0m height=[32m"2040.000000pt"[0m viewBox=[32m"0 0 2400.000000 2040.000000"[0m
+[31m[1m>[0m [90m24 |[0m  preserveAspectRatio=[32m"xMidYMid meet"[0m>
+  [90m   |[0m                                     [31m[1m^[0m
+  [90m25 |[0m
+  [90m26 |[0m <g transform=[32m"translate(0.000000,2040.000000) scale(0.100000,-0.100000)"[0m
+  [90m27 |[0m fill=[32m"currentColor"[0m stroke=[32m"none"[0m>
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+
+ GET /admin 500 in 92ms (next.js: 36ms, proxy.ts: 31ms, application-code: 25ms)
+ GET /agents 500 in 60ms (next.js: 48ms, application-code: 13ms)
+[browser] Uncaught Error: ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+
+    at <unknown> (Error: ./components/Logo.tsx:24:37)
+    at <unknown> (Error: (./components/Logo.tsx:24:37)
+[browser] Uncaught Error: ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+
+    at <unknown> (Error: ./components/Logo.tsx:24:37)
+    at <unknown> (Error: (./components/Logo.tsx:24:37)
+⨯ ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  [90m22 |[0m       =[32m"http://www.w3.org/2000/svg"[0m
+  [90m23 |[0m  width=[32m"2400.000000pt"[0m height=[32m"2040.000000pt"[0m viewBox=[32m"0 0 2400.000000 2040.000000"[0m
+[31m[1m>[0m [90m24 |[0m  preserveAspectRatio=[32m"xMidYMid meet"[0m>
+  [90m   |[0m                                     [31m[1m^[0m
+  [90m25 |[0m
+  [90m26 |[0m <g transform=[32m"translate(0.000000,2040.000000) scale(0.100000,-0.100000)"[0m
+  [90m27 |[0m fill=[32m"currentColor"[0m stroke=[32m"none"[0m>
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+
+ GET /agents 500 in 73ms (next.js: 38ms, application-code: 35ms)
+ GET /admin 500 in 77ms (next.js: 57ms, proxy.ts: 5ms, application-code: 14ms)
+[browser] Uncaught Error: ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+
+    at <unknown> (Error: ./components/Logo.tsx:24:37)
+    at <unknown> (Error: (./components/Logo.tsx:24:37)
+[browser] Uncaught Error: ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+
+    at <unknown> (Error: ./components/Logo.tsx:24:37)
+    at <unknown> (Error: (./components/Logo.tsx:24:37)
+⨯ ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  [90m22 |[0m       =[32m"http://www.w3.org/2000/svg"[0m
+  [90m23 |[0m  width=[32m"2400.000000pt"[0m height=[32m"2040.000000pt"[0m viewBox=[32m"0 0 2400.000000 2040.000000"[0m
+[31m[1m>[0m [90m24 |[0m  preserveAspectRatio=[32m"xMidYMid meet"[0m>
+  [90m   |[0m                                     [31m[1m^[0m
+  [90m25 |[0m
+  [90m26 |[0m <g transform=[32m"translate(0.000000,2040.000000) scale(0.100000,-0.100000)"[0m
+  [90m27 |[0m fill=[32m"currentColor"[0m stroke=[32m"none"[0m>
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+
+ GET /agents 500 in 27ms (next.js: 12ms, application-code: 16ms)
+⨯ ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  [90m22 |[0m       =[32m"http://www.w3.org/2000/svg"[0m
+  [90m23 |[0m  width=[32m"2400.000000pt"[0m height=[32m"2040.000000pt"[0m viewBox=[32m"0 0 2400.000000 2040.000000"[0m
+[31m[1m>[0m [90m24 |[0m  preserveAspectRatio=[32m"xMidYMid meet"[0m>
+  [90m   |[0m                                     [31m[1m^[0m
+  [90m25 |[0m
+  [90m26 |[0m <g transform=[32m"translate(0.000000,2040.000000) scale(0.100000,-0.100000)"[0m
+  [90m27 |[0m fill=[32m"currentColor"[0m stroke=[32m"none"[0m>
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+
+ GET /admin 500 in 74ms (next.js: 53ms, proxy.ts: 8ms, application-code: 12ms)
+[browser] Uncaught Error: ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+
+    at <unknown> (Error: ./components/Logo.tsx:24:37)
+    at <unknown> (Error: (./components/Logo.tsx:24:37)
+[browser] Uncaught Error: ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+
+    at <unknown> (Error: ./components/Logo.tsx:24:37)
+    at <unknown> (Error: (./components/Logo.tsx:24:37)
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/page.tsx [Client Component Browser]
+    ./app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/page.tsx [Client Component SSR]
+    ./app/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/page.tsx [Client Component Browser]
+    ./app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/page.tsx [Client Component SSR]
+    ./app/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+⨯ ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  [90m22 |[0m       =[32m"http://www.w3.org/2000/svg"[0m
+  [90m23 |[0m  width=[32m"2400.000000pt"[0m height=[32m"2040.000000pt"[0m viewBox=[32m"0 0 2400.000000 2040.000000"[0m
+[31m[1m>[0m [90m24 |[0m  preserveAspectRatio=[32m"xMidYMid meet"[0m>
+  [90m   |[0m                                     [31m[1m^[0m
+  [90m25 |[0m
+  [90m26 |[0m <g transform=[32m"translate(0.000000,2040.000000) scale(0.100000,-0.100000)"[0m
+  [90m27 |[0m fill=[32m"currentColor"[0m stroke=[32m"none"[0m>
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+
+ GET /agents 500 in 34ms (next.js: 12ms, application-code: 22ms)
+[browser] Uncaught Error: ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+
+    at <unknown> (Error: ./components/Logo.tsx:24:37)
+    at <unknown> (Error: (./components/Logo.tsx:24:37)
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/page.tsx [Client Component Browser]
+    ./app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/page.tsx [Client Component SSR]
+    ./app/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+⨯ ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  [90m22 |[0m       =[32m"http://www.w3.org/2000/svg"[0m
+  [90m23 |[0m  width=[32m"2400.000000pt"[0m height=[32m"2040.000000pt"[0m viewBox=[32m"0 0 2400.000000 2040.000000"[0m
+[31m[1m>[0m [90m24 |[0m  preserveAspectRatio=[32m"xMidYMid meet"[0m>
+  [90m   |[0m                                     [31m[1m^[0m
+  [90m25 |[0m
+  [90m26 |[0m <g transform=[32m"translate(0.000000,2040.000000) scale(0.100000,-0.100000)"[0m
+  [90m27 |[0m fill=[32m"currentColor"[0m stroke=[32m"none"[0m>
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+
+ GET /admin 500 in 30ms (next.js: 10ms, proxy.ts: 7ms, application-code: 13ms)
+[browser] Uncaught Error: ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+
+    at <unknown> (Error: ./components/Logo.tsx:24:37)
+    at <unknown> (Error: (./components/Logo.tsx:24:37)
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/page.tsx [Client Component Browser]
+    ./app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/page.tsx [Client Component SSR]
+    ./app/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+⨯ ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  [90m22 |[0m       =[32m"http://www.w3.org/2000/svg"[0m
+  [90m23 |[0m  width=[32m"2400.000000pt"[0m height=[32m"2040.000000pt"[0m viewBox=[32m"0 0 2400.000000 2040.000000"[0m
+[31m[1m>[0m [90m24 |[0m  preserveAspectRatio=[32m"xMidYMid meet"[0m>
+  [90m   |[0m                                     [31m[1m^[0m
+  [90m25 |[0m
+  [90m26 |[0m <g transform=[32m"translate(0.000000,2040.000000) scale(0.100000,-0.100000)"[0m
+  [90m27 |[0m fill=[32m"currentColor"[0m stroke=[32m"none"[0m>
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+
+⨯ ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  [90m22 |[0m       =[32m"http://www.w3.org/2000/svg"[0m
+  [90m23 |[0m  width=[32m"2400.000000pt"[0m height=[32m"2040.000000pt"[0m viewBox=[32m"0 0 2400.000000 2040.000000"[0m
+[31m[1m>[0m [90m24 |[0m  preserveAspectRatio=[32m"xMidYMid meet"[0m>
+  [90m   |[0m                                     [31m[1m^[0m
+  [90m25 |[0m
+  [90m26 |[0m <g transform=[32m"translate(0.000000,2040.000000) scale(0.100000,-0.100000)"[0m
+  [90m27 |[0m fill=[32m"currentColor"[0m stroke=[32m"none"[0m>
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+
+ GET /admin 500 in 121ms (next.js: 54ms, proxy.ts: 39ms, application-code: 28ms)
+ GET /agents 500 in 75ms (next.js: 61ms, application-code: 14ms)
+[browser] Uncaught Error: ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+
+    at <unknown> (Error: ./components/Logo.tsx:24:37)
+    at <unknown> (Error: (./components/Logo.tsx:24:37)
+[browser] Uncaught Error: ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+
+    at <unknown> (Error: ./components/Logo.tsx:24:37)
+    at <unknown> (Error: (./components/Logo.tsx:24:37)
+⨯ ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  [90m22 |[0m       =[32m"http://www.w3.org/2000/svg"[0m
+  [90m23 |[0m  width=[32m"2400.000000pt"[0m height=[32m"2040.000000pt"[0m viewBox=[32m"0 0 2400.000000 2040.000000"[0m
+[31m[1m>[0m [90m24 |[0m  preserveAspectRatio=[32m"xMidYMid meet"[0m>
+  [90m   |[0m                                     [31m[1m^[0m
+  [90m25 |[0m
+  [90m26 |[0m <g transform=[32m"translate(0.000000,2040.000000) scale(0.100000,-0.100000)"[0m
+  [90m27 |[0m fill=[32m"currentColor"[0m stroke=[32m"none"[0m>
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+
+⨯ ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  [90m22 |[0m       =[32m"http://www.w3.org/2000/svg"[0m
+  [90m23 |[0m  width=[32m"2400.000000pt"[0m height=[32m"2040.000000pt"[0m viewBox=[32m"0 0 2400.000000 2040.000000"[0m
+[31m[1m>[0m [90m24 |[0m  preserveAspectRatio=[32m"xMidYMid meet"[0m>
+  [90m   |[0m                                     [31m[1m^[0m
+  [90m25 |[0m
+  [90m26 |[0m <g transform=[32m"translate(0.000000,2040.000000) scale(0.100000,-0.100000)"[0m
+  [90m27 |[0m fill=[32m"currentColor"[0m stroke=[32m"none"[0m>
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+
+ GET /agents 500 in 97ms (next.js: 46ms, application-code: 50ms)
+ GET /admin 500 in 130ms (next.js: 62ms, proxy.ts: 32ms, application-code: 36ms)
+[browser] Uncaught Error: ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+
+    at <unknown> (Error: ./components/Logo.tsx:24:37)
+    at <unknown> (Error: (./components/Logo.tsx:24:37)
+[browser] Uncaught Error: ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+
+    at <unknown> (Error: ./components/Logo.tsx:24:37)
+    at <unknown> (Error: (./components/Logo.tsx:24:37)
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/page.tsx [Client Component Browser]
+    ./app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/page.tsx [Client Component SSR]
+    ./app/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+⨯ ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  [90m22 |[0m       =[32m"http://www.w3.org/2000/svg"[0m
+  [90m23 |[0m  width=[32m"2400.000000pt"[0m height=[32m"2040.000000pt"[0m viewBox=[32m"0 0 2400.000000 2040.000000"[0m
+[31m[1m>[0m [90m24 |[0m  preserveAspectRatio=[32m"xMidYMid meet"[0m>
+  [90m   |[0m                                     [31m[1m^[0m
+  [90m25 |[0m
+  [90m26 |[0m <g transform=[32m"translate(0.000000,2040.000000) scale(0.100000,-0.100000)"[0m
+  [90m27 |[0m fill=[32m"currentColor"[0m stroke=[32m"none"[0m>
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+
+ GET /admin 500 in 36ms (next.js: 14ms, proxy.ts: 5ms, application-code: 17ms)
+[browser] Uncaught Error: ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+
+    at <unknown> (Error: ./components/Logo.tsx:24:37)
+    at <unknown> (Error: (./components/Logo.tsx:24:37)
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/page.tsx [Client Component Browser]
+    ./app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/page.tsx [Client Component SSR]
+    ./app/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/page.tsx [Client Component Browser]
+    ./app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/page.tsx [Client Component SSR]
+    ./app/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+⨯ ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  [90m22 |[0m       =[32m"http://www.w3.org/2000/svg"[0m
+  [90m23 |[0m  width=[32m"2400.000000pt"[0m height=[32m"2040.000000pt"[0m viewBox=[32m"0 0 2400.000000 2040.000000"[0m
+[31m[1m>[0m [90m24 |[0m  preserveAspectRatio=[32m"xMidYMid meet"[0m>
+  [90m   |[0m                                     [31m[1m^[0m
+  [90m25 |[0m
+  [90m26 |[0m <g transform=[32m"translate(0.000000,2040.000000) scale(0.100000,-0.100000)"[0m
+  [90m27 |[0m fill=[32m"currentColor"[0m stroke=[32m"none"[0m>
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+
+ GET /agents 500 in 17ms (next.js: 7ms, application-code: 10ms)
+[browser] Uncaught Error: ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+
+    at <unknown> (Error: ./components/Logo.tsx:24:37)
+    at <unknown> (Error: (./components/Logo.tsx:24:37)
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/page.tsx [Client Component Browser]
+    ./app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/page.tsx [Client Component SSR]
+    ./app/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+⨯ ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  [90m22 |[0m       =[32m"http://www.w3.org/2000/svg"[0m
+  [90m23 |[0m  width=[32m"2400.000000pt"[0m height=[32m"2040.000000pt"[0m viewBox=[32m"0 0 2400.000000 2040.000000"[0m
+[31m[1m>[0m [90m24 |[0m  preserveAspectRatio=[32m"xMidYMid meet"[0m>
+  [90m   |[0m                                     [31m[1m^[0m
+  [90m25 |[0m
+  [90m26 |[0m <g transform=[32m"translate(0.000000,2040.000000) scale(0.100000,-0.100000)"[0m
+  [90m27 |[0m fill=[32m"currentColor"[0m stroke=[32m"none"[0m>
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+
+ GET /admin 500 in 23ms (next.js: 8ms, proxy.ts: 4ms, application-code: 11ms)
+[browser] Uncaught Error: ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+
+    at <unknown> (Error: ./components/Logo.tsx:24:37)
+    at <unknown> (Error: (./components/Logo.tsx:24:37)
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/page.tsx [Client Component Browser]
+    ./app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/page.tsx [Client Component SSR]
+    ./app/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+⨯ ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  [90m22 |[0m       =[32m"http://www.w3.org/2000/svg"[0m
+  [90m23 |[0m  width=[32m"2400.000000pt"[0m height=[32m"2040.000000pt"[0m viewBox=[32m"0 0 2400.000000 2040.000000"[0m
+[31m[1m>[0m [90m24 |[0m  preserveAspectRatio=[32m"xMidYMid meet"[0m>
+  [90m   |[0m                                     [31m[1m^[0m
+  [90m25 |[0m
+  [90m26 |[0m <g transform=[32m"translate(0.000000,2040.000000) scale(0.100000,-0.100000)"[0m
+  [90m27 |[0m fill=[32m"currentColor"[0m stroke=[32m"none"[0m>
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+
+ GET /admin 500 in 28ms (next.js: 10ms, proxy.ts: 4ms, application-code: 14ms)
+[browser] Uncaught Error: ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+
+    at <unknown> (Error: ./components/Logo.tsx:24:37)
+    at <unknown> (Error: (./components/Logo.tsx:24:37)
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/page.tsx [Client Component Browser]
+    ./app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/page.tsx [Client Component SSR]
+    ./app/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+⨯ ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  [90m22 |[0m       =[32m"http://www.w3.org/2000/svg"[0m
+  [90m23 |[0m  width=[32m"2400.000000pt"[0m height=[32m"2040.000000pt"[0m viewBox=[32m"0 0 2400.000000 2040.000000"[0m
+[31m[1m>[0m [90m24 |[0m  preserveAspectRatio=[32m"xMidYMid meet"[0m>
+  [90m   |[0m                                     [31m[1m^[0m
+  [90m25 |[0m
+  [90m26 |[0m <g transform=[32m"translate(0.000000,2040.000000) scale(0.100000,-0.100000)"[0m
+  [90m27 |[0m fill=[32m"currentColor"[0m stroke=[32m"none"[0m>
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+
+ GET /agents 500 in 28ms (next.js: 17ms, application-code: 11ms)
+[browser] Uncaught Error: ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+
+    at <unknown> (Error: ./components/Logo.tsx:24:37)
+    at <unknown> (Error: (./components/Logo.tsx:24:37)
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/page.tsx [Client Component Browser]
+    ./app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/page.tsx [Client Component SSR]
+    ./app/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+⨯ ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  [90m22 |[0m       =[32m"http://www.w3.org/2000/svg"[0m
+  [90m23 |[0m  width=[32m"2400.000000pt"[0m height=[32m"2040.000000pt"[0m viewBox=[32m"0 0 2400.000000 2040.000000"[0m
+[31m[1m>[0m [90m24 |[0m  preserveAspectRatio=[32m"xMidYMid meet"[0m>
+  [90m   |[0m                                     [31m[1m^[0m
+  [90m25 |[0m
+  [90m26 |[0m <g transform=[32m"translate(0.000000,2040.000000) scale(0.100000,-0.100000)"[0m
+  [90m27 |[0m fill=[32m"currentColor"[0m stroke=[32m"none"[0m>
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+
+ GET /agents 500 in 20ms (next.js: 8ms, application-code: 12ms)
+[browser] Uncaught Error: ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+
+    at <unknown> (Error: ./components/Logo.tsx:24:37)
+    at <unknown> (Error: (./components/Logo.tsx:24:37)
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/page.tsx [Client Component Browser]
+    ./app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/page.tsx [Client Component SSR]
+    ./app/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Client Component Browser]
+    ./app/(dashboard)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Client Component SSR]
+    ./app/(dashboard)/layout.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 
+[browser] ./components/Logo.tsx:24:37
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+  22 |       ="http://www.w3.org/2000/svg"
+  23 |  width="2400.000000pt" height="2040.000000pt" viewBox="0 0 2400.000000 2040.000000"
+> 24 |  preserveAspectRatio="xMidYMid meet">
+     |                                     ^
+  25 |
+  26 | <g transform="translate(0.000000,2040.000000) scale(0.100000,-0.100000)"
+  27 | fill="currentColor" stroke="none">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./components/Logo.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Client Component Browser]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Logo.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Client Component SSR]
+    ./app/(admin)/AdminPortal.tsx [Server Component]
+    ./app/(admin)/admin/page.tsx [Server Component] 

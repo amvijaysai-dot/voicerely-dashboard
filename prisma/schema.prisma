@@ -1,0 +1,119 @@
+// prisma/schema.prisma
+//
+// Voicerely Dashboard — PostgreSQL schema (production data layer).
+//
+// Mirrors the legacy JSON tenant document into proper relational models.
+// Primary keys use CUID (collision-resistant, non-sequential) instead of
+// auto-increment or date strings. The Retell API key is stored encrypted
+// (AES-256-GCM via lib/security/crypto) in the RetellApiKey table; the
+// Tenant row references it 1:1. AuditLog + Session capture the structured
+// telemetry and signed sessions respectively.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Tenant {
+  id             String   @id @default(cuid())
+  clientName     String
+  username       String   @unique
+  passwordHash   String
+  allowedMinutes Int      @default(0)
+  usedMinutes    Int      @default(0)
+  perMinuteRate  Float    @default(0)
+  status         String   @default("active") // "active" | "suspended"
+  isAdmin        Boolean  @default(false)
+  // Retell agent ids owned by this tenant (used to attribute webhooks).
+  agentIds       String[] @default([])
+  createdAt      DateTime @default(now())
+  // Billing model for flexible pricing options
+  billingModel   String?  // "hybrid" | "metered_maintenance" | "pure_per_minute"
+  baseMonthlyFee Float?   @default(0)
+  includedMinutes Int?   @default(0)
+  // Client contact email address (used for onboarding + notifications).
+  email           String?
+  // Payment method for billing (Paddle)
+  paddleCustomerId String?
+  cardBrand        String?
+  cardLast4        String?
+
+  retellApiKey RetellApiKey?
+  auditLogs    AuditLog[]
+  sessions     Session[]
+  callLogs     CallLog[]
+
+  @@index([status])
+}
+
+model CallLog {
+  id                  String   @id @default(cuid())
+  tenantId            String
+  callId              String // Retell call id (idempotency key)
+  agentId             String
+  totalDurationSeconds Int
+  transcript          String   @default("")
+  audioUrl            String   @default("")
+  disconnectionReason String?
+  sentiment           String? // "Positive" | "Neutral" | "Negative"
+  // ---- Anomaly & diagnostic markers (per call) ----
+  hallucinationDetected      Boolean @default(false)
+  scriptDeviation            Boolean @default(false)
+  missedInformation          Boolean @default(false)
+  interruptionCount          Int     @default(0)
+  agentTalkRatio             Float   @default(0) // 0..1 share of agent speaking time
+  mistakeSummary             String?
+  recommendedPromptCorrection String?
+  createdAt           DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, callId])
+  @@index([tenantId])
+  @@index([agentId])
+}
+
+model RetellApiKey {
+  id        String   @id @default(cuid())
+  tenantId  String   @unique
+  // Encrypted at rest (AES-256-GCM envelope from lib/security/crypto).
+  encrypted String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  tenantId  String
+  userId    String?
+  requestId String
+  action    String
+  success   Boolean
+  level     String   @default("info")
+  error     String?
+  meta      Json?
+  createdAt DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@index([action])
+  @@index([createdAt])
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  tenantId  String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+}

@@ -1,0 +1,207 @@
+// app/api/webhooks/retell/route.ts
+//
+// Retell webhook ingestion endpoint. Decouples dashboard performance from
+// blocking Retell API calls: instead of polling, Retell pushes call events
+// here, we attribute them to a tenant by agent_id, persist an immutable call
+// log to the local ledger (data/calls.json), and roll the minutes into the
+// tenant's used-minute balance (data/tenants.json).
+//
+// SECURITY: verifies the optional x-retell-signature header against
+// RETELL_WEBHOOK_SECRET. When the secret is unset (local/dev), verification is
+// skipped so the pipeline remains testable without a real key.
+//
+// RESILIENCE: any internal failure is logged but answered with 200/202 so
+// Retell never retries/spams the endpoint with duplicate payloads.
+
+import { NextRequest, NextResponse } from "next/server";
+import crypto from "node:crypto";
+import {
+  getTenantByAgentId,
+  appendCallLog,
+  incrementUsedMinutes,
+} from "@/lib/repositories/tenantRepository";
+import { newRequestId, audit } from "@/lib/security/logger";
+import { safeError } from "@/lib/validation";
+import type { CallLog } from "@/lib/db";
+
+export const dynamic = "force-dynamic";
+
+const WEBHOOK_SECRET = process.env.RETELL_WEBHOOK_SECRET;
+
+/** Constant-time-ish signature check (HMAC-SHA256 hex). */
+function verifySignature(rawBody: string, signature: string | null): boolean {
+  if (!WEBHOOK_SECRET) return true; // dev mode: no secret configured
+  if (!signature) return false;
+  const expected = crypto
+    .createHmac("sha256", WEBHOOK_SECRET)
+    .update(rawBody)
+    .digest("hex");
+  const a = Buffer.from(expected);
+  const b = Buffer.from(signature);
+  return a.length === b.length && crypto.timingSafeEqual(a, b);
+}
+
+/** Robustly pulls a number of seconds out of the varied Retell duration shapes. */
+function parseDurationSeconds(input: unknown): number {
+  if (typeof input === "number") {
+    // Treat values >= 1000 as milliseconds, otherwise seconds.
+    return input >= 1000 ? Math.round(input / 1000) : Math.round(input);
+  }
+  if (typeof input === "string") {
+    const n = Number(input);
+    if (!Number.isNaN(n)) return n >= 1000 ? Math.round(n / 1000) : Math.round(n);
+  }
+  return 0;
+}
+
+/** Normalizes the free-form Retell sentiment into our tri-state (or undefined). */
+function parseSentiment(input: unknown): CallLog["sentiment"] {
+  const s = typeof input === "string" ? input.toLowerCase() : "";
+  if (s.includes("positive")) return "Positive";
+  if (s.includes("negative")) return "Negative";
+  if (s.includes("neutral")) return "Neutral";
+  return undefined;
+}
+
+export async function POST(req: NextRequest) {
+  const requestId = newRequestId();
+
+  // Read the raw body once so we can both verify the signature and parse JSON.
+  const raw = await req.text();
+  const signature = req.headers.get("x-retell-signature");
+
+  if (!verifySignature(raw, signature)) {
+    audit(requestId, "webhook.retell_signature_failed", {
+      success: false,
+      error: "invalid_signature",
+    });
+    // Still 200 so Retell does not retry; the event is simply dropped.
+    return NextResponse.json({ received: true, status: "ignored" }, { status: 200 });
+  }
+
+  let payload: Record<string, unknown>;
+  try {
+    payload = JSON.parse(raw) as Record<string, unknown>;
+  } catch {
+    audit(requestId, "webhook.retell_bad_json", { success: false, error: "invalid_json" });
+    return NextResponse.json({ received: true, status: "ignored" }, { status: 200 });
+  }
+
+  // Retell wraps events as { event, data }. Support both shapes.
+  const event = (payload.event ?? payload.type ?? "") as string;
+  const data = (payload.data ?? payload) as Record<string, unknown>;
+
+  // Only act on analyzed/ended call events; ack everything else quietly.
+  const isCallEvent =
+    event === "call_analyzed" ||
+    event === "call_ended" ||
+    event === "call.completed" ||
+    event.includes("call_analyzed") ||
+    event.includes("call_ended");
+  if (!isCallEvent) {
+    audit(requestId, "webhook.retell_ignored_event", {
+      success: true,
+      meta: { event },
+    });
+    return NextResponse.json({ received: true, status: "ignored" }, { status: 200 });
+  }
+
+  try {
+    const callId = String(data.call_id ?? data.callId ?? "");
+    const agentId = String(data.agent_id ?? data.agentId ?? "");
+    if (!callId || !agentId) {
+      audit(requestId, "webhook.retell_missing_ids", {
+        success: false,
+        error: "missing_call_or_agent_id",
+        meta: { callId, agentId },
+      });
+      return NextResponse.json({ received: true, status: "ignored" }, { status: 200 });
+    }
+
+    // 1. Attribute the call to a tenant via the agent_id mapping.
+    const tenant = await getTenantByAgentId(agentId);
+    if (!tenant) {
+      audit(requestId, "webhook.retell_unknown_agent", {
+        success: false,
+        error: "no_tenant_for_agent",
+        meta: { agentId },
+      });
+      return NextResponse.json({ received: true, status: "ignored" }, { status: 200 });
+    }
+
+    // 2. Map Retell payload -> our client-view CallLog shape.
+    const durationSeconds = parseDurationSeconds(
+      data.duration_ms ?? data.duration ?? data.duration_seconds ?? 0
+    );
+    const sentiment =
+      parseSentiment(data.sentiment) ??
+      parseSentiment((data.call_analysis as { user_sentiment?: string })?.user_sentiment);
+    const transcript =
+      typeof data.transcript === "string"
+        ? data.transcript
+        : Array.isArray(data.transcript)
+        ? (data.transcript as { text?: string }[]).map((t) => t.text ?? "").join("\n")
+        : "";
+    const audioUrl =
+      typeof data.recording_url === "string"
+        ? data.recording_url
+        : typeof data.recordingUrl === "string"
+        ? data.recordingUrl
+        : "";
+    const createdAtRaw =
+      (data.dispatched_at as string) ??
+      (data.start_timestamp as string) ??
+      (typeof data.start_timestamp === "number"
+        ? new Date(data.start_timestamp).toISOString()
+        : new Date().toISOString());
+
+    const log: CallLog = {
+      callId,
+      tenantId: tenant.id,
+      agentId,
+      totalDurationSeconds: durationSeconds,
+      transcript,
+      audioUrl,
+      disconnectionReason: data.disconnection_reason
+        ? String(data.disconnection_reason)
+        : null,
+      sentiment,
+      createdAt: createdAtRaw,
+    };
+
+    const { inserted } = await appendCallLog(log, tenant.id);
+
+    // 3. Roll the consumed minutes into the tenant's used-minute balance
+    //    (only when this is a brand-new log, to avoid double counting).
+    if (inserted) {
+      const minutes = durationSeconds / 60;
+      await incrementUsedMinutes(tenant.id, minutes, tenant.id);
+    }
+
+    audit(requestId, "webhook.retell_ingested", {
+      success: true,
+      tenantId: tenant.id,
+      meta: {
+        callId,
+        agentId,
+        durationSeconds,
+        inserted,
+        event,
+      },
+    });
+
+    return NextResponse.json(
+      { received: true, status: "ok", inserted, tenantId: tenant.id },
+      { status: 202 }
+    );
+  } catch (err) {
+    // Log clearly, but NEVER fail the webhook — Retell would retry & spam us.
+    const { error } = safeError(err);
+    audit(requestId, "webhook.retell_processing_error", {
+      success: false,
+      error,
+      level: "error",
+    });
+    return NextResponse.json({ received: true, status: "accepted_with_errors" }, { status: 202 });
+  }
+}

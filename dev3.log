@@ -1,0 +1,212 @@
+
+> voicerely-dashboard@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.10 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.1.13:3000
+- Environments: .env.local
+✓ Ready in 632ms
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+
+(node:28396) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/vijay/projects/new/voicerely-dashboard/tailwind.config.ts?id=1784167528127 is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to \\?\C:\vijay\projects\new\voicerely-dashboard\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"timestamp":"2026-07-16T02:05:40.102Z","requestId":"5f3a4eb6-990d-4b79-8c0f-a5684dc21c4d","tenantId":"admin","userId":"admin","action":"auth.login","success":true,"level":"info","error":null,"meta":{"isAdmin":true}}
+ POST /api/auth/login 200 in 402ms (next.js: 295ms, application-code: 108ms)
+{"timestamp":"2026-07-16T02:05:40.321Z","requestId":"cfafd475-a63c-4c80-81a1-d7cc209752f9","tenantId":"tenant_mrmvactc","userId":"admin","action":"tenant.create","success":true,"level":"info","error":null,"meta":{"username":"emailco","clientName":"Email Co"}}
+[email:preview] Onboarding email to emailuser@emailco.com
+  Subject: Welcome to Voicerely — Your Dashboard Login
+Welcome to Voicerely, Email Co!
+
+Your analytics dashboard account is ready. Login details:
+Login URL: http://localhost:3000/login
+Username:  emailco
+Password:  password123
+
+For your security, please change your password after your first login.
+— The Voicerely Team
+ POST /api/admin/tenants 201 in 222ms (next.js: 45ms, proxy.ts: 77ms, application-code: 100ms)
+{"timestamp":"2026-07-16T02:05:40.460Z","requestId":"6053a4bf-bb56-4650-9b4c-377e489b3ca5","tenantId":"tenant_mrmvactc","userId":"tenant_mrmvactc","action":"auth.login","success":true,"level":"info","error":null,"meta":{"isAdmin":false}}
+ POST /api/auth/login 200 in 115ms (next.js: 3ms, application-code: 112ms)
+ GET /login?next=%2Fagents 200 in 475ms (next.js: 235ms, application-code: 240ms)
+{"timestamp":"2026-07-16T02:07:12.019Z","requestId":"97ae4f3e-17a4-4658-9e45-ec06f645c040","tenantId":"admin","userId":"admin","action":"auth.login_failed","success":false,"level":"warn","error":"invalid_credentials","meta":{"username":"admin"}}
+ POST /api/auth/login 401 in 99ms (next.js: 4ms, application-code: 95ms)
+{"timestamp":"2026-07-16T02:07:13.627Z","requestId":"c90423a0-8dc5-46e5-bf98-17d51e707b2a","tenantId":"admin","userId":"admin","action":"auth.login_failed","success":false,"level":"warn","error":"invalid_credentials","meta":{"username":"admin"}}
+ POST /api/auth/login 401 in 67ms (next.js: 2ms, application-code: 64ms)
+ GET /login?next=%2F 200 in 35ms (next.js: 3ms, application-code: 31ms)
+{"timestamp":"2026-07-16T02:07:25.564Z","requestId":"d3101711-d0d3-4823-bb39-db19cd205a16","tenantId":"tenant_mrmtsiz9","userId":"tenant_mrmtsiz9","action":"auth.login","success":true,"level":"info","error":null,"meta":{"isAdmin":false}}
+ POST /api/auth/login 200 in 73ms (next.js: 3ms, application-code: 70ms)
+ GET / 200 in 58ms (next.js: 34ms, proxy.ts: 5ms, application-code: 19ms)
+ GET / 200 in 32ms (next.js: 5ms, proxy.ts: 7ms, application-code: 20ms)
+ GET /api/auth/me 200 in 149ms (next.js: 50ms, application-code: 99ms)
+ GET /api/dashboard/metrics 200 in 162ms (next.js: 89ms, proxy.ts: 11ms, application-code: 61ms)
+ GET /api/calls?limit=1000 200 in 162ms (next.js: 138ms, proxy.ts: 9ms, application-code: 15ms)
+ GET /api/auth/me 200 in 9ms (next.js: 3ms, application-code: 6ms)
+ GET /api/dashboard/metrics 200 in 28ms (next.js: 10ms, proxy.ts: 6ms, application-code: 12ms)
+ GET /api/calls?limit=1000 200 in 29ms (next.js: 15ms, proxy.ts: 6ms, application-code: 8ms)
+ GET /login?next=%2Fagents 200 in 187ms (next.js: 143ms, application-code: 44ms)
+{"timestamp":"2026-07-16T02:12:58.797Z","requestId":"3c9b67cd-e411-4aca-b5fb-a3446fae3b63","tenantId":"admin","userId":"admin","action":"auth.login","success":true,"level":"info","error":null,"meta":{"isAdmin":true}}
+ POST /api/auth/login 200 in 248ms (next.js: 167ms, application-code: 81ms)
+{"timestamp":"2026-07-16T02:13:09.396Z","requestId":"47c3b250-ddce-49e9-b37f-b390aa838616","tenantId":"admin","userId":"admin","action":"auth.login","success":true,"level":"info","error":null,"meta":{"isAdmin":true}}
+ POST /api/auth/login 200 in 75ms (next.js: 5ms, application-code: 70ms)
+ GET /api/auth/me 200 in 28ms (next.js: 14ms, application-code: 14ms)
+ GET / 200 in 156ms (next.js: 37ms, proxy.ts: 91ms, application-code: 28ms)
+{"timestamp":"2026-07-16T02:18:07.460Z","requestId":"70b55075-088b-49c7-807e-f141afe4d973","tenantId":"admin","userId":"admin","action":"auth.login","success":true,"level":"info","error":null,"meta":{"isAdmin":true}}
+ POST /api/auth/login 200 in 74ms (next.js: 2ms, application-code: 71ms)
+ GET /admin 200 in 264ms (next.js: 181ms, proxy.ts: 3ms, application-code: 80ms)
+ GET /admin 200 in 41ms (next.js: 3ms, proxy.ts: 3ms, application-code: 34ms)
+ GET /api/auth/me 200 in 13ms (next.js: 8ms, application-code: 5ms)
+ GET /api/auth/me 200 in 28ms (next.js: 1674µs, application-code: 26ms)
+[browser] Image with src "/logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+✓ Compiled in 297ms
+ GET / 200 in 542ms (next.js: 319ms, proxy.ts: 36ms, application-code: 187ms)
+ GET /admin 200 in 567ms (next.js: 191ms, proxy.ts: 37ms, application-code: 338ms)
+ GET / 200 in 147ms (next.js: 37ms, proxy.ts: 11ms, application-code: 99ms)
+ GET /admin 200 in 176ms (next.js: 9ms, proxy.ts: 13ms, application-code: 154ms)
+ GET /admin 200 in 107ms (next.js: 6ms, proxy.ts: 11ms, application-code: 91ms)
+ GET / 200 in 52ms (next.js: 9ms, proxy.ts: 18ms, application-code: 25ms)
+✓ Compiled in 157ms
+ GET / 200 in 496ms (next.js: 56ms, proxy.ts: 24ms, application-code: 416ms)
+ GET /admin 200 in 537ms (next.js: 181ms, proxy.ts: 22ms, application-code: 335ms)
+ GET / 200 in 272ms (next.js: 44ms, proxy.ts: 46ms, application-code: 182ms)
+ GET /admin 200 in 238ms (next.js: 70ms, proxy.ts: 16ms, application-code: 152ms)
+ GET / 200 in 104ms (next.js: 8ms, proxy.ts: 20ms, application-code: 76ms)
+ GET /admin 200 in 91ms (next.js: 33ms, proxy.ts: 9ms, application-code: 50ms)
+{"timestamp":"2026-07-16T02:22:36.214Z","requestId":"8182d927-6594-40ce-8afa-aa0649de0ee8","tenantId":"admin","userId":"admin","action":"auth.login","success":true,"level":"info","error":null,"meta":{"isAdmin":true}}
+ POST /api/auth/login 200 in 220ms (next.js: 124ms, application-code: 96ms)
+ GET /admin 200 in 454ms (next.js: 5ms, proxy.ts: 8ms, application-code: 441ms)
+ GET /api/auth/me 200 in 77ms (next.js: 62ms, application-code: 15ms)
+✓ Compiled in 197ms
+ GET /admin 200 in 406ms (next.js: 207ms, proxy.ts: 46ms, application-code: 154ms)
+ GET / 200 in 79ms (next.js: 18ms, proxy.ts: 10ms, application-code: 51ms)
+{"timestamp":"2026-07-16T02:26:04.045Z","requestId":"28100e40-0ba5-49b7-8021-f6e7c42cf64b","tenantId":"admin","userId":"admin","action":"auth.login","success":true,"level":"info","error":null,"meta":{"isAdmin":true}}
+ POST /api/auth/login 200 in 188ms (next.js: 106ms, application-code: 82ms)
+ GET /admin 200 in 117ms (next.js: 4ms, proxy.ts: 6ms, application-code: 107ms)
+ GET /admin 200 in 91ms (next.js: 6ms, proxy.ts: 7ms, application-code: 78ms)
+[browser] Image with src "/logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET /api/auth/me 200 in 41ms (next.js: 31ms, application-code: 10ms)
+ GET /billing 200 in 94ms (next.js: 68ms, proxy.ts: 3ms, application-code: 23ms)
+ GET /api/auth/me 200 in 62ms (next.js: 2ms, application-code: 59ms)
+ GET /api/billing/payment-method 200 in 69ms (next.js: 55ms, proxy.ts: 5ms, application-code: 8ms)
+ GET /api/auth/me 200 in 14ms (next.js: 4ms, application-code: 10ms)
+ GET /api/billing/payment-method 200 in 21ms (next.js: 7ms, proxy.ts: 6ms, application-code: 8ms)
+ GET /agents 200 in 49ms (next.js: 28ms, proxy.ts: 3ms, application-code: 18ms)
+ GET /api/auth/me 200 in 35ms (next.js: 5ms, application-code: 30ms)
+ GET /api/calls?limit=100 200 in 133ms (next.js: 116ms, proxy.ts: 8ms, application-code: 9ms)
+ GET /api/auth/me 200 in 14ms (next.js: 6ms, application-code: 9ms)
+ GET /api/calls?limit=100 200 in 18ms (next.js: 2ms, proxy.ts: 6ms, application-code: 9ms)
+ GET /calls 200 in 59ms (next.js: 35ms, proxy.ts: 3ms, application-code: 20ms)
+ GET /api/calls?page=1&limit=20 200 in 24ms (next.js: 3ms, proxy.ts: 4ms, application-code: 17ms)
+ GET /api/calls?page=1&limit=20 200 in 20ms (next.js: 3ms, proxy.ts: 4ms, application-code: 13ms)
+ GET /metrics 200 in 83ms (next.js: 59ms, proxy.ts: 3ms, application-code: 21ms)
+ GET / 200 in 21ms (next.js: 3ms, proxy.ts: 3ms, application-code: 14ms)
+ GET /api/auth/me 200 in 16ms (next.js: 6ms, application-code: 9ms)
+ GET /api/dashboard/metrics 200 in 94ms (next.js: 51ms, proxy.ts: 12ms, application-code: 31ms)
+ GET /api/calls?limit=1000 200 in 94ms (next.js: 73ms, proxy.ts: 11ms, application-code: 9ms)
+ GET /api/auth/me 200 in 12ms (next.js: 5ms, application-code: 7ms)
+ GET /api/dashboard/metrics 200 in 26ms (next.js: 5ms, proxy.ts: 10ms, application-code: 12ms)
+ GET /api/calls?limit=1000 200 in 27ms (next.js: 9ms, proxy.ts: 9ms, application-code: 9ms)
+ GET /metrics 200 in 27ms (next.js: 3ms, proxy.ts: 4ms, application-code: 20ms)
+ GET /api/auth/me 200 in 10ms (next.js: 4ms, application-code: 6ms)
+ GET /api/auth/me 200 in 12ms (next.js: 2ms, application-code: 10ms)
+ GET /billing 200 in 31ms (next.js: 4ms, proxy.ts: 5ms, application-code: 22ms)
+ GET /api/billing/payment-method 200 in 23ms (next.js: 7ms, proxy.ts: 6ms, application-code: 10ms)
+ GET /api/billing/payment-method 200 in 17ms (next.js: 3ms, proxy.ts: 5ms, application-code: 9ms)
+ POST /api/auth/logout 200 in 77ms (next.js: 72ms, application-code: 5ms)
+ GET /login 200 in 33ms (next.js: 17ms, application-code: 17ms)
+ GET /login 200 in 26ms (next.js: 4ms, application-code: 23ms)
+{"timestamp":"2026-07-16T02:31:13.939Z","requestId":"5acd1640-6718-49ea-9488-a25f82f9e81e","tenantId":"tenant_mrmtsiz9","userId":"tenant_mrmtsiz9","action":"auth.login","success":true,"level":"info","error":null,"meta":{"isAdmin":false}}
+ POST /api/auth/login 200 in 76ms (next.js: 3ms, application-code: 74ms)
+ GET / 200 in 20ms (next.js: 3ms, proxy.ts: 5ms, application-code: 12ms)
+ GET / 200 in 30ms (next.js: 4ms, proxy.ts: 6ms, application-code: 21ms)
+ GET /api/auth/me 200 in 11ms (next.js: 4ms, application-code: 7ms)
+ GET /api/dashboard/metrics 200 in 30ms (next.js: 11ms, proxy.ts: 11ms, application-code: 9ms)
+ GET /api/calls?limit=1000 200 in 29ms (next.js: 14ms, proxy.ts: 9ms, application-code: 7ms)
+ GET /api/auth/me 200 in 11ms (next.js: 4ms, application-code: 8ms)
+ GET /api/dashboard/metrics 200 in 25ms (next.js: 5ms, proxy.ts: 9ms, application-code: 11ms)
+ GET /api/calls?limit=1000 200 in 26ms (next.js: 9ms, proxy.ts: 8ms, application-code: 9ms)
+ GET /billing 200 in 23ms (next.js: 3ms, proxy.ts: 3ms, application-code: 17ms)
+ GET /api/auth/me 200 in 7ms (next.js: 3ms, application-code: 4ms)
+ GET /api/billing/payment-method 200 in 21ms (next.js: 9ms, proxy.ts: 6ms, application-code: 6ms)
+ GET /api/auth/me 200 in 14ms (next.js: 5ms, application-code: 9ms)
+ GET /api/billing/payment-method 200 in 24ms (next.js: 3ms, proxy.ts: 14ms, application-code: 6ms)
+ GET / 200 in 23ms (next.js: 4ms, proxy.ts: 3ms, application-code: 16ms)
+ GET /api/auth/me 200 in 13ms (next.js: 3ms, application-code: 9ms)
+ GET /api/dashboard/metrics 200 in 26ms (next.js: 9ms, proxy.ts: 8ms, application-code: 10ms)
+ GET /api/calls?limit=1000 200 in 30ms (next.js: 13ms, proxy.ts: 7ms, application-code: 10ms)
+ GET /api/auth/me 200 in 10ms (next.js: 4ms, application-code: 6ms)
+ GET /api/dashboard/metrics 200 in 24ms (next.js: 5ms, proxy.ts: 10ms, application-code: 9ms)
+ GET /api/calls?limit=1000 200 in 23ms (next.js: 8ms, proxy.ts: 7ms, application-code: 9ms)
+ GET /billing 200 in 24ms (next.js: 3ms, proxy.ts: 3ms, application-code: 18ms)
+ GET /api/auth/me 200 in 15ms (next.js: 4ms, application-code: 10ms)
+ GET /api/billing/payment-method 200 in 26ms (next.js: 11ms, proxy.ts: 6ms, application-code: 9ms)
+ GET /api/auth/me 200 in 7ms (next.js: 3ms, application-code: 5ms)
+ GET /api/billing/payment-method 200 in 31ms (next.js: 3ms, proxy.ts: 8ms, application-code: 20ms)
+ GET /agents 200 in 20ms (next.js: 3ms, proxy.ts: 3ms, application-code: 15ms)
+ GET /api/auth/me 200 in 15ms (next.js: 3ms, application-code: 12ms)
+ GET /api/calls?limit=100 200 in 23ms (next.js: 9ms, proxy.ts: 5ms, application-code: 8ms)
+ GET /api/auth/me 200 in 9ms (next.js: 3ms, application-code: 6ms)
+ GET /api/calls?limit=100 200 in 24ms (next.js: 4ms, proxy.ts: 9ms, application-code: 11ms)
+ GET /calls 200 in 22ms (next.js: 3ms, proxy.ts: 3ms, application-code: 16ms)
+ GET /api/calls?page=1&limit=20 200 in 25ms (next.js: 4ms, proxy.ts: 3ms, application-code: 18ms)
+ GET /api/calls?page=1&limit=20 200 in 17ms (next.js: 1967µs, proxy.ts: 3ms, application-code: 11ms)
+ GET /metrics 200 in 22ms (next.js: 3ms, proxy.ts: 3ms, application-code: 17ms)
+ GET / 200 in 27ms (next.js: 5ms, proxy.ts: 4ms, application-code: 18ms)
+ GET /api/auth/me 200 in 17ms (next.js: 6ms, application-code: 11ms)
+ GET /api/dashboard/metrics 200 in 33ms (next.js: 10ms, proxy.ts: 11ms, application-code: 11ms)
+ GET /api/calls?limit=1000 200 in 33ms (next.js: 16ms, proxy.ts: 10ms, application-code: 7ms)
+ GET /api/auth/me 200 in 9ms (next.js: 3ms, application-code: 6ms)
+ GET /api/dashboard/metrics 200 in 25ms (next.js: 10ms, proxy.ts: 5ms, application-code: 10ms)
+ GET /api/calls?limit=1000 200 in 27ms (next.js: 9ms, proxy.ts: 9ms, application-code: 9ms)
+ GET /metrics 200 in 25ms (next.js: 3ms, proxy.ts: 3ms, application-code: 20ms)
+ GET /api/auth/me 200 in 24ms (next.js: 3ms, application-code: 21ms)
+ GET /api/auth/me 200 in 13ms (next.js: 1518µs, application-code: 12ms)
+ GET / 200 in 21ms (next.js: 3ms, proxy.ts: 3ms, application-code: 15ms)
+ GET /api/auth/me 200 in 14ms (next.js: 5ms, application-code: 10ms)
+ GET /api/dashboard/metrics 200 in 31ms (next.js: 8ms, proxy.ts: 12ms, application-code: 11ms)
+ GET /api/calls?limit=1000 200 in 31ms (next.js: 13ms, proxy.ts: 10ms, application-code: 7ms)
+ GET /api/auth/me 200 in 11ms (next.js: 4ms, application-code: 7ms)
+ GET /api/dashboard/metrics 200 in 29ms (next.js: 5ms, proxy.ts: 9ms, application-code: 15ms)
+ GET /api/calls?limit=1000 200 in 30ms (next.js: 9ms, proxy.ts: 9ms, application-code: 13ms)
+ GET /metrics 200 in 24ms (next.js: 3ms, proxy.ts: 3ms, application-code: 17ms)
+ GET /api/auth/me 200 in 18ms (next.js: 3ms, application-code: 16ms)
+ GET /api/auth/me 200 in 13ms (next.js: 1860µs, application-code: 12ms)
+ GET /billing 200 in 28ms (next.js: 3ms, proxy.ts: 4ms, application-code: 20ms)
+ GET /api/billing/payment-method 200 in 21ms (next.js: 4ms, proxy.ts: 4ms, application-code: 13ms)
+ GET /api/billing/payment-method 200 in 10ms (next.js: 1922µs, proxy.ts: 3ms, application-code: 5ms)
+ GET / 200 in 22ms (next.js: 3ms, proxy.ts: 4ms, application-code: 14ms)
+ GET /api/auth/me 200 in 17ms (next.js: 6ms, application-code: 11ms)
+ GET /api/dashboard/metrics 200 in 50ms (next.js: 11ms, proxy.ts: 26ms, application-code: 14ms)
+ GET /api/calls?limit=1000 200 in 43ms (next.js: 16ms, proxy.ts: 18ms, application-code: 10ms)
+ GET /api/auth/me 200 in 11ms (next.js: 4ms, application-code: 7ms)
+ GET /api/dashboard/metrics 200 in 22ms (next.js: 4ms, proxy.ts: 9ms, application-code: 9ms)
+ GET /api/calls?limit=1000 200 in 22ms (next.js: 7ms, proxy.ts: 8ms, application-code: 8ms)
+ GET /billing 200 in 30ms (next.js: 3ms, proxy.ts: 3ms, application-code: 24ms)
+ GET /api/auth/me 200 in 12ms (next.js: 3ms, application-code: 10ms)
+ GET /api/billing/payment-method 200 in 27ms (next.js: 9ms, proxy.ts: 5ms, application-code: 13ms)
+ GET /api/auth/me 200 in 9ms (next.js: 4ms, application-code: 5ms)
+ GET /api/billing/payment-method 200 in 18ms (next.js: 2ms, proxy.ts: 8ms, application-code: 7ms)
+ GET / 200 in 19ms (next.js: 3ms, proxy.ts: 3ms, application-code: 13ms)
+ GET /api/auth/me 200 in 12ms (next.js: 3ms, application-code: 8ms)
+ GET /api/dashboard/metrics 200 in 30ms (next.js: 7ms, proxy.ts: 12ms, application-code: 11ms)
+ GET /api/calls?limit=1000 200 in 29ms (next.js: 12ms, proxy.ts: 9ms, application-code: 8ms)
+ GET /api/auth/me 200 in 11ms (next.js: 4ms, application-code: 7ms)
+ GET /api/dashboard/metrics 200 in 21ms (next.js: 4ms, proxy.ts: 9ms, application-code: 9ms)
+ GET /api/calls?limit=1000 200 in 24ms (next.js: 7ms, proxy.ts: 8ms, application-code: 8ms)
+ GET /billing 200 in 22ms (next.js: 3ms, proxy.ts: 3ms, application-code: 16ms)
+ GET /api/auth/me 200 in 13ms (next.js: 3ms, application-code: 10ms)
+ GET /api/billing/payment-method 200 in 21ms (next.js: 9ms, proxy.ts: 6ms, application-code: 7ms)
+ GET /api/auth/me 200 in 8ms (next.js: 4ms, application-code: 4ms)
+ GET /api/billing/payment-method 200 in 27ms (next.js: 3ms, proxy.ts: 8ms, application-code: 16ms)
+ POST /api/auth/logout 200 in 5ms (next.js: 2ms, application-code: 3ms)
+ GET /login 200 in 15ms (next.js: 2ms, application-code: 13ms)
+{"timestamp":"2026-07-16T02:32:57.000Z","requestId":"aad11b19-50ff-4217-b98a-e842fbc96c5c","tenantId":"admin","userId":"admin","action":"auth.login","success":true,"level":"info","error":null,"meta":{"isAdmin":true}}
+ POST /api/auth/login 200 in 68ms (next.js: 2ms, application-code: 65ms)
+ GET /admin 200 in 34ms (next.js: 4ms, proxy.ts: 3ms, application-code: 27ms)
+ GET /admin 200 in 43ms (next.js: 6ms, proxy.ts: 6ms, application-code: 31ms)
+ GET /api/auth/me 200 in 8ms (next.js: 2ms, application-code: 6ms)
+[browser] Image with src "/logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET /api/auth/me 200 in 7ms (next.js: 1722µs, application-code: 5ms)
+[?25h
