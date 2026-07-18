@@ -5,7 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LucideIcon, LayoutDashboard, PhoneCall, Receipt, LogOut, BarChart3, Bot, User, Mail, AtSign, ChevronDown } from "lucide-react";
+import { LucideIcon, LayoutDashboard, PhoneCall, Receipt, LogOut, BarChart3, Bot, User, Mail, AtSign, ChevronDown, Settings } from "lucide-react";
 import { MobileNav } from "@/components/MobileNav";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Logo } from "@/components/Logo";
@@ -16,6 +16,7 @@ const NAV: { href: string; label: string; icon: LucideIcon }[] = [
   { href: "/calls", label: "Live Logs", icon: PhoneCall },
   { href: "/agents", label: "Agents", icon: Bot },
   { href: "/billing", label: "Billing", icon: Receipt },
+  { href: "/settings", label: "Settings", icon: Settings },
 ];
 
 function NavItem({ href, label, icon: Icon }: { href: string; label: string; icon: LucideIcon }) {

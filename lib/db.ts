@@ -5,6 +5,18 @@
 // (lib/repositories/tenantRepository.ts) owns encryption + querying. This
 // file is the single place to swap for Prisma + Supabase (PostgreSQL).
 
+// ⚠️  DEV-ONLY DRIVER WARNING
+// This file implements a flat-file JSON storage driver intended ONLY for
+// local development and demos. It is NOT safe for concurrent writes: two
+// simultaneous webhook calls will produce a read-modify-write race that
+// silently corrupts usedMinutes and call logs.
+//
+// PRODUCTION: set DATA_DRIVER=postgres in your environment. The Postgres
+// driver (lib/repositories/tenantPostgresRepository.ts) uses Prisma with
+// proper transaction support and is safe for concurrent access.
+//
+// DO NOT use this driver with real client data or live Retell webhooks.
+
 import fs from "node:fs";
 import path from "node:path";
 import { hashSync } from "bcryptjs";

@@ -102,7 +102,7 @@ export async function POST(req: NextRequest) {
 
   // Flood protection: cap webhook POSTs per IP (generous for real call
   // volume, but blocks payload flooding). Exceeding the limit returns 429.
-  const rl = rateLimit("webhook", clientIp(req), WEBHOOK_LIMIT, WEBHOOK_WINDOW_MS);
+  const rl = await rateLimit("webhook", clientIp(req), WEBHOOK_LIMIT, WEBHOOK_WINDOW_MS);
   if (rl.limited) {
     const retryAfter = Math.ceil((rl.resetMs - Date.now()) / 1000);
     audit(requestId, "webhook.retell_rate_limited", {

@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
   const requestId = newRequestId();
 
   // Brute-force protection: cap login attempts per IP.
-  const rl = rateLimit("login", clientIp(req), LOGIN_LIMIT, LOGIN_WINDOW_MS);
+  const rl = await rateLimit("login", clientIp(req), LOGIN_LIMIT, LOGIN_WINDOW_MS);
   if (rl.limited) {
     const retryAfter = Math.ceil((rl.resetMs - Date.now()) / 1000);
     audit(requestId, "auth.login_rate_limited", {

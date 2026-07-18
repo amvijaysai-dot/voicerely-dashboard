@@ -130,6 +130,17 @@ export async function createTenant(
     throw new Error("USERNAME_TAKEN");
   }
 
+  // Ensure no other tenant owns any of these agentIds.
+  if (tenant.agentIds && tenant.agentIds.length > 0) {
+    const conflict = await prisma.tenant.findFirst({
+      where: {
+        agentIds: { hasSome: tenant.agentIds },
+        id: { not: tenant.id },
+      },
+    });
+    if (conflict) throw new Error(`AGENT_ID_CONFLICT:${conflict.id}`);
+  }
+
   const created = await prisma.tenant.create({
     data: {
       id: tenant.id,
@@ -224,6 +235,17 @@ export async function updateTenant(
     } else {
       data.retellApiKey = { create: { encrypted } };
     }
+  }
+
+  // Ensure updated agentIds don't conflict with other tenants.
+  if (patch.agentIds && patch.agentIds.length > 0) {
+    const conflict = await prisma.tenant.findFirst({
+      where: {
+        agentIds: { hasSome: patch.agentIds },
+        id: { not: id },
+      },
+    });
+    if (conflict) throw new Error(`AGENT_ID_CONFLICT:${conflict.id}`);
   }
 
   const updated = await prisma.tenant.update({

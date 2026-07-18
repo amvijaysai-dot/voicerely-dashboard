@@ -102,6 +102,13 @@ export function safeError(err: unknown): { error: string; status: number } {
     if (err.message === "USERNAME_TAKEN") {
       return { error: "A tenant with that username already exists", status: 409 };
     }
+    if (err.message.startsWith("AGENT_ID_CONFLICT:")) {
+      const conflictId = err.message.split(":")[1];
+      return {
+        error: `Agent ID is already assigned to tenant ${conflictId}. Each agent can only belong to one tenant.`,
+        status: 409,
+      };
+    }
     // Never surface raw internal messages (e.g. Retell API errors).
   }
   return { error: "Internal server error", status: 500 };

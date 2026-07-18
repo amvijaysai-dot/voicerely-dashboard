@@ -1,12 +1,14 @@
 // app/login/page.tsx
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { Mic, LogIn } from "lucide-react";
+import { useState, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Mic, LogIn, ShieldCheck } from "lucide-react";
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
+  const params = useSearchParams();
+  const setupSuccess = params.get("setup") === "1";
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -53,6 +55,13 @@ export default function LoginPage() {
           </div>
         </div>
 
+        {setupSuccess && (
+          <p className="text-sm text-success bg-success/10 border border-success/30 rounded-lg px-3 py-2 flex items-center gap-2">
+            <ShieldCheck className="w-4 h-4 shrink-0" />
+            Password set successfully! You can now log in.
+          </p>
+        )}
+
         <label className="flex flex-col gap-1.5 text-sm text-muted">
           Username
           <input
@@ -72,6 +81,14 @@ export default function LoginPage() {
             className="bg-background-alt border border-border rounded-lg px-3 py-2.5 text-foreground outline-none focus:border-accent transition"
           />
         </label>
+        <p className="text-right">
+          <a
+            href="/set-password"
+            className="text-xs text-accent hover:underline transition"
+          >
+            Forgot password?
+          </a>
+        </p>
 
         {error && (
           <p className="text-sm text-danger bg-danger/10 border border-danger/30 rounded-lg px-3 py-2">{error}</p>
@@ -87,5 +104,13 @@ export default function LoginPage() {
         </button>
       </form>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={null}>
+      <LoginForm />
+    </Suspense>
   );
 }

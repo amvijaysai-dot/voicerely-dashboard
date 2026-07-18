@@ -8,7 +8,26 @@
 "use client";
 
 import { useEffect, useState, Fragment } from "react";
-import { Bot, Phone, FileText, Circle, ChevronDown, TriangleAlert } from "lucide-react";
+import { Bot, Phone, FileText, Circle, ChevronDown, TriangleAlert, Copy } from "lucide-react";
+
+function CopyPromptButton({ text }: { text: string }) {
+  const [copied, setCopied] = useState(false);
+  async function handleCopy() {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch { /* clipboard not available */ }
+  }
+  return (
+    <button
+      onClick={handleCopy}
+      className="absolute top-2 right-2 text-xs text-muted bg-surface border border-border rounded px-2 py-1 hover:text-foreground hover:bg-surface-hover transition"
+    >
+      {copied ? "Copied!" : "Copy"}
+    </button>
+  );
+}
 
 interface MeResponse {
   user: { id: string; username: string; clientName: string; isAdmin: boolean } | null;
@@ -165,33 +184,32 @@ export default function AgentsPage() {
                   </p>
                 </section>
 
-                {/* Read-only script preview — collapsible accordion */}
+                {/* Prompt preview — scrollable, max height, with copy button */}
                 <section className="bg-surface border border-border rounded-2xl lg:col-span-2 overflow-hidden">
                   <button
                     type="button"
-                    onClick={() =>
-                      setScriptOpen((o) => ({ ...o, [agent.agentId]: !open }))
-                    }
-                    aria-expanded={open}
+                    onClick={() => setScriptOpen((o) => ({ ...o, [agent.agentId]: !o[agent.agentId] }))}
+                    aria-expanded={!!scriptOpen[agent.agentId]}
                     className="w-full flex items-center gap-2 px-6 py-4 text-left transition hover:bg-surface-hover"
                   >
                     <FileText className="w-4 h-4 text-accent" />
-                    <span className="text-foreground font-semibold">View Active Agent Script</span>
+                    <span className="text-foreground font-semibold">Agent System Prompt</span>
                     <span className="ml-auto text-xs text-muted">Read-only</span>
                     <ChevronDown
-                      className={`w-4 h-4 text-muted transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+                      className={`w-4 h-4 text-muted transition-transform duration-200 ${scriptOpen[agent.agentId] ? "rotate-180" : ""}`}
                     />
                   </button>
-                  {open && (
-                    agent.prompt ? (
-                      <pre className="whitespace-pre-wrap break-words flex flex-col gap-2 px-6 pb-6 text-sm text-foreground/90 bg-background-alt border-t border-border rounded-b-2xl p-4">
-                        {agent.prompt}
-                      </pre>
-                    ) : (
-                      <p className="px-6 pb-6 text-sm text-muted">
-                        No system prompt is configured for this agent.
-                      </p>
-                    )
+                  {scriptOpen[agent.agentId] && (
+                    <div className="px-6 pb-6">
+                      <div className="relative">
+                        <pre className="text-sm text-foreground/90 bg-background-alt border border-border rounded-lg px-4 py-3 overflow-y-auto max-h-64 whitespace-pre-wrap break-words font-mono text-xs leading-relaxed">
+                          {agent.prompt || "No prompt configured for this agent."}
+                        </pre>
+                        {agent.prompt && (
+                          <CopyPromptButton text={agent.prompt} />
+                        )}
+                      </div>
+                    </div>
                   )}
                 </section>
               </Fragment>

@@ -34,18 +34,30 @@ export function cycleAnchorDay(createdAt: string): number {
  * day before anchorDay in the following month.
  */
 export function currentCycle(anchorDay: number, now: Date = new Date()): BillingCycle {
-  const day = Math.min(anchorDay, 28); // clamp; months < anchorDay clamp below
+  // Clamp anchorDay to the actual last day of the target month so months
+  // with fewer days (e.g. Feb) still land on the last valid day rather
+  // than silently shifting all cycles to the 28th.
+  function clampToMonth(year: number, month: number, d: number): number {
+    const lastDay = new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
+    return Math.min(d, lastDay);
+  }
+
   const y = now.getUTCFullYear();
   const m = now.getUTCMonth();
-
-  // First candidate start: anchorDay in the current UTC month.
-  let start = Date.UTC(y, m, day);
-  // If that start is still in the future relative to `now`, step back a month.
+  const dayThisMonth = clampToMonth(y, m, anchorDay);
+  let start = Date.UTC(y, m, dayThisMonth);
   if (start > now.getTime()) {
-    start = Date.UTC(y, m - 1, day);
+    const prevM = m - 1;
+    const prevY = prevM < 0 ? y - 1 : y;
+    const prevMonth = ((prevM % 12) + 12) % 12;
+    const dayPrevMonth = clampToMonth(prevY, prevMonth, anchorDay);
+    start = Date.UTC(prevY, prevMonth, dayPrevMonth);
   }
-  // End = anchorDay of the next month (exclusive).
-  const end = Date.UTC(y, m + 1, day);
+  const nextM = m + 1;
+  const nextY = nextM > 11 ? y + 1 : y;
+  const nextMonth = nextM % 12;
+  const dayNextMonth = clampToMonth(nextY, nextMonth, anchorDay);
+  const end = Date.UTC(nextY, nextMonth, dayNextMonth);
   return {
     start: new Date(start).toISOString(),
     end: new Date(end).toISOString(),

@@ -27,7 +27,7 @@ export async function middleware(req: NextRequest) {
   const isAdminRoute = pathname === "/admin" || pathname.startsWith("/admin/");
   const isBillingRoute = pathname === "/billing" || pathname.startsWith("/billing/");
   const isDashboardApiRoute = pathname.startsWith("/api/dashboard/");
-  const isDashboardRoot = pathname === "/" || pathname.startsWith("/calls") || pathname.startsWith("/agents") || pathname.startsWith("/metrics");
+  const isDashboardRoot = pathname === "/" || pathname.startsWith("/calls") || pathname.startsWith("/agents") || pathname.startsWith("/metrics") || pathname.startsWith("/settings");
 
   // Protect admin routes
   if (isAdminRoute) {

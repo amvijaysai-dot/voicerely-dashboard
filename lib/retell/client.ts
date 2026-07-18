@@ -132,6 +132,35 @@ async function retellFetch(
   }
 }
 
+/** Fetches ALL calls for a tenant by following Retell's pagination_key chain. */
+async function paginateAllCalls(
+  tenant: Tenant,
+  maxPages = 20
+): Promise<RetellCallRecord[]> {
+  const all: RetellCallRecord[] = [];
+  let paginationKey: string | undefined;
+  let pages = 0;
+
+  do {
+    const params = new URLSearchParams();
+    params.set("limit", "1000");
+    if (paginationKey) params.set("pagination_key", paginationKey);
+    const query = `?${params.toString()}`;
+    const data = (await retellFetch(tenant, `/list-calls${query}`)) as {
+      calls?: RetellCallRecord[];
+      pagination_key?: string;
+    };
+    const batch = data.calls ?? [];
+    all.push(...batch);
+    paginationKey = data.pagination_key;
+    pages++;
+    // Safety cap: never loop forever on a corrupt pagination_key response.
+    if (batch.length === 0) break;
+  } while (paginationKey && pages < maxPages);
+
+  return all;
+}
+
 /** Proxies Retell's GET /list-calls and returns the raw records. */
 export async function listCalls(
   tenant: Tenant,
@@ -140,11 +169,17 @@ export async function listCalls(
   const { demo } = resolveTenant(tenant);
   if (demo) return generateDemoCalls(opts.limit ?? 50);
 
+  // When called without a specific pagination_key (e.g. from the billing/metrics
+  // routes that need ALL calls for a cycle), paginate through the full history.
+  // When called with an explicit pagination_key, honour it directly (single page).
+  if (!opts.pagination_key) {
+    return paginateAllCalls(tenant);
+  }
+
   const params = new URLSearchParams();
   if (opts.limit) params.set("limit", String(opts.limit));
-  if (opts.pagination_key) params.set("pagination_key", opts.pagination_key);
-  const query = params.toString() ? `?${params.toString()}` : "";
-
+  params.set("pagination_key", opts.pagination_key);
+  const query = `?${params.toString()}`;
   const data = (await retellFetch(tenant, `/list-calls${query}`)) as {
     calls?: RetellCallRecord[];
   };

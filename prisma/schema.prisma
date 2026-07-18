@@ -125,3 +125,13 @@ model Session {
 
   @@index([tenantId])
 }
+
+model RateLimitBucket {
+  bucketKey  String   @id
+  count      Int      @default(0)
+  windowStart BigInt
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([windowStart])
+}
