@@ -22,6 +22,7 @@ type TenantRow = {
   allowedMinutes: number;
   usedMinutes: number;
   perMinuteRate: number;
+  avgBookingValue?: number; // Optional to handle Prisma type caching
   status: string;
   isAdmin: boolean;
   createdAt: Date;
@@ -45,6 +46,7 @@ function toTenant(row: Record<string, unknown>): Tenant {
     allowedMinutes: row.allowedMinutes as number,
     usedMinutes: row.usedMinutes as number,
     perMinuteRate: row.perMinuteRate as number,
+    avgBookingValue: (row.avgBookingValue as number) ?? 210,
     retellApiKey: row.retellApiKey ? decryptSecret((row.retellApiKey as { encrypted: string }).encrypted) : "",
     status: (row.status as Tenant["status"]) ?? "active",
     isAdmin: row.isAdmin as boolean,
@@ -150,6 +152,7 @@ export async function createTenant(
       allowedMinutes: tenant.allowedMinutes,
       usedMinutes: tenant.usedMinutes,
       perMinuteRate: tenant.perMinuteRate,
+      avgBookingValue: tenant.avgBookingValue ?? 210,
       status: tenant.status,
       isAdmin: tenant.isAdmin ?? false,
       createdAt: new Date(tenant.createdAt),
@@ -227,6 +230,8 @@ export async function updateTenant(
     data.billingCycleEnd = patch.billingCycleEnd
       ? new Date(patch.billingCycleEnd)
       : null;
+
+  // passwordHash is intentionally excluded — use updateTenantPassword instead.
 
   if (patch.retellApiKey !== undefined) {
     const encrypted = encryptSecret(patch.retellApiKey);
@@ -371,4 +376,35 @@ export async function listCallLogs(tenantId: string): Promise<CallLog[]> {
     where: { tenantId },
     orderBy: { createdAt: "desc" },
   });
+}
+
+/** Safely updates ONLY the password hash for a tenant. The hash must already
+ *  be bcrypt-hashed by the caller (lib/auth.ts hashPassword). This function
+ *  deliberately does NOT accept raw passwords — only pre-hashed values. */
+export async function updateTenantPassword(
+  id: string,
+  bcryptHash: string,
+  actorId?: string
+): Promise<boolean> {
+  const requestId = newRequestId();
+  try {
+    await prisma.tenant.update({
+      where: { id },
+      data: { passwordHash: bcryptHash },
+    });
+    audit(requestId, "tenant.password_updated", {
+      success: true,
+      tenantId: id,
+      userId: actorId,
+    });
+    return true;
+  } catch (e) {
+    audit(requestId, "tenant.password_update_failed", {
+      success: false,
+      tenantId: id,
+      userId: actorId,
+      error: String(e),
+    });
+    return false;
+  }
 }

@@ -46,7 +46,30 @@ function emptyMetrics() {
     minutesConsumed: 0,
     currentSpend: 0,
     avgCallDuration: 0,
+    trend: [],
   };
+}
+
+/** Aggregates calls into a daily count array for the last N days.
+ *  Returns [{day: number (1..N), calls: number}] in chronological order. */
+function buildDailyTrend(
+  calls: { start_timestamp: number }[],
+  days: number
+): { day: number; calls: number }[] {
+  const now = Date.now();
+  const dayMs = 86_400_000;
+  const buckets = new Array<number>(days).fill(0);
+
+  for (const c of calls) {
+    const age = now - c.start_timestamp;
+    const dayIndex = Math.floor(age / dayMs);
+    if (dayIndex >= 0 && dayIndex < days) {
+      // dayIndex 0 = today, 29 = 30 days ago. Reverse to chronological:
+      buckets[days - 1 - dayIndex] += 1;
+    }
+  }
+
+  return buckets.map((count, i) => ({ day: i + 1, calls: count }));
 }
 
 export async function GET(_req: NextRequest) {
@@ -85,11 +108,15 @@ export async function GET(_req: NextRequest) {
       minutesConsumed
     );
 
+    // 4. Build 30-day daily trend for the UsageTrendChart.
+    const trend = buildDailyTrend(rawCalls, 30);
+
     return NextResponse.json({
       totalCalls,
       minutesConsumed: Math.round(minutesConsumed * 100) / 100,
       currentSpend: Math.round(currentSpend * 100) / 100,
       avgCallDuration: Math.round(avgCallDuration * 100) / 100,
+      trend,
     });
   } catch (err) {
     // A tenant with no call records must not crash the route. Fall back to a

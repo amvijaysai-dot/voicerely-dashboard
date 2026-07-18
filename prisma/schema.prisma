@@ -25,6 +25,7 @@ model Tenant {
   allowedMinutes Int      @default(0)
   usedMinutes    Int      @default(0)
   perMinuteRate  Float    @default(0)
+  avgBookingValue  Float    @default(210)  // Average revenue per booked appointment (used for ROI calc)
   status         String   @default("active") // "active" | "suspended"
   isAdmin        Boolean  @default(false)
   // Retell agent ids owned by this tenant (used to attribute webhooks).

@@ -104,14 +104,16 @@ export default function MetricsPage() {
   const [selected, setSelected] = useState<CallHistoryRow | null>(null);
 
   useEffect(() => {
+    const controller = new AbortController();
+    const { signal } = controller;
     let active = true;
     async function load() {
       try {
         // Unified data sources — identical to the Overview tab.
         const [callsRes, metricsRes, summaryRes] = await Promise.all([
-          fetch("/api/calls?limit=1000"),
-          fetch("/api/dashboard/metrics"),
-          fetch("/api/billing/summary"),
+          fetch("/api/calls?limit=20", { signal }),
+          fetch("/api/dashboard/metrics", { signal }),
+          fetch("/api/billing/summary", { signal }),
         ]);
         if (!callsRes.ok) throw new Error("Failed to load call history");
         if (!metricsRes.ok) throw new Error("Failed to load metrics");
@@ -139,6 +141,7 @@ export default function MetricsPage() {
     load();
     return () => {
       active = false;
+      controller.abort();
     };
   }, []);
 

@@ -46,6 +46,8 @@ export interface Tenant {
   allowedMinutes: number;
   usedMinutes: number;
   perMinuteRate: number;
+  /** Average revenue per booked appointment (used for ROI calculation). */
+  avgBookingValue?: number;
   retellApiKey: string; // stored encrypted by the repository layer
   status: "active" | "suspended";
   isAdmin?: boolean;

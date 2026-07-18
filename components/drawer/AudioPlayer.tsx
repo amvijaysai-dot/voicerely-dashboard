@@ -69,7 +69,7 @@ export function AudioPlayer({ src }: { src: string }) {
     <div className="bg-surface border border-border rounded-2xl p-4 flex items-center gap-4 shadow-sm">
       <button
         onClick={togglePlay}
-        aria-label={isPlaying ? "Pause" : "Play"}
+        aria-label={isPlaying ? "Pause recording" : "Play recording"}
         className="w-11 h-11 rounded-full bg-accent flex items-center justify-center shrink-0 text-black hover:opacity-90 transition"
       >
         {isPlaying ? (

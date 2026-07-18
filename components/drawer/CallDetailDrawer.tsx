@@ -56,7 +56,7 @@ export function CallDetailDrawer({ call, onClose }: CallDetailDrawerProps) {
               <button
                 onClick={onClose}
                 className="text-muted hover:text-foreground transition-colors"
-                aria-label="Close"
+                aria-label="Close call details"
               >
                 <X className="w-5 h-5" />
               </button>

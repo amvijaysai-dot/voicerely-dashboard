@@ -181,6 +181,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                       onClick={logout}
                       role="menuitem"
                       className="w-full flex items-center gap-2 px-3 py-2.5 text-sm text-muted hover:text-foreground hover:bg-background-alt rounded-lg transition"
+                      aria-label="Log out of your account"
                     >
                       <LogOut className="w-4 h-4" />
                       Log out

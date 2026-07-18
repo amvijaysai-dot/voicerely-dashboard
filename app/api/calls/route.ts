@@ -44,47 +44,44 @@ export async function GET(req: NextRequest) {
       rawCalls = [];
     }
 
-    // Apply search filter (case-insensitive on agent ID, call ID)
-    let filtered = rawCalls;
+    // Transform ALL records to client-visible shape first so search/filter
+    // operates on the fields the user can actually see (agentName, customerNumber)
+    // rather than internal Retell IDs.
+    const allViews = rawCalls.map((c) => transformCallToClientView(c, config));
+
+    // Apply search filter on client-visible fields.
+    let filtered = allViews;
     if (search) {
       const q = search.toLowerCase();
       filtered = filtered.filter(
         (c) =>
-          (c.agent_id ?? "").toLowerCase().includes(q) ||
-          (c.call_id ?? "").toLowerCase().includes(q)
+          c.agentName.toLowerCase().includes(q) ||
+          c.customerNumber.toLowerCase().includes(q) ||
+          c.callId.toLowerCase().includes(q)
       );
     }
 
-    // Apply status filter (map "Completed"/"Failed" to Retell call_status)
+    // Apply status filter.
     if (status) {
       const statusLower = status.toLowerCase();
-      filtered = filtered.filter((c) => {
-        const isCompleted = c.call_status !== "error";
-        return statusLower === "completed" ? isCompleted : !isCompleted;
-      });
+      filtered = filtered.filter((c) =>
+        statusLower === "completed" ? c.status === "Completed" : c.status === "Failed"
+      );
     }
 
-    // Sort by timestamp descending (newest first)
-    filtered.sort((a, b) => b.start_timestamp - a.start_timestamp);
+    // Sort by timestamp descending (newest first).
+    filtered.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
 
-    // Pagination
+    // Server-side pagination.
     const totalCalls = filtered.length;
     const totalPages = Math.max(1, Math.ceil(totalCalls / limit));
     const safePage = Math.min(page, totalPages);
     const skip = (safePage - 1) * limit;
-    const paginatedLogs = filtered.slice(skip, skip + limit);
-
-    // Transform to client view
-    const calls = paginatedLogs.map((c) => transformCallToClientView(c, config));
+    const calls = filtered.slice(skip, skip + limit);
 
     return NextResponse.json({
       calls,
-      pagination: {
-        page: safePage,
-        limit,
-        totalCalls,
-        totalPages,
-      },
+      pagination: { page: safePage, limit, totalCalls, totalPages },
     });
   } catch (err) {
     const { error, status } = safeError(err);

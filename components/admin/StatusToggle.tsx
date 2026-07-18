@@ -18,7 +18,8 @@ export function StatusToggle({ status, disabled, onToggle, label }: StatusToggle
       type="button"
       role="switch"
       aria-checked={isActive}
-      aria-label={label ?? `Tenant status: ${isActive ? "Active" : "Suspended"}`}
+      aria-label={label ?? `${isActive ? "Deactivate" : "Activate"} tenant`}
+      aria-pressed={isActive}
       disabled={disabled}
       onClick={onToggle}
       className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors outline-none focus-visible:ring-2 focus-visible:ring-accent/60 disabled:opacity-50 disabled:cursor-not-allowed ${

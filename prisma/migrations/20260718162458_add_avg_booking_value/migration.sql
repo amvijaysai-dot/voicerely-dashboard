@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Tenant" ADD COLUMN     "avgBookingValue" DOUBLE PRECISION NOT NULL DEFAULT 210;

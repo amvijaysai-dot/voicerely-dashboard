@@ -86,6 +86,7 @@ export function ClientDiagnosticView({
       <button
         onClick={onBack}
         className="flex items-center gap-2 text-sm text-muted hover:text-foreground transition w-fit"
+        aria-label="Back to tenant list"
       >
         <ArrowLeft className="w-4 h-4" /> Back to All Clients
       </button>

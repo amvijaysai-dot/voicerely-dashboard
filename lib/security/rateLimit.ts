@@ -40,7 +40,7 @@ function inProcessLimit(
     return { limited: true, remaining: 0, resetMs: bucket.windowStart + windowMs };
   }
   bucket.count += 1;
-  return { limited: false, remaining: limit - bucket.count, resetMs: bucket.windowStart + windowMs };
+  return { limited: false, remaining: Math.max(0, limit - bucket.count), resetMs: bucket.windowStart + windowMs };
 }
 
 // ---- Postgres store (serverless-safe) ------------------------------------
@@ -79,10 +79,10 @@ async function postgresLimit(
     const row = result[0];
     if (!row) return inProcessLimit(namespace, key, limit, windowMs);
     const resetMs = Number(row.window_start) + windowMs;
-    if (row.count > limit) {
+    if (row.count >= limit) {
       return { limited: true, remaining: 0, resetMs };
     }
-    return { limited: false, remaining: limit - row.count, resetMs };
+    return { limited: false, remaining: Math.max(0, limit - row.count), resetMs };
   } catch {
     // If Postgres rate limiting fails, fall back to in-process.
     return inProcessLimit(namespace, key, limit, windowMs);

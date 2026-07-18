@@ -99,7 +99,14 @@ export function CallHistoryTable({ rows, loading, onViewTranscript }: CallHistor
                 <td className="px-6 py-4 text-right">
                   <button
                     onClick={() => onViewTranscript(row)}
-                    className="text-sm font-medium text-accent hover:text-accent-alt transition-colors"
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        onViewTranscript(row);
+                      }
+                    }}
+                    className="text-sm font-medium text-accent hover:text-accent-alt transition-colors focus:outline-none focus:ring-2 focus:ring-accent focus:ring-inset rounded"
+                    aria-label={`View transcript for call at ${formatTimestamp(row.timestamp)}`}
                   >
                     View Transcript
                   </button>

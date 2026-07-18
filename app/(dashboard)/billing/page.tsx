@@ -85,14 +85,16 @@ export default function BillingPage() {
 
   // Fetch the logged-in tenant's identity + dynamically aggregated billing summary.
   useEffect(() => {
+    const controller = new AbortController();
+    const { signal } = controller;
     let active = true;
     async function loadBilling() {
       setSummaryLoading(true);
       setSummaryError(null);
       try {
         const [meRes, summaryRes] = await Promise.all([
-          fetch("/api/auth/me"),
-          fetch("/api/billing/summary"),
+          fetch("/api/auth/me", { signal }),
+          fetch("/api/billing/summary", { signal }),
         ]);
         if (!meRes.ok) throw new Error("Unable to resolve tenant session.");
         const me = await meRes.json();
@@ -123,6 +125,7 @@ export default function BillingPage() {
     loadBilling();
     return () => {
       active = false;
+      controller.abort();
     };
   }, []);
 

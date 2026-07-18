@@ -25,6 +25,7 @@ interface DashboardMetrics {
   minutesConsumed: number;
   currentSpend: number;
   avgCallDuration: number; // seconds
+  trend?: { day: number; calls: number }[];
 }
 
 interface CallsResponse {
@@ -95,16 +96,20 @@ export default function Home() {
   const [avgDuration, setAvgDuration] = useState(0);
   const [trend, setTrend] = useState<{ day: number; calls: number }[]>([]);
   const [minutesAllocated, setMinutesAllocated] = useState<number | null>(null);
+  const [roiData, setRoiData] = useState<{ revenueRecovered: number; afterHoursCalls: number } | null>(null);
 
   useEffect(() => {
+    const controller = new AbortController();
+    const { signal } = controller;
     let cancelled = false;
     async function load() {
       try {
         // Live KPI metrics from the dynamic backend sync endpoint.
-        const [metricsRes, callsRes, summaryRes] = await Promise.all([
-          fetch("/api/dashboard/metrics"),
-          fetch("/api/calls?limit=1000"),
-          fetch("/api/billing/summary"),
+        const [metricsRes, callsRes, summaryRes, roiRes] = await Promise.all([
+          fetch("/api/dashboard/metrics", { signal }),
+          fetch("/api/calls?limit=20", { signal }),
+          fetch("/api/billing/summary", { signal }),
+          fetch("/api/dashboard/roi", { signal }),
         ]);
         if (!metricsRes.ok) throw new Error("Failed to load dashboard metrics");
         if (!callsRes.ok) throw new Error("Failed to load call history");
@@ -118,24 +123,33 @@ export default function Home() {
         setSpend(metrics.currentSpend);
         setAvgDuration(metrics.avgCallDuration);
 
+        // Use server-provided 30-day trend (chronological: day 1 = 30 days ago, day 30 = today)
+        if (metrics.trend && metrics.trend.length === 30) {
+          setTrend(metrics.trend);
+        } else {
+          // Fallback: compute client-side from the last 20 calls if server trend missing
+          const DAY_MS = 86_400_000;
+          const now = Date.now();
+          const buckets = new Array(30).fill(0);
+          for (const c of calls.calls ?? []) {
+            if (!c.timestamp) continue;
+            const ageDays = Math.floor((now - new Date(c.timestamp).getTime()) / DAY_MS);
+            if (ageDays >= 0 && ageDays < 30) buckets[29 - ageDays] += 1;
+          }
+          setTrend(buckets.map((calls, i) => ({ day: i + 1, calls })));
+        }
+
         // Plan allocation (for threshold warnings) comes from the billing summary.
         if (summaryRes.ok) {
           const summary: { minutesAllocated: number | null } = await summaryRes.json();
           setMinutesAllocated(summary.minutesAllocated ?? null);
         }
 
-        // Bucket calls into the last 30 days (index 0 = 29 days ago … 29 = today)
-        // so the trend spreads across the full width instead of clustering on
-        // a single day-of-month. Uses the ISO `timestamp` from the API.
-        const DAY_MS = 86_400_000;
-        const now = Date.now();
-        const buckets = new Array(30).fill(0);
-        for (const c of calls.calls ?? []) {
-          if (!c.timestamp) continue;
-          const ageDays = Math.floor((now - new Date(c.timestamp).getTime()) / DAY_MS);
-          if (ageDays >= 0 && ageDays < 30) buckets[29 - ageDays] += 1;
+        // Revenue Recovered (ROI) data.
+        if (roiRes.ok) {
+          const roi = await roiRes.json();
+          if (!cancelled) setRoiData(roi);
         }
-        setTrend(buckets.map((calls, i) => ({ day: i + 1, calls })));
       } catch (e) {
         if (!cancelled) setFetchError(e instanceof Error ? e.message : "Unknown error");
       } finally {
@@ -145,6 +159,7 @@ export default function Home() {
     load();
     return () => {
       cancelled = true;
+      controller.abort();
     };
   }, []);
 
@@ -170,9 +185,10 @@ export default function Home() {
         )}
 
         {/* KPI row */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
           {isLoading ? (
             <>
+              <Skeleton className="h-[104px]" />
               <Skeleton className="h-[104px]" />
               <Skeleton className="h-[104px]" />
               <Skeleton className="h-[104px]" />
@@ -184,6 +200,20 @@ export default function Home() {
             </div>
           ) : (
             <>
+              {roiData !== null && (
+                <div className="bg-surface border border-border rounded-2xl p-6 flex flex-col gap-3 col-span-full sm:col-span-1 lg:col-span-1 ring-1 ring-accent/20">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-muted">Revenue Recovered</span>
+                    <span className="text-xs font-medium text-accent bg-accent/10 px-2 py-0.5 rounded-full">This cycle</span>
+                  </div>
+                  <span className="text-3xl font-semibold text-accent tabular-nums tracking-tight">
+                    ${roiData.revenueRecovered.toLocaleString("en-US")}
+                  </span>
+                  <span className="text-sm text-muted">
+                    incl. {roiData.afterHoursCalls} after-hours calls captured
+                  </span>
+                </div>
+              )}
               <MetricCard label="Total Calls" value={totalCalls} icon={PhoneCall} />
               <MetricCard label="Minutes Consumed" value={minutes} icon={Clock} />
               <MetricCard label="Current Spend" value={spend} icon={DollarSign} />

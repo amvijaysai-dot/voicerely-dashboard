@@ -45,7 +45,8 @@ export function AudioWaveform({ durationSeconds }: AudioWaveformProps) {
         <button
           onClick={togglePlay}
           className="w-11 h-11 rounded-full bg-accent flex items-center justify-center shrink-0 hover:bg-accent-alt transition-colors"
-          aria-label={isPlaying ? "Pause" : "Play"}
+          aria-label={isPlaying ? "Pause recording" : "Play recording"}
+          aria-pressed={isPlaying}
         >
           {isPlaying ? (
             <Pause className="w-4 h-4 text-foreground" />

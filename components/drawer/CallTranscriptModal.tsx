@@ -100,7 +100,7 @@ export function CallTranscriptModal({ call, onClose }: CallTranscriptModalProps)
               <button
                 onClick={onClose}
                 className="text-muted hover:text-foreground transition-colors"
-                aria-label="Close"
+                aria-label="Close transcript modal"
               >
                 <X className="w-5 h-5" />
               </button>

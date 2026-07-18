@@ -23,6 +23,7 @@ function CopyPromptButton({ text }: { text: string }) {
     <button
       onClick={handleCopy}
       className="absolute top-2 right-2 text-xs text-muted bg-surface border border-border rounded px-2 py-1 hover:text-foreground hover:bg-surface-hover transition"
+      aria-label={copied ? "Copied to clipboard" : "Copy agent prompt"}
     >
       {copied ? "Copied!" : "Copy"}
     </button>
@@ -56,12 +57,14 @@ export default function AgentsPage() {
   const [scriptOpen, setScriptOpen] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
+    const controller = new AbortController();
+    const { signal } = controller;
     let cancelled = false;
     async function load() {
       try {
         const [meRes, agentsRes] = await Promise.all([
-          fetch("/api/auth/me"),
-          fetch("/api/agents"),
+          fetch("/api/auth/me", { signal }),
+          fetch("/api/agents", { signal }),
         ]);
         if (!meRes.ok) throw new Error("Failed to load account");
         const me: MeResponse = await meRes.json();
@@ -90,6 +93,7 @@ export default function AgentsPage() {
     load();
     return () => {
       cancelled = true;
+      controller.abort();
     };
   }, []);
 

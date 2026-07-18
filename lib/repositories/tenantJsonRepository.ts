@@ -160,19 +160,21 @@ export async function updateTenant(
         });
         return all;
       }
-      const merged: Tenant = { ...all[idx], ...patch };
-      // Ensure no other tenant already owns any of the new agentIds.
-      const newIds = merged.agentIds ?? [];
-      if (newIds.length > 0) {
-        const conflict = all.find(
-          (t, i) => i !== idx && (t.agentIds ?? []).some((aid) => newIds.includes(aid))
-        );
-        if (conflict) {
-          throw new Error(`AGENT_ID_CONFLICT:${conflict.id}`);
-        }
-      }
-      const encrypted = encryptTenant(merged);
-      result = decryptTenant(merged);
+  const merged: Tenant = { ...all[idx], ...patch };
+  // Ensure no other tenant already owns any of the new agentIds.
+  const newIds = merged.agentIds ?? [];
+  if (newIds.length > 0) {
+    const conflict = all.find(
+      (t, i) => i !== idx && (t.agentIds ?? []).some((aid) => newIds.includes(aid))
+    );
+    if (conflict) {
+      throw new Error(`AGENT_ID_CONFLICT:${conflict.id}`);
+    }
+  }
+  // passwordHash is intentionally excluded — use updateTenantPassword instead.
+  const { passwordHash: _ignored, ...safeMerged } = merged;
+  const encrypted = encryptTenant({ ...safeMerged, passwordHash: all[idx].passwordHash });
+      result = decryptTenant({ ...safeMerged, passwordHash: all[idx].passwordHash });
       const meta: Record<string, unknown> = {};
       for (const k of Object.keys(patch)) {
         if (k === "retellApiKey") meta.retellApiKey = "rotated";
@@ -309,4 +311,29 @@ export async function incrementUsedMinutes(
 export async function listCallLogs(tenantId: string): Promise<CallLog[]> {
   const map = readCallsRaw();
   return map[tenantId] ?? [];
+}
+
+/** Safely updates ONLY the password hash for a tenant. */
+export async function updateTenantPassword(
+  id: string,
+  bcryptHash: string,
+  actorId?: string
+): Promise<boolean> {
+  return enqueue(async () => {
+    const requestId = newRequestId();
+    let found = false;
+    mutateTenantsRaw((all) => {
+      const idx = all.findIndex((t) => t.id === id);
+      if (idx === -1) return all;
+      found = true;
+      all[idx] = { ...all[idx], passwordHash: bcryptHash };
+      return all;
+    });
+    audit(requestId, "tenant.password_updated", {
+      success: found,
+      tenantId: id,
+      userId: actorId,
+    });
+    return found;
+  }).then(() => true).catch(() => false);
 }

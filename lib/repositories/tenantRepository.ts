@@ -24,6 +24,7 @@ export const getTenantByUsername = driver.getTenantByUsername;
 export const getTenantByEmail = driver.getTenantByEmail;
 export const createTenant = driver.createTenant;
 export const updateTenant = driver.updateTenant;
+export const updateTenantPassword = driver.updateTenantPassword;
 export const deleteTenant = driver.deleteTenant;
 export const getTenantByAgentId = driver.getTenantByAgentId;
 export const appendCallLog = driver.appendCallLog;

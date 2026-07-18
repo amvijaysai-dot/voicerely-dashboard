@@ -5,7 +5,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { getSession } from "@/lib/auth";
-import { getTenantById, updateTenant } from "@/lib/repositories/tenantRepository";
+import { getTenantById, updateTenantPassword } from "@/lib/repositories/tenantRepository";
 import { verifyPassword, hashPassword } from "@/lib/auth";
 import { parseBody, safeError } from "@/lib/validation";
 import { rateLimit, clientIp } from "@/lib/security/rateLimit";
@@ -46,7 +46,10 @@ export async function POST(req: NextRequest) {
     }
 
     const passwordHash = await hashPassword(newPassword);
-    await updateTenant(session.id, { passwordHash }, session.id);
+    const updated = await updateTenantPassword(session.id, passwordHash, session.id);
+    if (!updated) {
+      return NextResponse.json({ error: "Failed to update password" }, { status: 500 });
+    }
 
     return NextResponse.json({ ok: true });
   } catch (e) {

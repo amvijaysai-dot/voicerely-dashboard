@@ -15,18 +15,51 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifySession, SESSION_COOKIE } from "@/lib/security/session";
 
+/** Validates the Origin header on state-mutating requests to prevent CSRF.
+ *  Returns true if the request is safe to proceed, false if it should be rejected. */
+function isSafeOrigin(req: NextRequest): boolean {
+  // Only validate POST/PUT/PATCH/DELETE — GET requests are safe.
+  const method = req.method.toUpperCase();
+  if (["GET", "HEAD", "OPTIONS"].includes(method)) return true;
+
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "";
+  if (!appUrl) return true; // Can't validate without app URL — allow but log warning.
+
+  const origin = req.headers.get("origin");
+  if (!origin) return true; // Same-origin requests (e.g. server-to-server) have no Origin.
+
+  // Allow the configured app URL and localhost in development.
+  const allowedOrigins = [appUrl];
+  if (process.env.NODE_ENV !== "production") {
+    allowedOrigins.push("http://localhost:3000", "http://localhost:3001");
+  }
+  return allowedOrigins.some((allowed) => origin.startsWith(allowed));
+}
+
 export const config = {
   matcher: ["/((?!_next/static|_next/image|favicon.ico|login|signup|api/auth).*)"],
 };
 
 export async function middleware(req: NextRequest) {
+  // CSRF protection: reject state-mutating requests from untrusted origins.
+  if (!isSafeOrigin(req)) {
+    return NextResponse.json({ error: "Forbidden: Invalid origin" }, { status: 403 });
+  }
+
   const token = req.cookies.get(SESSION_COOKIE)?.value;
   const session = token ? await verifySession(token) : null;
 
   const { pathname } = req.nextUrl;
   const isAdminRoute = pathname === "/admin" || pathname.startsWith("/admin/");
   const isBillingRoute = pathname === "/billing" || pathname.startsWith("/billing/");
-  const isDashboardApiRoute = pathname.startsWith("/api/dashboard/");
+  // Protect ALL private API routes at the edge (defence in depth — the route
+  // handlers also check session, but the middleware adds a fast-reject layer).
+  const isDashboardApiRoute =
+    pathname.startsWith("/api/dashboard/") ||
+    pathname.startsWith("/api/billing/") ||
+    pathname.startsWith("/api/calls") ||
+    pathname.startsWith("/api/agents") ||
+    pathname.startsWith("/api/config/");
   const isDashboardRoot = pathname === "/" || pathname.startsWith("/calls") || pathname.startsWith("/agents") || pathname.startsWith("/metrics") || pathname.startsWith("/settings");
 
   // Protect admin routes

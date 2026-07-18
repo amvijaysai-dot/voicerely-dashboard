@@ -41,13 +41,15 @@ export function AdminSidebar({
         <span className="font-semibold tracking-tight text-foreground">Voicerely</span>
         <span className="ml-1 text-xs uppercase tracking-wider text-accent">Admin</span>
       </div>
-      <nav className="flex flex-col py-4">
+      <nav className="flex flex-col py-4" role="listbox" aria-label="Select tenant">
         {ADMIN_NAV.map(({ id, label, icon: Icon }) => {
           const isActive = active === id;
           return (
             <button
               key={id}
               type="button"
+              role="option"
+              aria-selected={isActive}
               onClick={() => onSelect(id)}
               className={`flex items-center gap-3 px-6 py-3 text-sm border-l-2 text-left transition-colors ${
                 isActive
