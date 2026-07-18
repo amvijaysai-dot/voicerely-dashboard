@@ -5,7 +5,7 @@
 // return structured JSON with proper status codes (no raw error leakage).
 
 import { NextRequest, NextResponse } from "next/server";
-import { randomUUID } from "node:crypto";
+import { randomUUID, randomBytes } from "node:crypto";
 import { listClientTenants, createTenant } from "@/lib/repositories/tenantRepository";
 import { getSession, hashPassword } from "@/lib/auth";
 import { onboardTenantSchema, parseBody, safeError } from "@/lib/validation";
@@ -42,8 +42,12 @@ export async function POST(req: NextRequest) {
   }
   const input = parsed.data;
 
- try {
-    const passwordHash = await hashPassword(input.password);
+  try {
+    // If the admin supplied a password we use it; otherwise we generate a
+    // random throwaway password (the client will set their own via the setup
+    // link, so the throwaway value is never surfaced anywhere).
+    const initialPassword = input.password || randomBytes(12).toString("base64url");
+    const passwordHash = await hashPassword(initialPassword);
     const tenantId = `tenant_${randomUUID().replace(/-/g, "").slice(0, 12)}`;
     const tenant: Tenant = {
       id: tenantId,
@@ -64,15 +68,21 @@ export async function POST(req: NextRequest) {
       email: input.email,
     };
     const created = await createTenant(tenant, session.id);
+
     // Fire-and-forget onboarding email (best-effort; failures are logged, not fatal).
+    // We send a SECURE SETUP LINK, never a password.
     if (created.email) {
+      const { issuePasswordSetupToken } = await import("@/lib/security/passwordSetup");
       const { sendOnboardingEmail } = await import("@/lib/email");
+      const token = await issuePasswordSetupToken(created.id, session.id);
+      const setupUrl = `${new URL(req.url).origin}/set-password?tenant=${encodeURIComponent(
+        created.id
+      )}&token=${encodeURIComponent(token.raw)}`;
       await sendOnboardingEmail({
         to: created.email,
         clientName: created.clientName,
         username: created.username,
-        password: input.password,
-        loginUrl: `${new URL(req.url).origin}/login`,
+        setupUrl,
       }).catch((e) => {
         console.error("[onboarding-email] failed:", e);
       });

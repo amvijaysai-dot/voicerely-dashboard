@@ -9,7 +9,7 @@
 // tenant's DB row (see lib/db.ts), NOT process.env. Each tenant has their own
 // independent Retell account, so all data is scoped to that tenant's key.
 
-import type { RetellCallRecord } from "./types";
+import type { RetellCallRecord, RetellAgent } from "./types";
 import type { VoicerelyClientConfig } from "../billing/types";
 import type { Tenant } from "../db";
 import { RetellApiError } from "@/lib/errors";
@@ -60,7 +60,10 @@ function buildClientConfig(tenant: Tenant, demo: boolean): VoicerelyClientConfig
     voicerely_per_minute_rate: tenant.perMinuteRate || (demo ? 0.18 : 0),
     allocated_minutes: allocatedMinutes,
     currency: "USD",
-    billingCycleStart: new Date().toISOString().slice(0, 10),
+    // Cycle window is persisted on the tenant row (see lib/billing/cycle.ts).
+    // Resolved + rolled-forward lazily by the caller (billing summary route)
+    // so it always reflects the true current period, never "today".
+    billingCycleStart: tenant.billingCycleStart ?? new Date().toISOString().slice(0, 10),
   };
 }
 
@@ -158,6 +161,62 @@ export async function getCall(
   return (await retellFetch(tenant, `/get-call/${encodeURIComponent(callId)}`)) as RetellCallRecord;
 }
 
+/** Retrieves a single raw agent record (voice / prompt / phone). */
+export async function getAgent(
+  tenant: Tenant,
+  agentId: string
+): Promise<RetellAgent> {
+  const { demo } = resolveTenant(tenant);
+  if (demo) return generateDemoAgent(agentId, tenant);
+  return (await retellFetch(
+    tenant,
+    `/get-agent/${encodeURIComponent(agentId)}`
+  )) as RetellAgent;
+}
+
+/** Normalized agent view the dashboard renders (client-safe, no raw key). */
+export interface VoicerelyAgentView {
+  agentId: string;
+  name: string;
+  voice: string;
+  prompt: string;
+  phone: string;
+  status: "Active" | "Idle";
+  demo: boolean;
+}
+
+/** Builds the client-safe agent view from a raw Retell agent record. */
+export function toAgentView(
+  raw: RetellAgent,
+  demo: boolean,
+  fallbackName: string
+): VoicerelyAgentView {
+  const engine = raw.response_engine ?? {};
+  const prompt =
+    (typeof engine === "object" && engine !== null && "llm" in engine
+      ? (engine as { llm?: { prompt?: string } }).llm?.prompt
+      : undefined) ??
+    (typeof raw.prompt === "string" ? raw.prompt : undefined) ??
+    "";
+  const voice =
+    raw.voice_id ??
+    (typeof engine === "object" && engine !== null && "voice_id" in engine
+      ? (engine as { voice_id?: string }).voice_id
+      : undefined) ??
+    "";
+  const phone =
+    raw.inbound_phone_number ?? raw.phone_number ?? "";
+  return {
+    agentId: raw.agent_id,
+    name: raw.agent_name ?? fallbackName,
+    voice: voice || "Default",
+    prompt: prompt,
+    phone: phone || "+1 (800) 555-0100",
+    status: "Active",
+    demo,
+  };
+}
+
 /** Exposes the resolved Voicerely client config for a tenant. */
 export async function getClientConfig(
   tenant: Tenant
@@ -207,6 +266,27 @@ function generateDemoCalls(limit: number): RetellCallRecord[] {
     });
   }
   return calls;
+}
+
+function generateDemoAgent(agentId: string, tenant: Tenant): RetellAgent {
+  return {
+    agent_id: agentId,
+    agent_name: tenant.clientName ? `${tenant.clientName} Voice Agent` : "Primary Voice Agent",
+    voice_id: "11labs-Adrian",
+    response_engine: {
+      llm: {
+        model: "gpt-4o-mini",
+        prompt:
+          "You are the Voicerely voice assistant for a dental and vet clinic. " +
+          "Greet the caller by name when known, verify their identity using the " +
+          "last 4 digits of their phone number, then classify intent " +
+          "(billing, support, scheduling, or general info). Pull the relevant " +
+          "record, summarize options, and confirm the caller's choice. End with " +
+          "a polite sign-off. Never invent facts not present in the retrieved data.",
+      },
+    },
+    inbound_phone_number: "+1 (800) 555-0100",
+  };
 }
 
 function generateDemoCall(callId: string): RetellCallRecord {

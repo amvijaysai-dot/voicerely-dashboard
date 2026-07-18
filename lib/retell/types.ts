@@ -28,3 +28,24 @@ export interface RetellTranscriptTurn {
   timestamp_ms: number;
   sentiment?: "Positive" | "Neutral" | "Negative";
 }
+
+/** Shape of Retell's GET /get-agent/{agent_id} response. */
+export interface RetellAgent {
+  agent_id: string;
+  agent_name?: string;
+  /** Retell voice id (e.g. "11labs-Adrian"). */
+  voice_id?: string;
+  response_engine?: {
+    llm?: {
+      model?: string;
+      /** The system prompt / conversation script. */
+      prompt?: string;
+    };
+    voice_id?: string;
+  };
+  /** Inbound phone number this agent answers on. */
+  inbound_phone_number?: string;
+  phone_number?: string;
+  // Several Retell payloads nest the number differently; tolerate both.
+  [key: string]: unknown;
+}

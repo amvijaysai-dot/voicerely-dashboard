@@ -9,9 +9,9 @@
 
 import {
   readTenantsRaw,
-  writeTenantsRaw,
   readCallsRaw,
-  writeCallsRaw,
+  mutateTenantsRaw,
+  mutateCallsRaw,
   type Tenant,
   type CallLog,
 } from "@/lib/db";
@@ -66,8 +66,15 @@ export async function createTenant(
   actorId?: string
 ): Promise<Tenant> {
   const requestId = newRequestId();
-  const all = readTenantsRaw();
-  if (all.some((t) => t.username.toLowerCase() === tenant.username.toLowerCase())) {
+  let taken = false;
+  mutateTenantsRaw((all) => {
+    if (all.some((t) => t.username.toLowerCase() === tenant.username.toLowerCase())) {
+      taken = true;
+      return all;
+    }
+    return [...all, encryptTenant(tenant)];
+  });
+  if (taken) {
     audit(requestId, "tenant.create_failed", {
       success: false,
       tenantId: tenant.id,
@@ -76,9 +83,6 @@ export async function createTenant(
     });
     throw new Error("USERNAME_TAKEN");
   }
-  const encrypted = encryptTenant(tenant);
-  all.push(encrypted);
-  writeTenantsRaw(all);
   audit(requestId, "tenant.create", {
     success: true,
     tenantId: tenant.id,
@@ -94,32 +98,37 @@ export async function updateTenant(
   actorId?: string
 ): Promise<Tenant | undefined> {
   const requestId = newRequestId();
-  const all = readTenantsRaw();
-  const idx = all.findIndex((t) => t.id === id);
-  if (idx === -1) {
-    audit(requestId, "tenant.update_failed", {
-      success: false,
+  let result: Tenant | undefined;
+  mutateTenantsRaw((all) => {
+    const idx = all.findIndex((t) => t.id === id);
+    if (idx === -1) {
+      audit(requestId, "tenant.update_failed", {
+        success: false,
+        tenantId: id,
+        userId: actorId,
+        error: "not_found",
+      });
+      return all;
+    }
+    const merged: Tenant = { ...all[idx], ...patch };
+    const encrypted = encryptTenant(merged);
+    result = decryptTenant(merged);
+    const meta: Record<string, unknown> = {};
+    for (const k of Object.keys(patch)) {
+      if (k === "retellApiKey") meta.retellApiKey = "rotated";
+      else meta[k] = (patch as Record<string, unknown>)[k];
+    }
+    audit(requestId, "tenant.update", {
+      success: true,
       tenantId: id,
       userId: actorId,
-      error: "not_found",
+      meta,
     });
-    return undefined;
-  }
-  const merged: Tenant = { ...all[idx], ...patch };
-  all[idx] = encryptTenant(merged);
-  writeTenantsRaw(all);
-  const meta: Record<string, unknown> = {};
-  for (const k of Object.keys(patch)) {
-    if (k === "retellApiKey") meta.retellApiKey = "rotated";
-    else meta[k] = (patch as Record<string, unknown>)[k];
-  }
-  audit(requestId, "tenant.update", {
-    success: true,
-    tenantId: id,
-    userId: actorId,
-    meta,
+    const next = [...all];
+    next[idx] = encrypted;
+    return next;
   });
-  return decryptTenant(merged);
+  return result;
 }
 
 export async function deleteTenant(
@@ -127,10 +136,15 @@ export async function deleteTenant(
   actorId?: string
 ): Promise<boolean> {
   const requestId = newRequestId();
-  const all = readTenantsRaw();
-  const target = all.find((t) => t.id === id);
-  const next = all.filter((t) => t.id !== id);
-  if (next.length === all.length) {
+  let deleted = false;
+  let target: Tenant | undefined;
+  mutateTenantsRaw((all) => {
+    target = all.find((t) => t.id === id);
+    const next = all.filter((t) => t.id !== id);
+    deleted = next.length !== all.length;
+    return next;
+  });
+  if (!deleted) {
     audit(requestId, "tenant.delete_failed", {
       success: false,
       tenantId: id,
@@ -139,7 +153,6 @@ export async function deleteTenant(
     });
     return false;
   }
-  writeTenantsRaw(next);
   audit(requestId, "tenant.delete", {
     success: true,
     tenantId: id,
@@ -161,28 +174,30 @@ export async function appendCallLog(
   actorId?: string
 ): Promise<{ log: CallLog; inserted: boolean }> {
   const requestId = newRequestId();
-  const map = readCallsRaw();
-  const existing = map[log.tenantId] ?? [];
-  const dup = existing.find((c) => c.callId === log.callId);
-  if (dup) {
-    audit(requestId, "calllog.append_skipped", {
+  let outcome: { log: CallLog; inserted: boolean } = { log, inserted: true };
+  mutateCallsRaw((map) => {
+    const existing = map[log.tenantId] ?? [];
+    const dup = existing.find((c) => c.callId === log.callId);
+    if (dup) {
+      audit(requestId, "calllog.append_skipped", {
+        success: true,
+        tenantId: log.tenantId,
+        userId: actorId,
+        meta: { callId: log.callId, reason: "duplicate" },
+      });
+      outcome = { log: dup, inserted: false };
+      return map;
+    }
+    const next = { ...map, [log.tenantId]: [...existing, log] };
+    audit(requestId, "calllog.append", {
       success: true,
       tenantId: log.tenantId,
       userId: actorId,
-      meta: { callId: log.callId, reason: "duplicate" },
+      meta: { callId: log.callId, agentId: log.agentId, duration: log.totalDurationSeconds },
     });
-    return { log: dup, inserted: false };
-  }
-  const next = [...existing, log];
-  map[log.tenantId] = next;
-  writeCallsRaw(map);
-  audit(requestId, "calllog.append", {
-    success: true,
-    tenantId: log.tenantId,
-    userId: actorId,
-    meta: { callId: log.callId, agentId: log.agentId, duration: log.totalDurationSeconds },
+    return next;
   });
-  return { log, inserted: true };
+  return outcome;
 }
 
 /** Adds call minutes to a tenant's locally tracked used-minute balance. */
@@ -192,29 +207,35 @@ export async function incrementUsedMinutes(
   actorId?: string
 ): Promise<void> {
   const requestId = newRequestId();
-  const all = readTenantsRaw();
-  const idx = all.findIndex((t) => t.id === tenantId);
-  if (idx === -1) {
+  let found = true;
+  mutateTenantsRaw((all) => {
+    const idx = all.findIndex((t) => t.id === tenantId);
+    if (idx === -1) {
+      found = false;
+      return all;
+    }
+    const updated: Tenant = {
+      ...all[idx],
+      usedMinutes: all[idx].usedMinutes + minutes,
+    };
+    audit(requestId, "tenant.minutes_increment", {
+      success: true,
+      tenantId,
+      userId: actorId,
+      meta: { addedMinutes: minutes, usedMinutes: updated.usedMinutes },
+    });
+    const next = [...all];
+    next[idx] = encryptTenant(updated);
+    return next;
+  });
+  if (!found) {
     audit(requestId, "tenant.minutes_failed", {
       success: false,
       tenantId,
       userId: actorId,
       error: "not_found",
     });
-    return;
   }
-  const updated: Tenant = {
-    ...all[idx],
-    usedMinutes: all[idx].usedMinutes + minutes,
-  };
-  all[idx] = encryptTenant(updated);
-  writeTenantsRaw(all);
-  audit(requestId, "tenant.minutes_increment", {
-    success: true,
-    tenantId,
-    userId: actorId,
-    meta: { addedMinutes: minutes, usedMinutes: updated.usedMinutes },
-  });
 }
 
 /** Reads a tenant's full call-log history (live ingested records). */

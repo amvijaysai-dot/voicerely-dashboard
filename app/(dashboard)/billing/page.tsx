@@ -6,6 +6,7 @@ import Script from "next/script";
 import { Receipt, CreditCard } from "lucide-react";
 import { UsageMeter } from "@/components/billing/UsageMeter";
 import { getUsageStatus } from "@/lib/billing/thresholds";
+import type { VoicerelyPlanType } from "@/lib/billing/types";
 
 // Live plan config pulled from the authenticated tenant's billing summary
 // (/api/billing/summary) plus the session user — no static client/rate leaks.
@@ -69,6 +70,7 @@ export default function BillingPage() {
   // Live values resolved from the authenticated tenant session + billing summary.
   const [clientName, setClientName] = useState<string>("");
   const [planType, setPlanType] = useState<string>("Fixed Allowance");
+  const [rawPlanType, setRawPlanType] = useState<VoicerelyPlanType | undefined>(undefined);
   const [perMinuteRate, setPerMinuteRate] = useState<number>(0);
   const [allocatedMinutes, setAllocatedMinutes] = useState<number | null>(null);
   const [minutesUsed, setMinutesUsed] = useState<number>(0);
@@ -107,6 +109,7 @@ export default function BillingPage() {
             ? "Fixed Allowance"
             : "Tiered"
         );
+        setRawPlanType(summary.planType as VoicerelyPlanType);
         setPerMinuteRate(summary.perMinuteRate ?? 0);
         setAllocatedMinutes(summary.minutesAllocated ?? null);
         setMinutesUsed(summary.minutesUsed ?? 0);
@@ -223,6 +226,7 @@ export default function BillingPage() {
           minutesUsed={minutesUsed}
           minutesAllocated={allocatedMinutes}
           status={usage.status}
+          planType={rawPlanType}
         />
 
         {/* Plan tier card */}

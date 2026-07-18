@@ -13,11 +13,38 @@ import {
 import { verifyPassword, createSession, SESSION_COOKIE } from "@/lib/auth";
 import { loginSchema, parseBody } from "@/lib/validation";
 import { newRequestId, audit } from "@/lib/security/logger";
+import { rateLimit, clientIp } from "@/lib/security/rateLimit";
 
 export const dynamic = "force-dynamic";
 
+const LOGIN_LIMIT = 5;
+const LOGIN_WINDOW_MS = 60_000; // 1 minute
+
 export async function POST(req: NextRequest) {
   const requestId = newRequestId();
+
+  // Brute-force protection: cap login attempts per IP.
+  const rl = rateLimit("login", clientIp(req), LOGIN_LIMIT, LOGIN_WINDOW_MS);
+  if (rl.limited) {
+    const retryAfter = Math.ceil((rl.resetMs - Date.now()) / 1000);
+    audit(requestId, "auth.login_rate_limited", {
+      success: false,
+      error: "rate_limited",
+      meta: { ip: clientIp(req) },
+    });
+    return NextResponse.json(
+      { error: "Too many login attempts. Please try again shortly." },
+      {
+        status: 429,
+        headers: {
+          "Retry-After": String(retryAfter),
+          "X-RateLimit-Limit": String(LOGIN_LIMIT),
+          "X-RateLimit-Remaining": "0",
+        },
+      }
+    );
+  }
+
   const parsed = parseBody(loginSchema, await req.json().catch(() => ({})));
   if (!parsed.ok) {
     audit(requestId, "auth.login_validation_failed", {

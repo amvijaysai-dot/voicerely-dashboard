@@ -36,6 +36,14 @@ model Tenant {
   includedMinutes Int?   @default(0)
   // Client contact email address (used for onboarding + notifications).
   email           String?
+  // One-time password-setup token (SHA-256 of the raw link token). Null once
+  // used or expired. Never store the raw token.
+  passwordSetupTokenHash String?
+  passwordSetupExpiresAt DateTime?
+  // Billing cycle window (ISO dates). Reset on the tenant's signup
+  // anniversary (day-of-month from createdAt). End is exclusive.
+  billingCycleStart DateTime?
+  billingCycleEnd DateTime?
   // Payment method for billing (Paddle)
   paddleCustomerId String?
   cardBrand        String?

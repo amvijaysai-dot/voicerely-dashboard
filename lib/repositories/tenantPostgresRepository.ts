@@ -30,6 +30,10 @@ type TenantRow = {
   billingModel: string | null;
   baseMonthlyFee: number | null;
   includedMinutes: number | null;
+  passwordSetupTokenHash: string | null;
+  passwordSetupExpiresAt: Date | null;
+  billingCycleStart: Date | null;
+  billingCycleEnd: Date | null;
 };
 
 function toTenant(row: Record<string, unknown>): Tenant {
@@ -50,6 +54,16 @@ function toTenant(row: Record<string, unknown>): Tenant {
     baseMonthlyFee: row.baseMonthlyFee as number | undefined,
     includedMinutes: row.includedMinutes as number | undefined,
     email: row.email as string | undefined,
+    passwordSetupTokenHash: (row.passwordSetupTokenHash as string | null) ?? null,
+    passwordSetupExpiresAt: row.passwordSetupExpiresAt
+      ? (row.passwordSetupExpiresAt as Date).toISOString()
+      : null,
+    billingCycleStart: row.billingCycleStart
+      ? (row.billingCycleStart as Date).toISOString()
+      : null,
+    billingCycleEnd: row.billingCycleEnd
+      ? (row.billingCycleEnd as Date).toISOString()
+      : null,
   };
 }
 
@@ -132,6 +146,16 @@ export async function createTenant(
       baseMonthlyFee: tenant.baseMonthlyFee,
       includedMinutes: tenant.includedMinutes,
       email: tenant.email,
+      passwordSetupTokenHash: tenant.passwordSetupTokenHash ?? null,
+      passwordSetupExpiresAt: tenant.passwordSetupExpiresAt
+        ? new Date(tenant.passwordSetupExpiresAt)
+        : null,
+      billingCycleStart: tenant.billingCycleStart
+        ? new Date(tenant.billingCycleStart)
+        : null,
+      billingCycleEnd: tenant.billingCycleEnd
+        ? new Date(tenant.billingCycleEnd)
+        : null,
       retellApiKey: tenant.retellApiKey
         ? { create: { encrypted: encryptSecret(tenant.retellApiKey) } }
         : undefined,
@@ -178,6 +202,20 @@ export async function updateTenant(
   if (patch.billingModel !== undefined) data.billingModel = patch.billingModel;
   if (patch.baseMonthlyFee !== undefined) data.baseMonthlyFee = patch.baseMonthlyFee;
   if (patch.includedMinutes !== undefined) data.includedMinutes = patch.includedMinutes;
+  if (patch.passwordSetupTokenHash !== undefined)
+    data.passwordSetupTokenHash = patch.passwordSetupTokenHash ?? null;
+  if (patch.passwordSetupExpiresAt !== undefined)
+    data.passwordSetupExpiresAt = patch.passwordSetupExpiresAt
+      ? new Date(patch.passwordSetupExpiresAt)
+      : null;
+  if (patch.billingCycleStart !== undefined)
+    data.billingCycleStart = patch.billingCycleStart
+      ? new Date(patch.billingCycleStart)
+      : null;
+  if (patch.billingCycleEnd !== undefined)
+    data.billingCycleEnd = patch.billingCycleEnd
+      ? new Date(patch.billingCycleEnd)
+      : null;
 
   if (patch.retellApiKey !== undefined) {
     const encrypted = encryptSecret(patch.retellApiKey);

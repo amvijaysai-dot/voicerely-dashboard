@@ -30,8 +30,13 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# env files — ignore real secrets, but KEEP the committed template.
 .env*
+!.env.example
+
+# production data store (tenant/call ledger). The JSON driver is a dev/demo
+# fallback; it must never be committed or deployed. Production uses Postgres.
+data/*.json
 
 # vercel
 .vercel

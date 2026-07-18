@@ -15,8 +15,8 @@ export interface OnboardingEmailInput {
   to: string;
   clientName: string;
   username: string;
-  password: string;
-  loginUrl: string;
+  /** Secure, single-use setup link. The raw password is NEVER emailed. */
+  setupUrl: string;
 }
 
 function buildTransport() {
@@ -41,13 +41,16 @@ function onboardingHtml(input: OnboardingEmailInput): string {
   return `
   <div style="font-family: Arial, Helvetica, sans-serif; color:#111; max-width:520px; margin:0 auto;">
     <h2 style="color:#0f172a;">Welcome to Voicerely, ${input.clientName}!</h2>
-    <p>Your analytics dashboard account has been created. Here are your login details:</p>
-    <table style="border-collapse:collapse; margin:16px 0;">
-      <tr><td style="padding:6px 12px 6px 0; color:#64748b;">Login URL</td><td><a href="${input.loginUrl}">${input.loginUrl}</a></td></tr>
-      <tr><td style="padding:6px 12px 6px 0; color:#64748b;">Username</td><td><strong>${input.username}</strong></td></tr>
-      <tr><td style="padding:6px 12px 6px 0; color:#64748b;">Password</td><td><strong>${input.password}</strong></td></tr>
-    </table>
-    <p style="color:#64748b; font-size:13px;">For your security, please change your password after your first login.</p>
+    <p>Your analytics dashboard account has been created. For your security we never
+       email a password — set your own using the secure link below.</p>
+    <p style="margin:20px 0;">
+      <a href="${input.setupUrl}"
+         style="background:#0f172a; color:#fff; padding:12px 20px; border-radius:8px; text-decoration:none;">
+        Set your password
+      </a>
+    </p>
+    <p style="color:#64748b; font-size:13px;">This link expires in 24 hours and can be used only once.
+       Your username is <strong>${input.username}</strong>.</p>
     <p style="color:#94a3b8; font-size:12px;">— The Voicerely Team</p>
   </div>`;
 }
@@ -56,12 +59,13 @@ function onboardingText(input: OnboardingEmailInput): string {
   return [
     `Welcome to Voicerely, ${input.clientName}!`,
     ``,
-    `Your analytics dashboard account is ready. Login details:`,
-    `Login URL: ${input.loginUrl}`,
-    `Username:  ${input.username}`,
-    `Password:  ${input.password}`,
+    `Your analytics dashboard account is ready. For your security we never email a`,
+    `password — set your own using this secure, one-time link (expires in 24h):`,
     ``,
-    `For your security, please change your password after your first login.`,
+    `  ${input.setupUrl}`,
+    ``,
+    `Your username is: ${input.username}`,
+    ``,
     `— The Voicerely Team`,
   ].join("\n");
 }

@@ -6,9 +6,12 @@
 // log to the local ledger (data/calls.json), and roll the minutes into the
 // tenant's used-minute balance (data/tenants.json).
 //
-// SECURITY: verifies the optional x-retell-signature header against
-// RETELL_WEBHOOK_SECRET. When the secret is unset (local/dev), verification is
-// skipped so the pipeline remains testable without a real key.
+// SECURITY: verifies the x-retell-signature header (HMAC-SHA256) against
+// RETELL_WEBHOOK_SECRET. Verification is MANDATORY in production: if the secret
+// is missing there, the module throws at load time and the app refuses to boot,
+// so unsigned webhooks can never be silently accepted. In development, an
+// explicit opt-in flag (DEV_SKIP_WEBHOOK_VERIFY=true) disables verification for
+// local testing — it is NEVER on by default and is rejected in production.
 //
 // RESILIENCE: any internal failure is logged but answered with 200/202 so
 // Retell never retries/spams the endpoint with duplicate payloads.
@@ -22,15 +25,46 @@ import {
 } from "@/lib/repositories/tenantRepository";
 import { newRequestId, audit } from "@/lib/security/logger";
 import { safeError } from "@/lib/validation";
+import { rateLimit, clientIp } from "@/lib/security/rateLimit";
 import type { CallLog } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
-const WEBHOOK_SECRET = process.env.RETELL_WEBHOOK_SECRET;
+const WEBHOOK_LIMIT = Number(process.env.WEBHOOK_RATE_LIMIT ?? 120);
+const WEBHOOK_WINDOW_MS = 60_000; // 1 minute
 
-/** Constant-time-ish signature check (HMAC-SHA256 hex). */
+const WEBHOOK_SECRET = process.env.RETELL_WEBHOOK_SECRET;
+const IS_PRODUCTION = process.env.NODE_ENV === "production";
+
+// In development, allow an EXPLICIT opt-in to skip signature verification for
+// local testing. This is never enabled by default and is rejected in prod.
+const DEV_SKIP_VERIFY =
+  !IS_PRODUCTION && process.env.DEV_SKIP_WEBHOOK_VERIFY === "true";
+
+// Fail fast in production if no webhook secret is configured: we must never
+// silently accept unsigned webhooks. The throw happens at module load, so the
+// app refuses to boot rather than running insecurely.
+if (IS_PRODUCTION && !WEBHOOK_SECRET) {
+  throw new Error(
+    "FATAL: RETELL_WEBHOOK_SECRET is not set. Refusing to start in production " +
+      "with webhook signature verification disabled. Set RETELL_WEBHOOK_SECRET " +
+      "(the signing secret from your Retell webhook configuration)."
+  );
+}
+
+/** Constant-time signature check (HMAC-SHA256 hex). */
 function verifySignature(rawBody: string, signature: string | null): boolean {
-  if (!WEBHOOK_SECRET) return true; // dev mode: no secret configured
+  if (DEV_SKIP_VERIFY) return true; // dev-only, explicit opt-in
+  if (!WEBHOOK_SECRET) {
+    // Only reachable in development without the explicit skip flag — guard the
+    // pipeline but warn loudly so the gap is visible.
+    console.warn(
+      "[webhook] RETELL_WEBHOOK_SECRET is unset and DEV_SKIP_WEBHOOK_VERIFY is " +
+        "not enabled. Rejecting webhooks. Set the secret or opt in to skip " +
+        "(dev only) with DEV_SKIP_WEBHOOK_VERIFY=true."
+    );
+    return false;
+  }
   if (!signature) return false;
   const expected = crypto
     .createHmac("sha256", WEBHOOK_SECRET)
@@ -65,6 +99,29 @@ function parseSentiment(input: unknown): CallLog["sentiment"] {
 
 export async function POST(req: NextRequest) {
   const requestId = newRequestId();
+
+  // Flood protection: cap webhook POSTs per IP (generous for real call
+  // volume, but blocks payload flooding). Exceeding the limit returns 429.
+  const rl = rateLimit("webhook", clientIp(req), WEBHOOK_LIMIT, WEBHOOK_WINDOW_MS);
+  if (rl.limited) {
+    const retryAfter = Math.ceil((rl.resetMs - Date.now()) / 1000);
+    audit(requestId, "webhook.retell_rate_limited", {
+      success: false,
+      error: "rate_limited",
+      meta: { ip: clientIp(req) },
+    });
+    return NextResponse.json(
+      { received: false, status: "rate_limited" },
+      {
+        status: 429,
+        headers: {
+          "Retry-After": String(retryAfter),
+          "X-RateLimit-Limit": String(WEBHOOK_LIMIT),
+          "X-RateLimit-Remaining": "0",
+        },
+      }
+    );
+  }
 
   // Read the raw body once so we can both verify the signature and parse JSON.
   const raw = await req.text();

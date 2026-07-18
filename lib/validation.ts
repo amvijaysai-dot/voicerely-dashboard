@@ -20,7 +20,7 @@ export const onboardTenantSchema = z.object({
     .min(3, "Username must be at least 3 characters")
     .max(64, "Username too long")
     .regex(/^[a-zA-Z0-9_.-]+$/, "Username has invalid characters"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
+  password: z.string().min(8, "Password must be at least 8 characters").optional(),
   // Billing model selection
   billingModel: z.enum(["hybrid", "metered_maintenance", "pure_per_minute"]).optional().default("hybrid"),
   // Hybrid model fields
@@ -42,8 +42,13 @@ export const onboardTenantSchema = z.object({
     .default(""),
 });
 
-export type LoginInput = z.infer<typeof loginSchema>;
-export type OnboardTenantInput = z.infer<typeof onboardTenantSchema>;
+export const setPasswordSchema = z.object({
+  tenantId: z.string().trim().min(1, "Missing tenant"),
+  token: z.string().trim().min(1, "Missing token"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+});
+
+export type SetPasswordInput = z.infer<typeof setPasswordSchema>;
 
 // Partial update for an existing tenant. All fields optional; retellApiKey is
 // only re-encrypted when a non-empty value is supplied. status toggles
