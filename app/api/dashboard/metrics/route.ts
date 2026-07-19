@@ -8,35 +8,20 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { getSessionTenant } from "@/lib/auth";
-import { listCalls, getClientConfig } from "@/lib/retell/client";
+import { getTenantById } from "@/lib/repositories/tenantRepository";
+import { listCalls } from "@/lib/retell/client";
 import { transformCallToClientView } from "@/lib/transform";
+import { currentCycle, rollCycleIfNeeded } from "@/lib/billing/cycle";
+import { calculateBillingSummary } from "@/lib/billing/calculate";
+import { getClientConfig } from "@/lib/retell/client";
 import { safeError } from "@/lib/validation";
-import type { BillingModel } from "@/lib/db";
+import type { Tenant } from "@/lib/db";
+import type { BillingCycle } from "@/lib/billing/cycle";
+import type { BillingSummary } from "@/lib/billing/calculate";
+import type { VoicerelyClientConfig } from "@/lib/billing/types";
+import type { VoicerelyCallView } from "@/lib/transform";
 
 export const dynamic = "force-dynamic";
-
-/** Computes Current Spend from the tenant's billing model + consumed minutes. */
-function computeCurrentSpend(
-  model: BillingModel,
-  baseMonthlyFee: number,
-  includedMinutes: number,
-  perMinuteRate: number,
-  minutesConsumed: number
-): number {
-  switch (model) {
-    case "hybrid":
-      // Base Fee + Max(0, Consumed - Included) * Overage Rate
-      return baseMonthlyFee + Math.max(0, minutesConsumed - includedMinutes) * perMinuteRate;
-    case "metered_maintenance":
-      // Flat Maintenance + (Total Minutes * Rate)
-      return baseMonthlyFee + minutesConsumed * perMinuteRate;
-    case "pure_per_minute":
-      // Total Minutes * Rate
-      return minutesConsumed * perMinuteRate;
-    default:
-      return 0;
-  }
-}
 
 /** Shape the frontend's MetricCard row expects. Return 200 with zeros
  *  (never throw) so the dashboard stays healthy when there's no data. */
@@ -47,6 +32,10 @@ function emptyMetrics() {
     currentSpend: 0,
     avgCallDuration: 0,
     trend: [],
+    minutesAllocated: null,
+    usagePercent: null,
+    perMinuteRate: 0,
+    planType: "hybrid" as const,
   };
 }
 
@@ -73,50 +62,64 @@ function buildDailyTrend(
 }
 
 export async function GET(_req: NextRequest) {
-  const tenant = await getSessionTenant();
-  if (!tenant) {
+  const sessionTenant = await getSessionTenant();
+  if (!sessionTenant) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   try {
-    // Aggregate the SAME dataset the trend chart uses: the active session's
-    // Retell call list (including demo synthetic data), transformed through the
-    // client config. This keeps the KPI cards and the chart perfectly in sync
-    // and removes the dependency on the separate (often empty) call-log ledger.
-    const config = await getClientConfig(tenant);
-    const rawCalls = await listCalls(tenant, { limit: 1000 });
-    const calls = rawCalls.map((c) => transformCallToClientView(c, config));
+    // Get the full tenant record with billing cycle info
+    const tenant = await getTenantById(sessionTenant.id);
+    if (!tenant) {
+      return NextResponse.json({ error: "Tenant not found" }, { status: 404 });
+    }
+
+    // Get the current billing cycle, rolling forward if needed
+    const anchorDay = new Date(tenant.createdAt).getUTCDate();
+    const cycle = currentCycle(anchorDay);
+    const { tenant: rolledTenant } = rollCycleIfNeeded(tenant);
+
+    // Get client config for call transformation
+    const config = await getClientConfig(rolledTenant);
+
+    // Fetch calls for the current billing cycle
+    const rawCalls = await listCalls(rolledTenant, { limit: 1000 });
+    
+    // Transform calls to client view
+    const calls: VoicerelyCallView[] = rawCalls.map((c) =>
+      transformCallToClientView(c, config)
+    );
+
+    // Filter calls to current billing cycle
+    const cycleCalls = calls.filter((call) => {
+      const callTime = new Date(call.timestamp).getTime();
+      const cycleStart = new Date(cycle.start).getTime();
+      const cycleEnd = new Date(cycle.end).getTime();
+      return callTime >= cycleStart && callTime < cycleEnd;
+    });
 
     // 1. Aggregate call metrics dynamically from the active call list.
-    const totalCalls = calls.length;
-    const totalSeconds = calls.reduce((sum, c) => sum + c.durationMinutes * 60, 0);
+    const totalCalls = cycleCalls.length;
+    const totalSeconds = cycleCalls.reduce((sum, c) => sum + c.durationMinutes * 60, 0);
     const minutesConsumed = totalSeconds / 60;
     const avgCallDuration = totalCalls > 0 ? totalSeconds / totalCalls : 0; // seconds
 
-    // 2. Read the tenant's onboarding billing configuration (with safe defaults).
-    const billingModel: BillingModel = tenant.billingModel ?? "hybrid";
-    const baseMonthlyFee = tenant.baseMonthlyFee ?? 0;
-    const includedMinutes = tenant.includedMinutes ?? 0;
-    const perMinuteRate = tenant.perMinuteRate ?? config.voicerely_per_minute_rate ?? 0;
+    // 2. Calculate billing summary using the billing calculation utility
+    const billingSummary: BillingSummary = calculateBillingSummary(cycleCalls, config);
 
-    // 3. Dynamically compute Current Spend per the matched billing model.
-    const currentSpend = computeCurrentSpend(
-      billingModel,
-      baseMonthlyFee,
-      includedMinutes,
-      perMinuteRate,
-      minutesConsumed
-    );
-
-    // 4. Build 30-day daily trend for the UsageTrendChart.
+    // 3. Build 30-day daily trend for the UsageTrendChart (using all calls for trend)
     const trend = buildDailyTrend(rawCalls, 30);
 
     return NextResponse.json({
       totalCalls,
       minutesConsumed: Math.round(minutesConsumed * 100) / 100,
-      currentSpend: Math.round(currentSpend * 100) / 100,
+      currentSpend: billingSummary.currentSpend,
       avgCallDuration: Math.round(avgCallDuration * 100) / 100,
       trend,
+      minutesAllocated: billingSummary.minutesAllocated,
+      usagePercent: billingSummary.usagePercent,
+      perMinuteRate: billingSummary.perMinuteRate,
+      planType: billingSummary.planType,
     });
   } catch (err) {
     // A tenant with no call records must not crash the route. Fall back to a

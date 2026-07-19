@@ -59,7 +59,8 @@ export async function middleware(req: NextRequest) {
     pathname.startsWith("/api/billing/") ||
     pathname.startsWith("/api/calls") ||
     pathname.startsWith("/api/agents") ||
-    pathname.startsWith("/api/config/");
+    pathname.startsWith("/api/config/") ||
+    pathname.startsWith("/api/settings/");
   const isDashboardRoot = pathname === "/" || pathname.startsWith("/calls") || pathname.startsWith("/agents") || pathname.startsWith("/metrics") || pathname.startsWith("/settings");
 
   // Protect admin routes

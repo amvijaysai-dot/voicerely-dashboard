@@ -1,4 +1,3 @@
-// app/page.tsx
 //
 // Root Overview route. Wrapped in the shared dashboard shell
 // (sidebar + topbar) so it matches /calls and /billing.
@@ -26,6 +25,14 @@ interface DashboardMetrics {
   currentSpend: number;
   avgCallDuration: number; // seconds
   trend?: { day: number; calls: number }[];
+  minutesAllocated: number | null;
+  usagePercent: number | null;
+  perMinuteRate: number;
+  planType: string;
+  revenueRecovered: number;
+  afterHoursCalls: number;
+  completedCalls: number;
+  avgBookingValue?: number;
 }
 
 interface CallsResponse {
@@ -96,7 +103,7 @@ export default function Home() {
   const [avgDuration, setAvgDuration] = useState(0);
   const [trend, setTrend] = useState<{ day: number; calls: number }[]>([]);
   const [minutesAllocated, setMinutesAllocated] = useState<number | null>(null);
-  const [roiData, setRoiData] = useState<{ revenueRecovered: number; afterHoursCalls: number } | null>(null);
+  const [metrics, setMetrics] = useState<DashboardMetrics | null>(null);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -105,11 +112,10 @@ export default function Home() {
     async function load() {
       try {
         // Live KPI metrics from the dynamic backend sync endpoint.
-        const [metricsRes, callsRes, summaryRes, roiRes] = await Promise.all([
+        const [metricsRes, callsRes, summaryRes] = await Promise.all([
           fetch("/api/dashboard/metrics", { signal }),
           fetch("/api/calls?limit=20", { signal }),
           fetch("/api/billing/summary", { signal }),
-          fetch("/api/dashboard/roi", { signal }),
         ]);
         if (!metricsRes.ok) throw new Error("Failed to load dashboard metrics");
         if (!callsRes.ok) throw new Error("Failed to load call history");
@@ -118,6 +124,7 @@ export default function Home() {
         const calls: CallsResponse = await callsRes.json();
         if (cancelled) return;
 
+        setMetrics(metrics);
         setTotalCalls(metrics.totalCalls);
         setMinutes(Math.round(metrics.minutesConsumed));
         setSpend(metrics.currentSpend);
@@ -143,12 +150,6 @@ export default function Home() {
         if (summaryRes.ok) {
           const summary: { minutesAllocated: number | null } = await summaryRes.json();
           setMinutesAllocated(summary.minutesAllocated ?? null);
-        }
-
-        // Revenue Recovered (ROI) data.
-        if (roiRes.ok) {
-          const roi = await roiRes.json();
-          if (!cancelled) setRoiData(roi);
         }
       } catch (e) {
         if (!cancelled) setFetchError(e instanceof Error ? e.message : "Unknown error");
@@ -200,17 +201,32 @@ export default function Home() {
             </div>
           ) : (
             <>
-              {roiData !== null && (
+              {metrics && (metrics.revenueRecovered ?? 0) > 0 && (
                 <div className="bg-surface border border-border rounded-2xl p-6 flex flex-col gap-3 col-span-full sm:col-span-1 lg:col-span-1 ring-1 ring-accent/20">
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5">
                     <span className="text-sm text-muted">Revenue Recovered</span>
-                    <span className="text-xs font-medium text-accent bg-accent/10 px-2 py-0.5 rounded-full">This cycle</span>
+                    <div className="relative group">
+                      <button
+                        aria-label="How is revenue recovered calculated?"
+                        className="text-muted hover:text-foreground transition"
+                      >
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                          <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/>
+                        </svg>
+                      </button>
+                      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 bg-surface border border-border rounded-xl p-3 text-xs text-muted shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
+                        <p className="font-medium text-foreground mb-1">How this is calculated</p>
+                        <p>Calls answered × avg. booking value × 60% conversion rate.</p>
+                        <p className="mt-1">Avg. booking value: <span className="text-foreground font-medium">${metrics.avgBookingValue ?? 210}</span></p>
+                        <p className="mt-1 text-accent">Adjust in Settings → Business Profile</p>
+                      </div>
+                    </div>
                   </div>
                   <span className="text-3xl font-semibold text-accent tabular-nums tracking-tight">
-                    ${roiData.revenueRecovered.toLocaleString("en-US")}
+                    ${(metrics.revenueRecovered ?? 0).toLocaleString("en-US")}
                   </span>
                   <span className="text-sm text-muted">
-                    incl. {roiData.afterHoursCalls} after-hours calls captured
+                    incl. {metrics.afterHoursCalls ?? 0} after-hours calls captured
                   </span>
                 </div>
               )}
