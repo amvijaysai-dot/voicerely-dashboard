@@ -8,6 +8,7 @@ import { LucideIcon, LayoutDashboard, PhoneCall, Receipt, LogOut, BarChart3, Bot
 import { MobileNav } from "@/components/MobileNav";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Logo } from "@/components/Logo";
+import { UserProvider } from "@/lib/context/UserContext";
 
 const NAV: { href: string; label: string; icon: LucideIcon }[] = [
   { href: "/", label: "Overview", icon: LayoutDashboard },
@@ -36,19 +37,37 @@ function NavItem({ href, label, icon: Icon }: { href: string; label: string; ico
   );
 }
 
-interface SessionUser {
-  id: string;
-  username: string;
-  clientName: string;
-  email?: string;
-  isAdmin: boolean;
-}
-
 export function DashboardShell({
   user,
   children,
 }: {
-  user: SessionUser;
+  user: {
+    id: string;
+    username: string;
+    clientName: string;
+    email?: string;
+    isAdmin: boolean;
+  };
+  children: React.ReactNode;
+}) {
+  return (
+    <UserProvider user={user}>
+      <DashboardShellInner user={user}>{children}</DashboardShellInner>
+    </UserProvider>
+  );
+}
+
+function DashboardShellInner({
+  user,
+  children,
+}: {
+  user: {
+    id: string;
+    username: string;
+    clientName: string;
+    email?: string;
+    isAdmin: boolean;
+  };
   children: React.ReactNode;
 }) {
   const router = useRouter();

@@ -10,7 +10,6 @@ import { PhoneCall, Clock, DollarSign, Timer } from "lucide-react";
 import { MetricCard } from "@/components/overview/MetricCard";
 import { UsageAlertBanner } from "@/components/billing/UsageAlertBanner";
 import { getUsageStatus } from "@/lib/billing/thresholds";
-import DashboardLayout from "@/app/(dashboard)/layout";
 
 // Lazy-load the SVG AreaChart so the heavy SVG math never blocks the
 // initial paint. The chart is below the fold on most viewports anyway.
@@ -29,6 +28,7 @@ interface DashboardMetrics {
   usagePercent: number | null;
   perMinuteRate: number;
   planType: string;
+  // ROI — now returned by /api/dashboard/metrics directly
   revenueRecovered: number;
   afterHoursCalls: number;
   completedCalls: number;
@@ -112,10 +112,9 @@ export default function Home() {
     async function load() {
       try {
         // Live KPI metrics from the dynamic backend sync endpoint.
-        const [metricsRes, callsRes, summaryRes] = await Promise.all([
+        const [metricsRes, callsRes] = await Promise.all([
           fetch("/api/dashboard/metrics", { signal }),
           fetch("/api/calls?limit=20", { signal }),
-          fetch("/api/billing/summary", { signal }),
         ]);
         if (!metricsRes.ok) throw new Error("Failed to load dashboard metrics");
         if (!callsRes.ok) throw new Error("Failed to load call history");
@@ -146,11 +145,8 @@ export default function Home() {
           setTrend(buckets.map((calls, i) => ({ day: i + 1, calls })));
         }
 
-        // Plan allocation (for threshold warnings) comes from the billing summary.
-        if (summaryRes.ok) {
-          const summary: { minutesAllocated: number | null } = await summaryRes.json();
-          setMinutesAllocated(summary.minutesAllocated ?? null);
-        }
+        // Plan allocation (for threshold warnings) comes from the metrics response.
+        setMinutesAllocated(metrics.minutesAllocated ?? null);
       } catch (e) {
         if (!cancelled) setFetchError(e instanceof Error ? e.message : "Unknown error");
       } finally {
@@ -168,90 +164,88 @@ export default function Home() {
   const showUsageAlert = !isLoading && usage.status !== "safe";
 
   return (
-    <DashboardLayout>
-      <div className="flex flex-col gap-6">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight text-foreground">Overview</h1>
-          <p className="text-sm text-muted mt-1">Call performance and spend at a glance.</p>
+    <div className="flex flex-col gap-6">
+      <div>
+        <h1 className="text-2xl font-semibold tracking-tight text-foreground">Overview</h1>
+        <p className="text-sm text-muted mt-1">Call performance and spend at a glance.</p>
+      </div>
+
+      {fetchError && (
+        <div className="bg-danger/10 border border-danger/30 rounded-2xl px-4 py-3 text-sm text-danger">
+          {fetchError}
         </div>
+      )}
 
-        {fetchError && (
-          <div className="bg-danger/10 border border-danger/30 rounded-2xl px-4 py-3 text-sm text-danger">
-            {fetchError}
+      {showUsageAlert && (
+        <UsageAlertBanner status={usage.status} message={usage.message} />
+      )}
+
+      {/* KPI row */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        {isLoading ? (
+          <>
+            <Skeleton className="h-[104px]" />
+            <Skeleton className="h-[104px]" />
+            <Skeleton className="h-[104px]" />
+            <Skeleton className="h-[104px]" />
+            <Skeleton className="h-[104px]" />
+          </>
+        ) : fetchError ? (
+          <div className="col-span-full bg-surface border border-border rounded-2xl p-6 text-sm text-muted">
+            Metrics unavailable.
           </div>
-        )}
-
-        {showUsageAlert && (
-          <UsageAlertBanner status={usage.status} message={usage.message} />
-        )}
-
-        {/* KPI row */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-          {isLoading ? (
-            <>
-              <Skeleton className="h-[104px]" />
-              <Skeleton className="h-[104px]" />
-              <Skeleton className="h-[104px]" />
-              <Skeleton className="h-[104px]" />
-              <Skeleton className="h-[104px]" />
-            </>
-          ) : fetchError ? (
-            <div className="col-span-full bg-surface border border-border rounded-2xl p-6 text-sm text-muted">
-              Metrics unavailable.
-            </div>
-          ) : (
-            <>
-              {metrics && (metrics.revenueRecovered ?? 0) > 0 && (
-                <div className="bg-surface border border-border rounded-2xl p-6 flex flex-col gap-3 col-span-full sm:col-span-1 lg:col-span-1 ring-1 ring-accent/20">
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-sm text-muted">Revenue Recovered</span>
-                    <div className="relative group">
-                      <button
-                        aria-label="How is revenue recovered calculated?"
-                        className="text-muted hover:text-foreground transition"
-                      >
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                          <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/>
-                        </svg>
-                      </button>
-                      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 bg-surface border border-border rounded-xl p-3 text-xs text-muted shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
-                        <p className="font-medium text-foreground mb-1">How this is calculated</p>
-                        <p>Calls answered × avg. booking value × 60% conversion rate.</p>
-                        <p className="mt-1">Avg. booking value: <span className="text-foreground font-medium">${metrics.avgBookingValue ?? 210}</span></p>
-                        <p className="mt-1 text-accent">Adjust in Settings → Business Profile</p>
-                      </div>
+        ) : (
+          <>
+            {metrics && (metrics.revenueRecovered ?? 0) > 0 && (
+              <div className="bg-surface border border-border rounded-2xl p-6 flex flex-col gap-3 col-span-full sm:col-span-1 lg:col-span-1 ring-1 ring-accent/20">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-sm text-muted">Revenue Recovered</span>
+                  <div className="relative group">
+                    <button
+                      aria-label="How is revenue recovered calculated?"
+                      className="text-muted hover:text-foreground transition"
+                    >
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 1 1-5.83 1.6"/><path d="M12 17h.01"/>
+                      </svg>
+                    </button>
+                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 bg-surface border border-border rounded-xl p-3 text-xs text-muted shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
+                      <p className="font-medium text-foreground mb-1">How this is calculated</p>
+                      <p>Calls answered × avg. booking value × 60% conversion rate.</p>
+                      <p className="mt-1">Avg. booking value: <span className="text-foreground font-medium">${metrics.avgBookingValue ?? 210}</span></p>
+                      <p className="mt-1 text-accent">Adjust in Settings → Business Profile</p>
                     </div>
                   </div>
-                  <span className="text-3xl font-semibold text-accent tabular-nums tracking-tight">
-                    ${(metrics.revenueRecovered ?? 0).toLocaleString("en-US")}
-                  </span>
-                  <span className="text-sm text-muted">
-                    incl. {metrics.afterHoursCalls ?? 0} after-hours calls captured
-                  </span>
                 </div>
-              )}
-              <MetricCard label="Total Calls" value={totalCalls} icon={PhoneCall} />
-              <MetricCard label="Minutes Consumed" value={minutes} icon={Clock} />
-              <MetricCard label="Current Spend" value={spend} icon={DollarSign} />
-              <MetricCard label="Avg Call Duration" value={formatDuration(avgDuration)} icon={Timer} />
-            </>
-          )}
-        </div>
-
-        {/* Usage trend chart (Tremor AreaChart spec, §2.3 / §4.4) */}
-        <section className="bg-surface border border-border rounded-2xl p-6">
-          <h2 className="text-lg font-semibold tracking-tight text-foreground mb-4">
-            Call Volume — Last 30 Days
-          </h2>
-          {isLoading ? (
-            <Skeleton className="h-64 w-full" />
-          ) : totalCalls === 0 ? (
-            <EmptyCallVolume />
-          ) : (
-            <UsageTrendChart data={trend} />
-          )}
-        </section>
+                <span className="text-3xl font-semibold text-accent tabular-nums tracking-tight">
+                  ${(metrics.revenueRecovered ?? 0).toLocaleString("en-US")}
+                </span>
+                <span className="text-sm text-muted">
+                  incl. {metrics.afterHoursCalls ?? 0} after-hours calls captured
+                </span>
+              </div>
+            )}
+            <MetricCard label="Total Calls" value={totalCalls} icon={PhoneCall} />
+            <MetricCard label="Minutes Consumed" value={minutes} icon={Clock} />
+            <MetricCard label="Current Spend" value={spend} icon={DollarSign} />
+            <MetricCard label="Avg Call Duration" value={formatDuration(avgDuration)} icon={Timer} />
+          </>
+        )}
       </div>
-    </DashboardLayout>
+
+      {/* Usage trend chart (Tremor AreaChart spec, §2.3 / §4.4) */}
+      <section className="bg-surface border border-border rounded-2xl p-6">
+        <h2 className="text-lg font-semibold tracking-tight text-foreground mb-4">
+          Call Volume — Last 30 Days
+        </h2>
+        {isLoading ? (
+          <Skeleton className="h-64 w-full" />
+        ) : totalCalls === 0 ? (
+          <EmptyCallVolume />
+        ) : (
+          <UsageTrendChart data={trend} />
+        )}
+      </section>
+    </div>
   );
 }

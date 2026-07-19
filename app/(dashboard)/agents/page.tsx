@@ -9,6 +9,7 @@
 
 import { useEffect, useState, Fragment } from "react";
 import { Bot, Phone, FileText, Circle, ChevronDown, TriangleAlert, Copy } from "lucide-react";
+import { useUser } from "@/lib/context/UserContext";
 
 function CopyPromptButton({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
@@ -30,10 +31,6 @@ function CopyPromptButton({ text }: { text: string }) {
   );
 }
 
-interface MeResponse {
-  user: { id: string; username: string; clientName: string; isAdmin: boolean } | null;
-}
-
 interface AgentView {
   agentId: string;
   name: string;
@@ -50,9 +47,9 @@ function Skeleton({ className = "" }: { className?: string }) {
 }
 
 export default function AgentsPage() {
+  const currentUser = useUser();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [clientName, setClientName] = useState("");
   const [agents, setAgents] = useState<AgentView[]>([]);
   const [scriptOpen, setScriptOpen] = useState<Record<string, boolean>>({});
 
@@ -62,16 +59,7 @@ export default function AgentsPage() {
     let cancelled = false;
     async function load() {
       try {
-        const [meRes, agentsRes] = await Promise.all([
-          fetch("/api/auth/me", { signal }),
-          fetch("/api/agents", { signal }),
-        ]);
-        if (!meRes.ok) throw new Error("Failed to load account");
-        const me: MeResponse = await meRes.json();
-        if (cancelled) return;
-
-        setClientName(me.user?.clientName ?? "Your Account");
-
+        const agentsRes = await fetch("/api/agents", { signal });
         if (!agentsRes.ok) {
           const status = agentsRes.status;
           throw new Error(
@@ -135,7 +123,7 @@ export default function AgentsPage() {
                     </div>
                     <div className="min-w-0">
                       <h2 className="text-foreground font-semibold truncate">{agent.name}</h2>
-                      <p className="text-xs text-muted">{clientName}</p>
+                      <p className="text-xs text-muted">{currentUser.clientName}</p>
                     </div>
                     <span
                       className={`ml-auto inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${

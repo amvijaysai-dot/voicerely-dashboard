@@ -44,6 +44,12 @@ type PaddleEvent =
   | { name: "checkout.closed"; data: Record<string, unknown> }
   | { name: string; data: unknown };
 
+interface PaddleConfig {
+  clientToken: string;   // was: vendorId
+  environment: "sandbox" | "production";
+  priceId: string;       // was: setupPriceId
+}
+
 declare global {
   interface Window {
     Paddle?: {
@@ -58,7 +64,7 @@ declare global {
         open: (args: {
           items: Array<{ priceId: string; quantity: number }>;
           settings: { displayMode: "overlay" | "inline"; theme: "light" | "dark" };
-          customer?: { email?: string };
+          customer?: { id?: string };
           eventCallback?: (event: PaddleEvent) => void;
         }) => void;
       };
@@ -82,6 +88,7 @@ export default function BillingPage() {
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
+  const [paddleConfig, setPaddleConfig] = useState<PaddleConfig | null>(null);
 
   // Fetch the logged-in tenant's identity + dynamically aggregated billing summary.
   useEffect(() => {
@@ -129,10 +136,27 @@ export default function BillingPage() {
     };
   }, []);
 
+  // Fetch Paddle config on mount
+  useEffect(() => {
+    fetchPaddleConfig();
+  }, []);
+
   // Fetch payment method on mount
   useEffect(() => {
     fetchPaymentMethod();
   }, []);
+
+  async function fetchPaddleConfig() {
+    try {
+      const res = await fetch("/api/config/paddle");
+      if (res.ok) {
+        const config = await res.json();
+        setPaddleConfig(config);
+      }
+    } catch {
+      // Config fetch failed - Paddle init will use fallback
+    }
+  }
 
   async function fetchPaymentMethod() {
     setLoading(true);
@@ -153,19 +177,38 @@ export default function BillingPage() {
     }
   }
 
-  const openPaddleCheckout = () => {
+  const openPaddleCheckout = async () => {
     const paddle = typeof window !== "undefined" ? window.Paddle : undefined;
     if (!paddle?.Checkout) {
       setCheckoutError("Paddle is still loading. Please try again in a moment.");
       return;
     }
+    if (!paddleConfig) {
+      setCheckoutError("Paddle configuration not loaded. Please refresh the page.");
+      return;
+    }
+
+    // First, get the Paddle customer ID from the server
+    let paddleCustomerId = paymentMethod?.paddleCustomerId;
+    if (!paddleCustomerId) {
+      try {
+        const res = await fetch("/api/billing/payment-method", { method: "POST" });
+        if (res.ok) {
+          const data = await res.json();
+          paddleCustomerId = data.customerId;
+        }
+      } catch {
+        // Ignore - will proceed without customer ID
+      }
+    }
+
     setCheckoutError(null);
     setUpdating(true);
     try {
       paddle.Checkout.open({
         items: [
           {
-            priceId: process.env.NEXT_PUBLIC_PADDLE_SETUP_PRICE_ID || "pri_placeholder",
+            priceId: paddleConfig.priceId,
             quantity: 1,
           },
         ],
@@ -173,6 +216,7 @@ export default function BillingPage() {
           displayMode: "overlay",
           theme: "dark",
         },
+        customer: paddleCustomerId ? { id: paddleCustomerId } : undefined,
         eventCallback: (event) => {
           if (event.name === "checkout.error") {
             // Explicitly surface checkout failures instead of failing silently.
@@ -205,14 +249,12 @@ export default function BillingPage() {
         strategy="afterInteractive"
         onLoad={() => {
           const paddle = typeof window !== "undefined" ? window.Paddle : undefined;
-          if (paddle) {
+          if (paddle && paddleConfig) {
             // Crucial: set environment BEFORE initializing. Driven by the
-            // NEXT_PUBLIC_PADDLE_ENV flag so prod/sandbox is a config switch.
-            paddle.Environment.set(
-              (process.env.NEXT_PUBLIC_PADDLE_ENV as "sandbox" | "production") || "sandbox"
-            );
+            // config from /api/config/paddle so prod/sandbox is a config switch.
+            paddle.Environment.set(paddleConfig.environment);
             paddle.Initialize({
-              token: process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN || "test_placeholder",
+              token: paddleConfig.clientToken,
             });
           }
         }}

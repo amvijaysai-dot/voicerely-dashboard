@@ -1,4 +1,3 @@
-// app/api/dashboard/metrics/route.ts
 //
 // Dynamic backend data sync for the main dashboard metrics view.
 // Scoped to the authenticated client tenant (401 if no valid session).
@@ -36,6 +35,10 @@ function emptyMetrics() {
     usagePercent: null,
     perMinuteRate: 0,
     planType: "hybrid" as const,
+    revenueRecovered: 0,
+    afterHoursCalls: 0,
+    completedCalls: 0,
+    avgBookingValue: 210,
   };
 }
 
@@ -75,7 +78,11 @@ export async function GET(_req: NextRequest) {
     }
 
     // Get the current billing cycle, rolling forward if needed
-    const anchorDay = new Date(tenant.createdAt).getUTCDate();
+    // Guard against missing createdAt (seeded/legacy tenants may not have it).
+    // Default to day 1 of month so cycles are at least consistent.
+    const anchorDay = tenant.createdAt
+      ? new Date(tenant.createdAt).getUTCDate()
+      : 1;
     const cycle = currentCycle(anchorDay);
     const { tenant: rolledTenant } = rollCycleIfNeeded(tenant);
 
@@ -84,7 +91,7 @@ export async function GET(_req: NextRequest) {
 
     // Fetch calls for the current billing cycle
     const rawCalls = await listCalls(rolledTenant, { limit: 1000 });
-    
+
     // Transform calls to client view
     const calls: VoicerelyCallView[] = rawCalls.map((c) =>
       transformCallToClientView(c, config)
@@ -110,16 +117,36 @@ export async function GET(_req: NextRequest) {
     // 3. Build 30-day daily trend for the UsageTrendChart (using all calls for trend)
     const trend = buildDailyTrend(rawCalls, 30);
 
+    // ── ROI / Revenue Recovered (computed from the same rawCalls already fetched) ──
+    const CAPTURE_RATE = 0.60;
+    const avgBookingValue = tenant.avgBookingValue ?? 210;
+    const completedCalls = cycleCalls.filter((c) => c.status === "Completed").length;
+    const afterHoursCalls = cycleCalls.filter((c) => {
+      const hour = new Date(c.timestamp).getUTCHours();
+      return hour >= 20 || hour < 8;
+    }).length;
+    const revenueRecovered =
+      Math.round(completedCalls * avgBookingValue * CAPTURE_RATE) +
+      Math.round(afterHoursCalls * avgBookingValue * CAPTURE_RATE);
+
     return NextResponse.json({
+      // KPIs
       totalCalls,
       minutesConsumed: Math.round(minutesConsumed * 100) / 100,
       currentSpend: billingSummary.currentSpend,
       avgCallDuration: Math.round(avgCallDuration * 100) / 100,
+      // Trend chart
       trend,
+      // Billing summary
       minutesAllocated: billingSummary.minutesAllocated,
       usagePercent: billingSummary.usagePercent,
       perMinuteRate: billingSummary.perMinuteRate,
       planType: billingSummary.planType,
+      // ROI (merged — no separate /api/dashboard/roi call needed)
+      revenueRecovered,
+      afterHoursCalls,
+      completedCalls,
+      avgBookingValue,
     });
   } catch (err) {
     // A tenant with no call records must not crash the route. Fall back to a

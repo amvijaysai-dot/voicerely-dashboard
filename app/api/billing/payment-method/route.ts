@@ -5,6 +5,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { getSessionTenant } from "@/lib/auth";
+import { updateTenant } from "@/lib/repositories/tenantRepository";
 
 export const dynamic = "force-dynamic";
 
@@ -102,46 +103,28 @@ export async function GET() {
 
 /**
  * POST /api/billing/payment-method
- *
- * Creates a server-side Paddle checkout session for updating a tenant's
- * payment method. This is a server-trusted operation only — it reads the
- * authenticated tenant from the session and never accepts client-supplied
- * state (no payment tokens, card data, or customer IDs are taken from the
- * request body). All sensitive values are resolved server-side from env.
- *
- * ┌──────────────────────────────────────────────────────────────────────┐
- * │ WEBHOOK LANDING ZONE (upcoming)                                        │
- * │ This route is NOT where saved payment tokens are written. Paddle       │
- * │ returns the persisted payment method asynchronously via its webhook    │
- * │ pipeline. The handlers to be added here (or in app/api/webhooks/       │
- * │ paddle) will listen for:                                               │
- * │   • "transaction.completed"  → confirm one-time setup charge cleared   │
- * │   • "subscription.updated"   → map the new payment_method token back   │
- * │     to the Prisma tenant row (paddleCustomerId + card metadata)         │
- * │ Those listeners update the tenant record out-of-band; the client only  │
- * │ triggers the overlay and polls /api/billing/payment-method for status. │
- * └──────────────────────────────────────────────────────────────────────┘
+ * Creates or updates Paddle customer record for the tenant.
+ * Checkout itself is initiated client-side via Paddle.Checkout.open().
+ * This endpoint only handles the server-side customer creation/lookup.
  */
-export async function POST(request: NextRequest) {
+export async function POST() {
   const tenant = await getSessionTenant();
   if (!tenant) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  // In demo mode, return error (client should use Paddle.js SDK directly)
   if (!PADDLE_API_KEY) {
     return NextResponse.json(
-      { error: "Paddle not configured. Set PADDLE_API_KEY and PADDLE_VENDOR_ID." },
+      { error: "Paddle not configured. Set PADDLE_API_KEY." },
       { status: 503 }
     );
   }
 
-  // Get or create Paddle customer
-  let paddleCustomerId = tenant.paddleCustomerId;
+  try {
+    let customerId = tenant.paddleCustomerId;
 
-  if (!paddleCustomerId) {
-    // Create a new Paddle customer
-    try {
+    // Create Paddle customer if one doesn't exist yet.
+    if (!customerId) {
       const createRes = await fetch(`${PADDLE_API_URL}/customers`, {
         method: "POST",
         headers: {
@@ -154,58 +137,32 @@ export async function POST(request: NextRequest) {
         }),
       });
 
-      if (createRes.ok) {
-        const createData = (await createRes.json()) as { data: { id: string } };
-        paddleCustomerId = createData.data.id;
+      if (!createRes.ok) {
+        const err = await createRes.json().catch(() => ({}));
+        console.error("Paddle customer creation failed:", err);
+        return NextResponse.json(
+          { error: "Failed to create Paddle customer." },
+          { status: 502 }
+        );
       }
-    } catch {
-      // Fall through to use checkout without customer ID
+
+      const createData = (await createRes.json()) as { data: { id: string } };
+      customerId = createData.data.id;
+
+      // Persist the Paddle customer ID on the tenant record.
+      await updateTenant(tenant.id, { paddleCustomerId: customerId });
     }
+
+    // Return the customer ID so the client can pass it to Paddle.Checkout.open().
+    return NextResponse.json({
+      customerId,
+      ok: true,
+    });
+  } catch (err) {
+    console.error("Paddle POST error:", err);
+    return NextResponse.json(
+      { error: "Failed to prepare Paddle checkout." },
+      { status: 500 }
+    );
   }
-
-  // Use the configured setup price ID for payment method update
-  if (PADDLE_SETUP_PRICE_ID) {
-    // Create a checkout for the setup price
-    try {
-      const checkoutRes = await fetch(`${PADDLE_API_URL}/checkouts`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${PADDLE_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          items: [
-            {
-              price_id: PADDLE_SETUP_PRICE_ID,
-              quantity: 1,
-            },
-          ],
-          customer_id: paddleCustomerId,
-          success_url: `${process.env.NEXT_PUBLIC_APP_URL}/billing?success=true`,
-          cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/billing?canceled=true`,
-        }),
-      });
-
-      if (checkoutRes.ok) {
-        const checkoutData = (await checkoutRes.json()) as {
-          data: {
-            url: string;
-            checkout_id: string;
-          };
-        };
-        return NextResponse.json({
-          checkoutUrl: checkoutData.data.url,
-          paddleCheckoutId: checkoutData.data.checkout_id,
-        });
-      }
-    } catch {
-      // Fall through to error
-    }
-  }
-
-  // Return error if no valid checkout could be created
-  return NextResponse.json(
-    { error: "Unable to create Paddle checkout. Check PADDLE_SETUP_PRICE_ID configuration." },
-    { status: 500 }
-  );
 }
