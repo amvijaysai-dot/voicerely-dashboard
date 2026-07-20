@@ -40,7 +40,7 @@ export const config = {
   matcher: ["/((?!_next/static|_next/image|favicon.ico|login|signup|api/auth).*)"],
 };
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   // CSRF protection: reject state-mutating requests from untrusted origins.
   if (!isSafeOrigin(req)) {
     return NextResponse.json({ error: "Forbidden: Invalid origin" }, { status: 403 });
