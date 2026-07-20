@@ -3,7 +3,9 @@
 // Encryption-at-rest for tenant secrets (the per-tenant Retell API key).
 // Uses Node's native crypto with AES-256-GCM: each value gets a random IV
 // and a 16-byte auth tag, so tampering is detected on decrypt. The key is
-// loaded from ENCRYPTION_KEY (32-byte hex) and fails fast if absent.
+// loaded from ENCRYPTION_KEY (32-byte hex) and evaluated lazily at runtime
+// so Next.js static analysis during `next build` does not fail due to missing
+// environment variables.
 
 import crypto from "node:crypto";
 
