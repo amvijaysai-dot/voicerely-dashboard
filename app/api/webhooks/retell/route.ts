@@ -8,10 +8,10 @@
 //
 // SECURITY: verifies the x-retell-signature header (HMAC-SHA256) against
 // RETELL_WEBHOOK_SECRET. Verification is MANDATORY in production: if the secret
-// is missing there, the module throws at load time and the app refuses to boot,
-// so unsigned webhooks can never be silently accepted. In development, an
-// explicit opt-in flag (DEV_SKIP_WEBHOOK_VERIFY=true) disables verification for
-// local testing — it is NEVER on by default and is rejected in production.
+// is missing there, the handler throws at request time so unsigned webhooks
+// can never be silently accepted. In development, an explicit opt-in flag
+// (DEV_SKIP_WEBHOOK_VERIFY=true) disables verification for local testing —
+// it is NEVER on by default and is rejected in production.
 //
 // RESILIENCE: any internal failure is logged but answered with 200/202 so
 // Retell never retries/spams the endpoint with duplicate payloads.
@@ -33,29 +33,16 @@ export const dynamic = "force-dynamic";
 const WEBHOOK_LIMIT = Number(process.env.WEBHOOK_RATE_LIMIT ?? 120);
 const WEBHOOK_WINDOW_MS = 60_000; // 1 minute
 
-const WEBHOOK_SECRET = process.env.RETELL_WEBHOOK_SECRET;
-const IS_PRODUCTION = process.env.NODE_ENV === "production";
-
-// In development, allow an EXPLICIT opt-in to skip signature verification for
-// local testing. This is never enabled by default and is rejected in prod.
-const DEV_SKIP_VERIFY =
-  !IS_PRODUCTION && process.env.DEV_SKIP_WEBHOOK_VERIFY === "true";
-
-// Fail fast in production if no webhook secret is configured: we must never
-// silently accept unsigned webhooks. The throw happens at module load, so the
-// app refuses to boot rather than running insecurely.
-if (IS_PRODUCTION && !WEBHOOK_SECRET) {
-  throw new Error(
-    "FATAL: RETELL_WEBHOOK_SECRET is not set. Refusing to start in production " +
-      "with webhook signature verification disabled. Set RETELL_WEBHOOK_SECRET " +
-      "(the signing secret from your Retell webhook configuration)."
-  );
-}
-
 /** Constant-time signature check (HMAC-SHA256 hex). */
-function verifySignature(rawBody: string, signature: string | null): boolean {
-  if (DEV_SKIP_VERIFY) return true; // dev-only, explicit opt-in
-  if (!WEBHOOK_SECRET) {
+function verifySignature(
+  rawBody: string,
+  signature: string | null,
+  webhookSecret: string | undefined,
+  isProduction: boolean,
+  devSkipVerify: boolean
+): boolean {
+  if (devSkipVerify) return true; // dev-only, explicit opt-in
+  if (!webhookSecret) {
     // Only reachable in development without the explicit skip flag — guard the
     // pipeline but warn loudly so the gap is visible.
     console.warn(
@@ -67,7 +54,7 @@ function verifySignature(rawBody: string, signature: string | null): boolean {
   }
   if (!signature) return false;
   const expected = crypto
-    .createHmac("sha256", WEBHOOK_SECRET)
+    .createHmac("sha256", webhookSecret)
     .update(rawBody)
     .digest("hex");
   const a = Buffer.from(expected);
@@ -127,7 +114,11 @@ export async function POST(req: NextRequest) {
   const raw = await req.text();
   const signature = req.headers.get("x-retell-signature");
 
-  if (!verifySignature(raw, signature)) {
+  const webhookSecret = process.env.RETELL_WEBHOOK_SECRET;
+  const isProduction = process.env.NODE_ENV === "production";
+  const devSkipVerify = !isProduction && process.env.DEV_SKIP_WEBHOOK_VERIFY === "true";
+
+  if (!verifySignature(raw, signature, webhookSecret, isProduction, devSkipVerify)) {
     audit(requestId, "webhook.retell_signature_failed", {
       success: false,
       error: "invalid_signature",
