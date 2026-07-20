@@ -199,13 +199,407 @@ h6 {
   pointer-events: none;
 }
 
+/* ── Refined premium layer (polish pass) ── */
+@keyframes vr-rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes vr-shimmer {
+  0% { transform: translateX(-120%); }
+  100% { transform: translateX(260%); }
+}
+@keyframes vr-glow-pulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 0.85; transform: scale(1.08); }
+}
+
+.vr-rise { animation: vr-rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+/* Refined glass card: gradient hairline border + inner top highlight + layered shadow */
+.vr-glass {
+  position: relative;
+  background: color-mix(in srgb, var(--surface) 72%, transparent);
+  backdrop-filter: blur(22px) saturate(140%);
+  -webkit-backdrop-filter: blur(22px) saturate(140%);
+  border: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
+  box-shadow:
+    0 1px 0 0 rgba(255, 255, 255, 0.05) inset,
+    0 24px 60px -24px rgba(0, 0, 0, 0.6),
+    0 10px 30px -16px rgba(0, 0, 0, 0.5);
+}
+.vr-glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    160deg,
+    rgba(255, 122, 0, 0.4),
+    rgba(255, 255, 255, 0.07) 42%,
+    transparent 72%
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.75;
+}
+
+/* Ambient orange glow blobs (background depth) */
+.vr-glow {
+  position: absolute;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgba(255, 107, 0, 0.4), transparent 70%);
+  filter: blur(48px);
+  animation: vr-glow-pulse 9s ease-in-out infinite;
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+
+/* Premium button shimmer overlay */
+.vr-shimmer {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 38%;
+  background: linear-gradient(
+    100deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  transform: translateX(-120%);
+  animation: vr-shimmer 3.6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Hover lift for premium cards */
+.vr-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+.vr-lift:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--accent) 38%, var(--border));
+  box-shadow: 0 14px 34px -18px rgba(255, 107, 0, 0.4);
+}
+
+/* ── Dark immersive login (cinematic, Stripe/Apple feel) ── */
+.vr-login {
+  background-color: #0a0a0f;
+  color: #f5f5f4;
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Floating gradient orbs (orange/amber, 8–12% opacity) */
+@keyframes vr-orb-drift {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  33% { transform: translate3d(6%, 4%, 0) scale(1.12); }
+  66% { transform: translate3d(-4%, 6%, 0) scale(0.94); }
+  100% { transform: translate3d(0, 0, 0) scale(1); }
+}
+.vr-orb {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(70px);
+  will-change: transform;
+  pointer-events: none;
+  animation: vr-orb-drift 20s ease-in-out infinite;
+}
+.vr-orb--1 {
+  width: 46vw; height: 46vw;
+  top: -14%; left: -8%;
+  background: radial-gradient(circle, rgba(249, 115, 22, 0.12), transparent 70%);
+}
+.vr-orb--2 {
+  width: 40vw; height: 40vw;
+  bottom: -16%; right: -10%;
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.10), transparent 70%);
+  animation-delay: -7s;
+}
+.vr-orb--3 {
+  width: 30vw; height: 30vw;
+  top: 30%; right: 18%;
+  background: radial-gradient(circle, rgba(249, 115, 22, 0.08), transparent 70%);
+  animation-delay: -13s;
+}
+
+/* Dark glass (bento + login card) */
+.vr-bento {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.06),
+    0 20px 50px -28px rgba(0, 0, 0, 0.8);
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.vr-bento:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.20);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.08),
+    0 26px 60px -28px rgba(249, 115, 22, 0.35);
+}
+
+/* Gentle floating oscillation for the login card */
+@keyframes vr-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.vr-float { animation: vr-float 4s ease-in-out infinite; will-change: transform; }
+
+/* Orange gradient text with subtle glow */
+.vr-grad-text {
+  background: linear-gradient(100deg, #fb923c, #f97316 55%, #fbbf24);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 28px rgba(249, 115, 22, 0.35);
+}
+
+/* Center-expanding underline for links */
+.vr-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 50% 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  transition: background-size 0.25s ease;
+  padding-bottom: 1px;
+}
+.vr-underline:hover { background-size: 100% 1px; }
+
+/* Staggered word reveal for the hero headline */
+@keyframes vr-word-in {
+  from { opacity: 0; transform: translateY(0.5em); filter: blur(4px); }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+.vr-word { display: inline-block; animation: vr-word-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+/* Dark form input */
+.vr-input-dark {
+  background: #1a1a1f;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  color: #f5f5f4;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+.vr-input-dark::placeholder { color: #6b7280; }
+.vr-input-dark:hover { border-color: rgba(255, 255, 255, 0.18); }
+.vr-input-dark:focus {
+  outline: none;
+  border-color: #f97316;
+  box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.45), 0 0 22px -4px rgba(249, 115, 22, 0.5);
+}
+
+/* Custom remember-me checkbox */
+.vr-check {
+  appearance: none;
+  width: 1.05rem; height: 1.05rem;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.04);
+  display: grid; place-content: center;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+  cursor: pointer;
+}
+.vr-check::before {
+  content: "";
+  width: 0.6rem; height: 0.6rem;
+  transform: scale(0);
+  transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+  background: #0a0a0f;
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+.vr-check:checked {
+  background: #f97316;
+  border-color: #f97316;
+}
+.vr-check:checked::before { transform: scale(1); }
+.vr-check:focus-visible { outline: 2px solid #f97316; outline-offset: 2px; }
+
+/* ── Ultra-premium cinematic login (void black + breathing orbs) ── */
+.vr-void {
+  background-color: #050508;
+  color: #f5f5f4;
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+@keyframes vr-orb-breathe {
+  0% { transform: translate3d(0, 0, 0) scale(0.95); }
+  33% { transform: translate3d(5%, 3%, 0) scale(1.05); }
+  66% { transform: translate3d(-4%, 5%, 0) scale(0.97); }
+  100% { transform: translate3d(0, 0, 0) scale(0.95); }
+}
+.vr-orb-b {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(80px);
+  will-change: transform;
+  pointer-events: none;
+  animation: vr-orb-breathe 25s ease-in-out infinite;
+}
+/* Light mode (default, softer/diffused) */
+.vr-orb-b--1 {
+  width: 44vw; height: 44vw; top: -12%; left: -6%;
+  background: radial-gradient(circle, rgba(249, 115, 22, 0.06), transparent 70%);
+}
+.vr-orb-b--2 {
+  width: 38vw; height: 38vw; bottom: -14%; right: -8%;
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.04), transparent 70%);
+  animation-delay: -8s;
+}
+.vr-orb-b--3 {
+  width: 30vw; height: 30vw; top: 28%; right: 16%;
+  background: radial-gradient(circle, rgba(249, 115, 22, 0.05), transparent 70%);
+  animation-delay: -15s;
+}
+.vr-orb-b--4 {
+  width: 26vw; height: 26vw; bottom: 18%; left: 22%;
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.03), transparent 70%);
+  animation-delay: -20s;
+}
+/* Dark mode (deeper, warmer) — overrides when .dark ancestor present */
+.dark .vr-orb-b--1 { background: radial-gradient(circle, rgba(249, 115, 22, 0.10), transparent 70%); }
+.dark .vr-orb-b--2 { background: radial-gradient(circle, rgba(251, 191, 36, 0.07), transparent 70%); }
+.dark .vr-orb-b--3 { background: radial-gradient(circle, rgba(249, 115, 22, 0.06), transparent 70%); }
+.dark .vr-orb-b--4 { background: radial-gradient(circle, rgba(251, 191, 36, 0.05), transparent 70%); }
+
+/* Gradient hairline border for the login card (top brighter) */
+.vr-grad-border {
+  position: relative;
+}
+.vr-grad-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.18),
+    rgba(255, 255, 255, 0.06) 40%,
+    transparent 75%
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Button shimmer sweep */
+.vr-shimmer-btn {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+}
+.vr-shimmer-btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -60%;
+  width: 50%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.22),
+    transparent
+  );
+  animation: vr-sweep 4s ease-in-out infinite;
+}
+@keyframes vr-sweep {
+  0% { transform: translateX(0); }
+  60%, 100% { transform: translateX(320%); }
+}
+
+/* Center-expanding underline link */
+.vr-underline-c {
+  position: relative;
+}
+.vr-underline-c::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -1px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.25s ease;
+}
+.vr-underline-c:hover::after { transform: scaleX(1); }
+
+/* Custom remember-me checkbox (orange, spring) */
+.vr-check2 {
+  appearance: none;
+  width: 1.125rem; height: 1.125rem;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1; /* stone-300 */
+  background: #f5f5f4; /* stone-100 */
+  display: grid; place-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+.vr-check2::before {
+  content: "";
+  width: 0.65rem; height: 0.65rem;
+  transform: scale(0);
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  background: #fff;
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+.vr-check2:checked {
+  background: #f97316;
+  border-color: #f97316;
+}
+.vr-check2:checked::before { transform: scale(1); }
+.vr-check2:focus-visible { outline: 2px solid #f97316; outline-offset: 2px; }
+/* Dark mode overrides */
+.dark .vr-check2 {
+  border-color: rgba(255, 255, 255, 0.12);
+  background: #111118;
+}
+
+/* Error shake */
+@keyframes vr-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-6px); }
+  80% { transform: translateX(6px); }
+}
+.vr-shake { animation: vr-shake 0.4s ease both; }
+
 @media (prefers-reduced-motion: reduce) {
   .vr-fade-in,
   .vr-card-in,
   .vr-brand-mesh,
   .vr-particle,
   .vr-waveform,
-  .vr-ripple {
+  .vr-ripple,
+  .vr-rise,
+  .vr-shimmer,
+  .vr-glow,
+  .vr-orb,
+  .vr-float,
+  .vr-word,
+  .vr-orb-b,
+  .vr-shimmer-btn::after,
+  .vr-shake {
     animation: none !important;
+  }
+  .vr-lift:hover,
+  .vr-bento:hover {
+    transform: none;
   }
 }

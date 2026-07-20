@@ -23,6 +23,7 @@
     "@types/nodemailer": "^8.0.1",
     "bcryptjs": "^3.0.3",
     "bullmq": "^5.80.9",
+    "framer-motion": "^11.18.2",
     "ioredis": "^5.11.1",
     "jose": "^6.2.3",
     "lucide-react": "^1.24.0",
