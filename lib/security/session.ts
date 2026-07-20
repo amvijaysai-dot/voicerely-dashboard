@@ -1,8 +1,8 @@
 // lib/security/session.ts
 //
 // Edge-safe session crypto. Imports ONLY jose + the secret — no next/headers,
-// no fs — so it can be used from middleware.ts (Edge runtime) and route
-// handlers alike. The AUTH_SECRET is evaluated lazily at runtime (inside
+// no fs — so it can be used from proxy.ts (Edge runtime) and route handlers
+// alike. The AUTH_SECRET is evaluated lazily at runtime (inside
 // createSession/verifySession) so Next.js static analysis during `next build`
 // does not fail due to missing environment variables.
 
@@ -10,6 +10,8 @@ import { SignJWT, jwtVerify } from "jose";
 import type { SessionUser } from "@/lib/auth";
 
 const COOKIE_NAME = "voicerely_session";
+const ISSUER = "voicerely-dashboard";
+const AUDIENCE = "voicerely-dashboard";
 
 function getSecret(): Uint8Array {
   const rawSecret = process.env.AUTH_SECRET;
@@ -35,13 +37,18 @@ export async function createSession(user: SessionUser): Promise<string> {
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
     .setExpirationTime("7d")
+    .setIssuer(ISSUER)
+    .setAudience(AUDIENCE)
     .sign(secret);
 }
 
 export async function verifySession(token: string): Promise<SessionUser | null> {
   try {
     const secret = getSecret();
-    const { payload } = await jwtVerify(token, secret);
+    const { payload } = await jwtVerify(token, secret, {
+      issuer: ISSUER,
+      audience: AUDIENCE,
+    });
     return {
       id: String(payload.id),
       username: String(payload.username),

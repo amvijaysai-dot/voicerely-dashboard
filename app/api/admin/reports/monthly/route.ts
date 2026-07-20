@@ -11,7 +11,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
-import { listClientTenants } from "@/lib/repositories/tenantRepository";
+import { listClientTenants } from "@/lib/tenantService";
 import { listCalls, getClientConfig } from "@/lib/retell/client";
 import { transformCallToClientView } from "@/lib/transform";
 import { currentCycle, isInCycle } from "@/lib/billing/cycle";
@@ -25,6 +25,35 @@ function isAuthorized(req: NextRequest, isAdmin: boolean): boolean {
   const cronSecret = process.env.CRON_SECRET;
   if (!cronSecret) return false;
   return req.headers.get("authorization") === `Bearer ${cronSecret}`;
+}
+
+/** Escapes HTML-significant characters to prevent HTML/email injection from
+ *  tenant-controlled fields (clientName, appUrl). Uses char codes so the
+ *  replacement strings never contain literal entities that could be re-parsed. */
+function escapeHtml(input: string): string {
+  let out = "";
+  for (const ch of input) {
+    switch (ch) {
+      case "&":
+        out += "&#38;";
+        break;
+      case "<":
+        out += "&#60;";
+        break;
+      case ">":
+        out += "&#62;";
+        break;
+      case '"':
+        out += "&#34;";
+        break;
+      case "'":
+        out += "&#39;";
+        break;
+      default:
+        out += ch;
+    }
+  }
+  return out;
 }
 
 function buildReportEmail(params: {
@@ -47,13 +76,18 @@ function buildReportEmail(params: {
     appUrl,
     monthLabel,
   } = params;
+  // Escape all interpolated values to prevent HTML/email-header injection
+  // (a tenant's clientName or appUrl must never break out of the markup).
+  const safeClientName = escapeHtml(clientName);
+  const safeAppUrl = escapeHtml(appUrl);
+  const safeMonth = escapeHtml(monthLabel);
 
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Your ${monthLabel} VoiceRely Report</title>
+<title>Your ${safeMonth} VoiceRely Report</title>
 <style>
   body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0D0D0D;margin:0;padding:24px}
   .wrap{max-width:560px;margin:0 auto}
@@ -77,7 +111,7 @@ function buildReportEmail(params: {
 <div class="wrap">
   <div class="logo">VoiceRely</div>
   <div class="card">
-    <h1>${clientName} \u2014 ${monthLabel} Report</h1>
+    <h1>${safeClientName} \u2014 ${safeMonth} Report</h1>
     <p class="sub">Here's how your AI voice agent performed this month.</p>
 
     <div class="roi-card">
@@ -107,11 +141,11 @@ function buildReportEmail(params: {
       </div>
     </div>
 
-    <a href="${appUrl}" class="cta">View Full Dashboard \u2192</a>
+    <a href="${safeAppUrl}" class="cta">View Full Dashboard \u2192</a>
   </div>
   <div class="footer">
     You're receiving this as a VoiceRely client.<br>
-    Reply to reach your account manager \u00B7 <a href="${appUrl}/settings" style="color:#FF6B00">Manage settings</a>
+    Reply to reach your account manager \u00B7 <a href="${safeAppUrl}/settings" style="color:#FF6B00">Manage settings</a>
   </div>
 </div>
 </body>

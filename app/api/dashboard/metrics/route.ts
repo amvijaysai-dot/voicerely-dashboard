@@ -7,7 +7,6 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { getSessionTenant } from "@/lib/auth";
-import { getTenantById } from "@/lib/repositories/tenantRepository";
 import { listCalls } from "@/lib/retell/client";
 import { transformCallToClientView } from "@/lib/transform";
 import { currentCycle, rollCycleIfNeeded } from "@/lib/billing/cycle";
@@ -71,11 +70,9 @@ export async function GET(_req: NextRequest) {
   }
 
   try {
-    // Get the full tenant record with billing cycle info
-    const tenant = await getTenantById(sessionTenant.id);
-    if (!tenant) {
-      return NextResponse.json({ error: "Tenant not found" }, { status: 404 });
-    }
+    // getSessionTenant() already returns the full (cached) tenant row, so a
+    // second getTenantById lookup is redundant — use it directly.
+    const tenant = sessionTenant;
 
     // Get the current billing cycle, rolling forward if needed
     // Guard against missing createdAt (seeded/legacy tenants may not have it).

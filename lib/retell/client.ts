@@ -13,6 +13,7 @@ import type { RetellCallRecord, RetellAgent } from "./types";
 import type { VoicerelyClientConfig } from "../billing/types";
 import type { Tenant } from "../db";
 import { RetellApiError } from "@/lib/errors";
+import { getRetellApiKey } from "@/lib/tenantService";
 
 const RETELL_API_BASE = "https://api.retellai.com";
 const RETELL_TIMEOUT_MS = 8000;
@@ -67,12 +68,15 @@ function buildClientConfig(tenant: Tenant, demo: boolean): VoicerelyClientConfig
   };
 }
 
-function resolveTenant(tenant: Tenant): {
+async function resolveTenant(tenant: Tenant): Promise<{
   retellApiKey: string;
   config: VoicerelyClientConfig;
   demo: boolean;
-} {
-  const retellApiKey = tenant.retellApiKey ?? "";
+}> {
+  // The Retell key is never carried on the Tenant object (it is blanked by the
+  // TenantService). Fetch it from the service, which decrypts it at most once
+  // per 60s cache lifetime and never exposes it outside this server-only module.
+  const retellApiKey = await getRetellApiKey(tenant.id);
 
   // Demo mode: tenant has no Retell key. Synthetic config so the dashboard
   // is navigable without a live backend. Real proxy path used once a key is set.
@@ -88,7 +92,7 @@ async function retellFetch(
   path: string,
   init: RequestInit = {}
 ): Promise<unknown> {
-  const { retellApiKey } = resolveTenant(tenant);
+  const { retellApiKey } = await resolveTenant(tenant);
 
   // Network resiliency: bound every upstream call to an 8s execution timeout.
   const controller = new AbortController();
@@ -166,7 +170,7 @@ export async function listCalls(
   tenant: Tenant,
   opts: { limit?: number; pagination_key?: string } = {}
 ): Promise<RetellCallRecord[]> {
-  const { demo } = resolveTenant(tenant);
+  const { demo } = await resolveTenant(tenant);
   if (demo) return generateDemoCalls(opts.limit ?? 50);
 
   // When called without a specific pagination_key (e.g. from the billing/metrics
@@ -191,7 +195,7 @@ export async function getCall(
   tenant: Tenant,
   callId: string
 ): Promise<RetellCallRecord> {
-  const { demo } = resolveTenant(tenant);
+  const { demo } = await resolveTenant(tenant);
   if (demo) return generateDemoCall(callId);
   return (await retellFetch(tenant, `/get-call/${encodeURIComponent(callId)}`)) as RetellCallRecord;
 }
@@ -201,7 +205,7 @@ export async function getAgent(
   tenant: Tenant,
   agentId: string
 ): Promise<RetellAgent> {
-  const { demo } = resolveTenant(tenant);
+  const { demo } = await resolveTenant(tenant);
   if (demo) return generateDemoAgent(agentId, tenant);
   return (await retellFetch(
     tenant,
@@ -256,7 +260,7 @@ export function toAgentView(
 export async function getClientConfig(
   tenant: Tenant
 ): Promise<VoicerelyClientConfig> {
-  return resolveTenant(tenant).config;
+  return (await resolveTenant(tenant)).config;
 }
 
 // ---- Demo-mode data (used only when no Retell API key is configured) ----

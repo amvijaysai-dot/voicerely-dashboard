@@ -49,6 +49,10 @@ export interface Tenant {
   /** Average revenue per booked appointment (used for ROI calculation). */
   avgBookingValue?: number;
   retellApiKey: string; // stored encrypted by the repository layer
+  /** True when the tenant has a (decrypted) Retell key configured. Populated
+   *  by the TenantService on read so callers can detect demo mode without
+   *  ever touching the plaintext secret. */
+  hasRetellKey?: boolean;
   status: "active" | "suspended";
   isAdmin?: boolean;
   createdAt: string;

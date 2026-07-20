@@ -36,6 +36,16 @@ export async function GET(
       return NextResponse.json({ error: "Call not found" }, { status: 404 });
     }
 
+    // Tenant isolation: a tenant may only view calls belonging to their own
+    // Retell agent(s). If the call's agent is not owned by this tenant, treat
+    // it as not found (never leak another tenant's call data).
+    const agentId = raw.agent_id ?? "";
+    if (agentId && tenant.agentIds && tenant.agentIds.length > 0) {
+      if (!tenant.agentIds.includes(agentId)) {
+        return NextResponse.json({ error: "Call not found" }, { status: 404 });
+      }
+    }
+
     const call = transformCallToClientView(raw, config);
 
     return NextResponse.json({

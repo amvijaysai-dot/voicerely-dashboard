@@ -6,6 +6,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSessionTenant } from "@/lib/auth";
 import { updateTenant } from "@/lib/repositories/tenantRepository";
+import { invalidateTenant } from "@/lib/tenantService";
 
 export const dynamic = "force-dynamic";
 
@@ -151,6 +152,7 @@ export async function POST() {
 
       // Persist the Paddle customer ID on the tenant record.
       await updateTenant(tenant.id, { paddleCustomerId: customerId });
+      invalidateTenant(tenant.id);
     }
 
     // Return the customer ID so the client can pass it to Paddle.Checkout.open().

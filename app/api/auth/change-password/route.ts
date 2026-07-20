@@ -5,7 +5,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { getSession } from "@/lib/auth";
-import { getTenantById, updateTenantPassword } from "@/lib/repositories/tenantRepository";
+import { getTenant, invalidateTenant } from "@/lib/tenantService";
+import { updateTenantPassword } from "@/lib/repositories/tenantRepository";
 import { verifyPassword, hashPassword } from "@/lib/auth";
 import { parseBody, safeError } from "@/lib/validation";
 import { rateLimit, clientIp } from "@/lib/security/rateLimit";
@@ -21,7 +22,18 @@ export async function POST(req: NextRequest) {
   // Rate limit: 5 attempts per IP per 15 minutes.
   const rl = await rateLimit("change-password", clientIp(req as unknown as Request), 5, 15 * 60_000);
   if (rl.limited) {
-    return NextResponse.json({ error: "Too many attempts. Please wait." }, { status: 429 });
+    const retryAfter = Math.ceil((rl.resetMs - Date.now()) / 1000);
+    return NextResponse.json(
+      { error: "Too many attempts. Please wait." },
+      {
+        status: 429,
+        headers: {
+          "Retry-After": String(retryAfter),
+          "X-RateLimit-Limit": "5",
+          "X-RateLimit-Remaining": "0",
+        },
+      }
+    );
   }
 
   const session = await getSession();
@@ -33,7 +45,7 @@ export async function POST(req: NextRequest) {
   const { currentPassword, newPassword } = parsed.data;
 
   try {
-    const tenant = await getTenantById(session.id);
+    const tenant = await getTenant(session.id);
     if (!tenant) return NextResponse.json({ error: "Tenant not found" }, { status: 404 });
 
     const valid = await verifyPassword(currentPassword, tenant.passwordHash);
@@ -50,6 +62,7 @@ export async function POST(req: NextRequest) {
     if (!updated) {
       return NextResponse.json({ error: "Failed to update password" }, { status: 500 });
     }
+    invalidateTenant(session.id);
 
     return NextResponse.json({ ok: true });
   } catch (e) {

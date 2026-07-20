@@ -7,11 +7,8 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { getSession, hashPassword } from "@/lib/auth";
-import {
-  getTenantById,
-  updateTenant,
-  deleteTenant,
-} from "@/lib/repositories/tenantRepository";
+import { getTenant, invalidateTenant } from "@/lib/tenantService";
+import { updateTenant, deleteTenant } from "@/lib/repositories/tenantRepository";
 import { updateTenantSchema, parseBody, safeError } from "@/lib/validation";
 
 export const dynamic = "force-dynamic";
@@ -26,7 +23,7 @@ export async function PATCH(
   }
 
   const { id } = await params;
-  const existing = await getTenantById(id);
+  const existing = await getTenant(id);
   if (!existing || existing.isAdmin) {
     return NextResponse.json({ error: "Tenant not found" }, { status: 404 });
   }
@@ -56,6 +53,7 @@ export async function PATCH(
     if (!updated) {
       return NextResponse.json({ error: "Tenant not found" }, { status: 404 });
     }
+    invalidateTenant(id);
     return NextResponse.json({
       id: updated.id,
       clientName: updated.clientName,
@@ -83,7 +81,7 @@ export async function DELETE(
   }
 
   const { id } = await params;
-  const existing = await getTenantById(id);
+  const existing = await getTenant(id);
   if (!existing || existing.isAdmin) {
     return NextResponse.json({ error: "Tenant not found" }, { status: 404 });
   }
@@ -92,5 +90,6 @@ export async function DELETE(
   if (!removed) {
     return NextResponse.json({ error: "Tenant not found" }, { status: 404 });
   }
+  invalidateTenant(id);
   return NextResponse.json({ ok: true, id });
 }

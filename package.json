@@ -13,7 +13,8 @@
     "db:check": "node scripts/check-db.mjs",
     "db:studio": "prisma studio",
     "db:seed": "node scripts/seed-admin.mjs",
-    "db:fix-agents": "node scripts/fix-duplicate-agents.mjs --fix"
+    "db:fix-agents": "node scripts/fix-duplicate-agents.mjs --fix",
+    "worker": "tsx scripts/webhook-worker.ts"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.8.0",
@@ -21,6 +22,8 @@
     "@types/bcryptjs": "^2.4.6",
     "@types/nodemailer": "^8.0.1",
     "bcryptjs": "^3.0.3",
+    "bullmq": "^5.80.9",
+    "ioredis": "^5.11.1",
     "jose": "^6.2.3",
     "lucide-react": "^1.24.0",
     "next": "16.2.10",
@@ -40,6 +43,7 @@
     "eslint-config-next": "16.2.10",
     "prisma": "^7.8.0",
     "tailwindcss": "^4",
+    "tsx": "^4.23.1",
     "typescript": "^5"
   }
 }

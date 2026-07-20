@@ -10,7 +10,8 @@
 // use (or expiry) the hash is cleared so the link cannot be replayed.
 
 import crypto from "node:crypto";
-import { getTenantById, updateTenant } from "@/lib/repositories/tenantRepository";
+import { getTenant, invalidateTenant } from "@/lib/tenantService";
+import { updateTenant } from "@/lib/repositories/tenantRepository";
 import { hashPassword } from "@/lib/auth";
 
 const PASSWORD_SETUP_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
@@ -51,7 +52,7 @@ export async function consumePasswordSetupToken(
   rawToken: string,
   newPassword: string
 ): Promise<ConsumeResult> {
-  const tenant = await getTenantById(tenantId);
+  const tenant = await getTenant(tenantId);
   if (!tenant) return { ok: false, error: "Tenant not found" };
 
   const hash = crypto.createHash("sha256").update(rawToken).digest("hex");
@@ -64,6 +65,7 @@ export async function consumePasswordSetupToken(
       passwordSetupTokenHash: null,
       passwordSetupExpiresAt: null,
     });
+    invalidateTenant(tenantId);
     return { ok: false, error: "This setup link has expired" };
   }
 
@@ -73,5 +75,6 @@ export async function consumePasswordSetupToken(
     passwordSetupTokenHash: null, // single-use: invalidate immediately
     passwordSetupExpiresAt: null,
   });
+  invalidateTenant(tenantId);
   return { ok: true };
 }

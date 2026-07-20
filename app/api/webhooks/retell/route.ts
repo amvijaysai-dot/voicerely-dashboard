@@ -1,32 +1,36 @@
 // app/api/webhooks/retell/route.ts
 //
-// Retell webhook ingestion endpoint. Decouples dashboard performance from
-// blocking Retell API calls: instead of polling, Retell pushes call events
-// here, we attribute them to a tenant by agent_id, persist an immutable call
-// log to the local ledger (data/calls.json), and roll the minutes into the
-// tenant's used-minute balance (data/tenants.json).
+// Retell webhook ingestion endpoint — now the ASYNCHRONOUS entry point.
 //
-// SECURITY: verifies the x-retell-signature header (HMAC-SHA256) against
-// RETELL_WEBHOOK_SECRET. Verification is MANDATORY in production: if the secret
-// is missing there, the handler throws at request time so unsigned webhooks
-// can never be silently accepted. In development, an explicit opt-in flag
-// (DEV_SKIP_WEBHOOK_VERIFY=true) disables verification for local testing —
-// it is NEVER on by default and is rejected in production.
+// New flow (see WEBHOOK_ARCHITECTURE.md):
+//   Retell → [signature verify] → [enqueue to BullMQ] → Worker → DB → Analytics → Notify
 //
-// RESILIENCE: any internal failure is logged but answered with 200/202 so
-// Retell never retries/spams the endpoint with duplicate payloads.
+// This handler ONLY:
+//   1. Rate-limits per IP.
+//   2. Verifies the x-retell-signature (HMAC-SHA256) — MANDATORY in production.
+//   3. Parses + shape-validates the event, mapping it to a normalized
+//      RetellCallRecord (the same shape the dashboard already consumes).
+//   4. Enqueues a job onto the `retell-webhook` BullMQ queue (Redis-backed),
+//      keyed by callId for idempotency.
+//
+// Heavy work (tenant attribution, DB writes, billing roll-up, analytics,
+// notifications) happens in the Worker, NOT in the request path. The endpoint
+// returns 202 immediately so Retell is never blocked and never retries.
+//
+// GRACEFUL FALLBACK: if Redis/queue is unavailable, the verified event is
+// processed INLINE via the same staged pipeline, preserving the previous
+// synchronous behavior. The endpoint therefore never hard-fails on queue outages.
+//
+// SECURITY: signature verification is unchanged and still mandatory in prod.
 
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "node:crypto";
-import {
-  getTenantByAgentId,
-  appendCallLog,
-  incrementUsedMinutes,
-} from "@/lib/repositories/tenantRepository";
+import { enqueueWebhook } from "@/lib/queue/webhookQueue";
+import { isQueueAvailable } from "@/lib/queue/redis";
+import { processWebhook, type WebhookJobPayload } from "@/lib/queue/processWebhook";
 import { newRequestId, audit } from "@/lib/security/logger";
-import { safeError } from "@/lib/validation";
 import { rateLimit, clientIp } from "@/lib/security/rateLimit";
-import type { CallLog } from "@/lib/db";
+import type { RetellCallRecord } from "@/lib/retell/types";
 
 export const dynamic = "force-dynamic";
 
@@ -43,8 +47,6 @@ function verifySignature(
 ): boolean {
   if (devSkipVerify) return true; // dev-only, explicit opt-in
   if (!webhookSecret) {
-    // Only reachable in development without the explicit skip flag — guard the
-    // pipeline but warn loudly so the gap is visible.
     console.warn(
       "[webhook] RETELL_WEBHOOK_SECRET is unset and DEV_SKIP_WEBHOOK_VERIFY is " +
         "not enabled. Rejecting webhooks. Set the secret or opt in to skip " +
@@ -65,7 +67,6 @@ function verifySignature(
 /** Robustly pulls a number of seconds out of the varied Retell duration shapes. */
 function parseDurationSeconds(input: unknown): number {
   if (typeof input === "number") {
-    // Treat values >= 1000 as milliseconds, otherwise seconds.
     return input >= 1000 ? Math.round(input / 1000) : Math.round(input);
   }
   if (typeof input === "string") {
@@ -76,7 +77,7 @@ function parseDurationSeconds(input: unknown): number {
 }
 
 /** Normalizes the free-form Retell sentiment into our tri-state (or undefined). */
-function parseSentiment(input: unknown): CallLog["sentiment"] {
+function parseSentiment(input: unknown): "Positive" | "Negative" | "Neutral" | undefined {
   const s = typeof input === "string" ? input.toLowerCase() : "";
   if (s.includes("positive")) return "Positive";
   if (s.includes("negative")) return "Negative";
@@ -84,11 +85,58 @@ function parseSentiment(input: unknown): CallLog["sentiment"] {
   return undefined;
 }
 
+/** Maps the raw Retell webhook payload to a normalized RetellCallRecord. */
+function toCallRecord(data: Record<string, unknown>): RetellCallRecord {
+  const transcript =
+    typeof data.transcript === "string"
+      ? data.transcript
+      : Array.isArray(data.transcript)
+      ? (data.transcript as { text?: string }[]).map((t) => t.text ?? "").join("\n")
+      : "";
+  const recording_url =
+    typeof data.recording_url === "string"
+      ? data.recording_url
+      : typeof data.recordingUrl === "string"
+      ? data.recordingUrl
+      : undefined;
+  const sentimentRaw =
+    parseSentiment(data.sentiment) ??
+    parseSentiment((data.call_analysis as { user_sentiment?: string } | undefined)?.user_sentiment);
+  const startTimestamp =
+    typeof data.start_timestamp === "number"
+      ? data.start_timestamp
+      : typeof data.dispatched_at === "string"
+      ? Date.parse(data.dispatched_at)
+      : Date.now();
+
+  return {
+    call_id: String(data.call_id ?? data.callId ?? ""),
+    agent_id: String(data.agent_id ?? data.agentId ?? ""),
+    agent_name: (data.agent_name ?? data.agentName) as string | undefined,
+    call_status: (data.call_status ?? "ended") as RetellCallRecord["call_status"],
+    disconnection_reason: (data.disconnection_reason ??
+      data.disconnectionReason) as string | undefined,
+    start_timestamp: startTimestamp,
+    end_timestamp:
+      typeof data.end_timestamp === "number"
+        ? data.end_timestamp
+        : startTimestamp + parseDurationSeconds(data.duration_ms ?? data.duration ?? data.duration_seconds ?? 0) * 1000,
+    duration_seconds: parseDurationSeconds(
+      data.duration_ms ?? data.duration ?? data.duration_seconds ?? 0
+    ),
+    from_number: (data.from_number ?? data.fromNumber) as string | undefined,
+    to_number: (data.to_number ?? data.toNumber) as string | undefined,
+    recording_url,
+    transcript,
+    transcript_object: [],
+    call_analysis: sentimentRaw ? { user_sentiment: sentimentRaw } : undefined,
+  };
+}
+
 export async function POST(req: NextRequest) {
   const requestId = newRequestId();
 
-  // Flood protection: cap webhook POSTs per IP (generous for real call
-  // volume, but blocks payload flooding). Exceeding the limit returns 429.
+  // Flood protection: cap webhook POSTs per IP.
   const rl = await rateLimit("webhook", clientIp(req), WEBHOOK_LIMIT, WEBHOOK_WINDOW_MS);
   if (rl.limited) {
     const retryAfter = Math.ceil((rl.resetMs - Date.now()) / 1000);
@@ -139,6 +187,27 @@ export async function POST(req: NextRequest) {
   const event = (payload.event ?? payload.type ?? "") as string;
   const data = (payload.data ?? payload) as Record<string, unknown>;
 
+  // Replay / staleness protection: reject events whose embedded timestamp is
+  // missing or older than MAX_WEBHOOK_AGE_MS. Retell redelivers at-least-once,
+  // and the queue already de-dupes by callId, but this bounds how late a
+  // captured/replayed payload can be accepted (defence in depth).
+  const MAX_WEBHOOK_AGE_MS = 1000 * 60 * 60 * 24; // 24h
+  const tsRaw =
+    (data.start_timestamp as number) ??
+    (data.dispatched_at ? Date.parse(data.dispatched_at as string) : NaN) ??
+    (typeof data.timestamp === "number" ? data.timestamp : NaN);
+  if (!Number.isNaN(tsRaw)) {
+    const age = Date.now() - (tsRaw > 1e12 ? tsRaw : tsRaw * 1000);
+    if (age > MAX_WEBHOOK_AGE_MS) {
+      audit(requestId, "webhook.retell_stale", {
+        success: false,
+        error: "stale_event",
+        meta: { event, ageMs: age },
+      });
+      return NextResponse.json({ received: true, status: "ignored" }, { status: 200 });
+    }
+  }
+
   // Only act on analyzed/ended call events; ack everything else quietly.
   const isCallEvent =
     event === "call_analyzed" ||
@@ -147,109 +216,71 @@ export async function POST(req: NextRequest) {
     event.includes("call_analyzed") ||
     event.includes("call_ended");
   if (!isCallEvent) {
-    audit(requestId, "webhook.retell_ignored_event", {
-      success: true,
-      meta: { event },
+    audit(requestId, "webhook.retell_ignored_event", { success: true, meta: { event } });
+    return NextResponse.json({ received: true, status: "ignored" }, { status: 200 });
+  }
+
+  const callId = String(data.call_id ?? data.callId ?? "");
+  const agentId = String(data.agent_id ?? data.agentId ?? "");
+  if (!callId || !agentId) {
+    audit(requestId, "webhook.retell_missing_ids", {
+      success: false,
+      error: "missing_call_or_agent_id",
+      meta: { callId, agentId },
     });
     return NextResponse.json({ received: true, status: "ignored" }, { status: 200 });
   }
 
+  const jobPayload: WebhookJobPayload = {
+    callId,
+    agentId,
+    call: toCallRecord(data),
+    event,
+    requestId,
+  };
+
+  // Enqueue for asynchronous processing. If the queue is unavailable, fall back
+  // to inline processing so the endpoint never loses an event.
+  const queueUp = await isQueueAvailable();
+  if (queueUp) {
+    const jobId = await enqueueWebhook(jobPayload);
+    if (jobId) {
+      audit(requestId, "webhook.retell_enqueued", {
+        success: true,
+        meta: { callId, agentId, jobId, event },
+      });
+      return NextResponse.json(
+        { received: true, status: "queued", callId, jobId },
+        { status: 202 }
+      );
+    }
+    // Enqueue failed (e.g. Redis blip) → fall through to inline.
+    console.warn("[webhook] enqueue failed; processing inline.");
+  }
+
+  // INLINE FALLBACK (synchronous, preserves prior behavior when no queue).
   try {
-    const callId = String(data.call_id ?? data.callId ?? "");
-    const agentId = String(data.agent_id ?? data.agentId ?? "");
-    if (!callId || !agentId) {
-      audit(requestId, "webhook.retell_missing_ids", {
-        success: false,
-        error: "missing_call_or_agent_id",
-        meta: { callId, agentId },
-      });
-      return NextResponse.json({ received: true, status: "ignored" }, { status: 200 });
-    }
-
-    // 1. Attribute the call to a tenant via the agent_id mapping.
-    const tenant = await getTenantByAgentId(agentId);
-    if (!tenant) {
-      audit(requestId, "webhook.retell_unknown_agent", {
-        success: false,
-        error: "no_tenant_for_agent",
-        meta: { agentId },
-      });
-      return NextResponse.json({ received: true, status: "ignored" }, { status: 200 });
-    }
-
-    // 2. Map Retell payload -> our client-view CallLog shape.
-    const durationSeconds = parseDurationSeconds(
-      data.duration_ms ?? data.duration ?? data.duration_seconds ?? 0
-    );
-    const sentiment =
-      parseSentiment(data.sentiment) ??
-      parseSentiment((data.call_analysis as { user_sentiment?: string })?.user_sentiment);
-    const transcript =
-      typeof data.transcript === "string"
-        ? data.transcript
-        : Array.isArray(data.transcript)
-        ? (data.transcript as { text?: string }[]).map((t) => t.text ?? "").join("\n")
-        : "";
-    const audioUrl =
-      typeof data.recording_url === "string"
-        ? data.recording_url
-        : typeof data.recordingUrl === "string"
-        ? data.recordingUrl
-        : "";
-    const createdAtRaw =
-      (data.dispatched_at as string) ??
-      (data.start_timestamp as string) ??
-      (typeof data.start_timestamp === "number"
-        ? new Date(data.start_timestamp).toISOString()
-        : new Date().toISOString());
-
-    const log: CallLog = {
-      callId,
-      tenantId: tenant.id,
-      agentId,
-      totalDurationSeconds: durationSeconds,
-      transcript,
-      audioUrl,
-      disconnectionReason: data.disconnection_reason
-        ? String(data.disconnection_reason)
-        : null,
-      sentiment,
-      createdAt: createdAtRaw,
-    };
-
-    const { inserted } = await appendCallLog(log, tenant.id);
-
-    // 3. Roll the consumed minutes into the tenant's used-minute balance
-    //    (only when this is a brand-new log, to avoid double counting).
-    if (inserted) {
-      const minutes = durationSeconds / 60;
-      await incrementUsedMinutes(tenant.id, minutes, tenant.id);
-    }
-
-    audit(requestId, "webhook.retell_ingested", {
-      success: true,
-      tenantId: tenant.id,
-      meta: {
-        callId,
-        agentId,
-        durationSeconds,
-        inserted,
-        event,
-      },
-    });
-
+    const result = await processWebhook(jobPayload);
     return NextResponse.json(
-      { received: true, status: "ok", inserted, tenantId: tenant.id },
+      {
+        received: true,
+        status: result.ok ? "ok" : "accepted_with_errors",
+        inserted: result.inserted,
+        tenantId: result.tenantId,
+      },
       { status: 202 }
     );
-  } catch (err) {
-    // Log clearly, but NEVER fail the webhook — Retell would retry & spam us.
-    const { error } = safeError(err);
-    audit(requestId, "webhook.retell_processing_error", {
+  } catch {
+    // Never fail the webhook — Retell would retry & spam us.
+    audit(requestId, "webhook.retell_inline_error", {
       success: false,
-      error,
+      error: "inline_processing_failed",
       level: "error",
+      meta: { callId },
     });
-    return NextResponse.json({ received: true, status: "accepted_with_errors" }, { status: 202 });
+    return NextResponse.json(
+      { received: true, status: "accepted_with_errors" },
+      { status: 202 }
+    );
   }
 }

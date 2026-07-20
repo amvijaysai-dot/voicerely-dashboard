@@ -11,7 +11,7 @@
 
 import bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
-import { getTenantById } from "@/lib/repositories/tenantRepository";
+import { getTenant } from "@/lib/tenantService";
 import type { Tenant } from "@/lib/db";
 import { SESSION_COOKIE, createSession, verifySession } from "@/lib/security/session";
 
@@ -42,9 +42,11 @@ export async function getSession(): Promise<SessionUser | null> {
   return verifySession(token);
 }
 
-/** Loads the full tenant row for the logged-in session (incl. retellApiKey). */
+/** Loads the tenant row for the logged-in session. The returned tenant is
+ *  sanitized (no Retell key) — use lib/retell/client.ts for Retell calls, which
+ *  resolves the key via the TenantService cache. */
 export async function getSessionTenant(): Promise<Tenant | null> {
   const session = await getSession();
   if (!session) return null;
-  return (await getTenantById(session.id)) ?? null;
+  return (await getTenant(session.id)) ?? null;
 }

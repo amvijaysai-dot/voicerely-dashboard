@@ -18,6 +18,7 @@ import { calculateBillingSummary } from "@/lib/billing/calculate";
 import { rollCycleIfNeeded, isInCycle } from "@/lib/billing/cycle";
 import { getSessionTenant } from "@/lib/auth";
 import { updateTenant } from "@/lib/repositories/tenantRepository";
+import { invalidateTenant } from "@/lib/tenantService";
 import { safeError } from "@/lib/validation";
 
 export const dynamic = "force-dynamic";
@@ -39,6 +40,7 @@ export async function GET(req: NextRequest) {
         billingCycleEnd: tenant.billingCycleEnd ?? null,
         usedMinutes: tenant.usedMinutes,
       });
+      invalidateTenant(tenant.id);
     }
 
     const config = await getClientConfig(tenant);

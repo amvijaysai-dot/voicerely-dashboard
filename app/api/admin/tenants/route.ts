@@ -6,7 +6,8 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { randomUUID, randomBytes } from "node:crypto";
-import { listClientTenants, createTenant } from "@/lib/repositories/tenantRepository";
+import { listClientTenants } from "@/lib/tenantService";
+import { createTenant } from "@/lib/repositories/tenantRepository";
 import { getSession, hashPassword } from "@/lib/auth";
 import { onboardTenantSchema, parseBody, safeError } from "@/lib/validation";
 import type { Tenant } from "@/lib/db";
