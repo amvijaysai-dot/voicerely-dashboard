@@ -59,6 +59,8 @@ export default function CallsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Debounce search input (300ms)
@@ -72,6 +74,25 @@ export default function CallsPage() {
     };
   }, [searchQuery]);
 
+  // Date range preset helpers
+  function setThisMonth() {
+    const now = new Date();
+    const start = new Date(now.getFullYear(), now.getMonth(), 1);
+    setFromDate(start.toISOString().slice(0, 10));
+    setToDate(now.toISOString().slice(0, 10));
+    setPage(1);
+  }
+
+  function clearDateFilter() {
+    setFromDate("");
+    setToDate("");
+    setPage(1);
+  }
+
+  function setPage(page: number) {
+    setPagination((prev) => ({ ...prev, page }));
+  }
+
   // Fetch calls when pagination, search, or status changes
   const fetchCalls = useCallback(async () => {
     setLoading(true);
@@ -83,6 +104,8 @@ export default function CallsPage() {
       });
       if (debouncedSearch) params.set("search", debouncedSearch);
       if (statusFilter) params.set("status", statusFilter);
+      if (fromDate) params.set("from", fromDate);
+      if (toDate) params.set("to", toDate);
 
       const res = await fetch(`/api/calls?${params.toString()}`);
       if (!res.ok) throw new Error("Failed to load calls");
@@ -101,18 +124,23 @@ export default function CallsPage() {
     } finally {
       setLoading(false);
     }
-  }, [pagination.page, pagination.limit, debouncedSearch, statusFilter]);
+  }, [pagination.page, pagination.limit, debouncedSearch, statusFilter, fromDate, toDate]);
 
   useEffect(() => {
     fetchCalls();
   }, [fetchCalls]);
 
-  // Reset to page 1 when search or status changes
+  // Reset to page 1 when search, status, or dates change
   useEffect(() => {
     if (pagination.page !== 1) {
       setPagination((prev) => ({ ...prev, page: 1 }));
     }
-  }, [debouncedSearch, statusFilter]);
+  }, [debouncedSearch, statusFilter, fromDate, toDate]);
+
+  // Also reset page when dates change directly (via onChange handlers)
+  useEffect(() => {
+    setPage(1);
+  }, [fromDate, toDate]);
 
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= pagination.totalPages) {
@@ -152,6 +180,41 @@ export default function CallsPage() {
           <option value="Completed">Completed</option>
           <option value="Failed">Failed</option>
         </select>
+
+        {/* Date range filter */}
+        <div className="flex items-center gap-2 flex-wrap">
+          <input
+            type="date"
+            value={fromDate}
+            onChange={(e) => { setFromDate(e.target.value); setPage(1); }}
+            className="bg-background-alt border border-border rounded-lg px-3 py-2 text-sm text-foreground outline-none focus:border-accent transition"
+            aria-label="Filter from date"
+          />
+          <span className="text-xs text-muted">to</span>
+          <input
+            type="date"
+            value={toDate}
+            onChange={(e) => { setToDate(e.target.value); setPage(1); }}
+            className="bg-background-alt border border-border rounded-lg px-3 py-2 text-sm text-foreground outline-none focus:border-accent transition"
+            aria-label="Filter to date"
+          />
+          <button
+            type="button"
+            onClick={setThisMonth}
+            className="text-xs text-accent hover:underline whitespace-nowrap px-2 py-2"
+          >
+            This month
+          </button>
+          {(fromDate || toDate) && (
+            <button
+              type="button"
+              onClick={clearDateFilter}
+              className="text-xs text-muted hover:text-foreground whitespace-nowrap px-2 py-2"
+            >
+              Clear dates
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="bg-surface border border-border rounded-2xl overflow-hidden">

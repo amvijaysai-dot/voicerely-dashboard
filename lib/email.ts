@@ -19,6 +19,12 @@ export interface OnboardingEmailInput {
   setupUrl: string;
 }
 
+/** Nodemailer transport instance (null when SMTP not configured). */
+export const transporter = buildTransport();
+
+/** Default "From" address for outbound emails. */
+export const FROM_ADDRESS = process.env.SMTP_FROM ?? "Voicerely <no-reply@voicerely.app>";
+
 function buildTransport() {
   const host = process.env.SMTP_HOST;
   const user = process.env.SMTP_USER;

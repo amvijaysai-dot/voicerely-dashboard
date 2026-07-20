@@ -26,6 +26,8 @@ export async function GET(req: NextRequest) {
   const limit = Math.min(100, Math.max(1, Number(req.nextUrl.searchParams.get("limit") ?? "20")));
   const search = req.nextUrl.searchParams.get("search") ?? "";
   const status = req.nextUrl.searchParams.get("status") ?? "";
+  const from = req.nextUrl.searchParams.get("from") ?? "";
+  const to = req.nextUrl.searchParams.get("to") ?? "";
 
   try {
     // Unified pipeline: pull the tenant's active call list through the same
@@ -67,6 +69,25 @@ export async function GET(req: NextRequest) {
       filtered = filtered.filter((c) =>
         statusLower === "completed" ? c.status === "Completed" : c.status === "Failed"
       );
+    }
+
+    // Apply date-range filter on ISO timestamp.
+    if (from) {
+      const fromTime = new Date(from).getTime();
+      if (!isNaN(fromTime)) {
+        filtered = filtered.filter(
+          (c) => new Date(c.timestamp).getTime() >= fromTime
+        );
+      }
+    }
+    if (to) {
+      const toTime = new Date(to).getTime();
+      if (!isNaN(toTime)) {
+        // Add 1 day so "to=2026-07-31" includes the full last day.
+        filtered = filtered.filter(
+          (c) => new Date(c.timestamp).getTime() < toTime + 86_400_000
+        );
+      }
     }
 
     // Sort by timestamp descending (newest first).
