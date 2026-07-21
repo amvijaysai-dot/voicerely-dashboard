@@ -14,6 +14,7 @@
     "db:studio": "prisma studio",
     "db:seed": "node scripts/seed-admin.mjs",
     "db:fix-agents": "node scripts/fix-duplicate-agents.mjs --fix",
+    "seed:demo": "tsx scripts/seed-demo-dashboard.ts",
     "worker": "tsx scripts/webhook-worker.ts"
   },
   "dependencies": {

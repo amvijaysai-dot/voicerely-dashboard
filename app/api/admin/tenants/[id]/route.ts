@@ -10,6 +10,7 @@ import { getSession, hashPassword } from "@/lib/auth";
 import { getTenant, invalidateTenant } from "@/lib/tenantService";
 import { updateTenant, deleteTenant } from "@/lib/repositories/tenantRepository";
 import { updateTenantSchema, parseBody, safeError } from "@/lib/validation";
+import { newRequestId } from "@/lib/security/logger";
 
 export const dynamic = "force-dynamic";
 
@@ -34,6 +35,11 @@ export async function PATCH(
   }
   const input = parsed.data;
 
+  // TRACE: Log incoming agentId and outgoing patch
+  const requestId = newRequestId();
+  console.log(`[TRACE][${requestId}] PATCH /api/admin/tenants/${id}`);
+  console.log(`[TRACE][${requestId}] incoming agentId:`, input.agentId);
+
   try {
     const patch: Record<string, unknown> = {};
     if (input.clientName !== undefined) patch.clientName = input.clientName;
@@ -49,7 +55,11 @@ export async function PATCH(
     if (input.baseMonthlyFee !== undefined) patch.baseMonthlyFee = input.baseMonthlyFee;
     if (input.includedMinutes !== undefined) patch.includedMinutes = input.includedMinutes;
 
+    console.log(`[TRACE][${requestId}] outgoing patch.agentIds:`, patch.agentIds);
+
     const updated = await updateTenant(id, patch, session.id);
+    console.log(`[TRACE][${requestId}] updated.agentIds from repo:`, updated?.agentIds);
+
     if (!updated) {
       return NextResponse.json({ error: "Tenant not found" }, { status: 404 });
     }

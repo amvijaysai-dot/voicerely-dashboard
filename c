@@ -1,280 +1,254 @@
-# OUTBOUND_CALL_AUDIT.md
+# WEBHOOK_TRACE_REPORT.md
 
 **Date:** 2026-07-21
-**Author:** Principal Retell AI Integration Engineer
-**Status:** OUTBOUND CALLS NOT SUPPORTED
+**Author:** Senior Backend Engineer
+**Status:** ROOT CAUSE IDENTIFIED
 
 ---
 
-## Audit Summary
+## Complete Persistence Path Trace
 
-The current Voicerely integration **does NOT support outbound Retell calls**. All calls are treated as inbound calls.
+### Stage 1: Webhook Received
+**File:** `app/api/webhooks/retell/route.ts`
+**Function:** `POST()`
+**Line:** 136-286
+
+**Expected:** Webhook POST received with `x-retell-signature` header
+**Actual:** ✅ WORKING (if webhook is sent)
+
+**Log:**
+```
+[webhook] rateLimit check
+[webhook] verifySignature: signature validated
+[webhook] JSON.parse: payload parsed
+[webhook] event: call_analyzed
+[webhook] callId: <call_id>
+[webhook] agentId: <agent_id>
+```
 
 ---
 
-## Evidence
+### Stage 2: Tenant Resolution
+**File:** `lib/queue/processWebhook.ts`
+**Function:** `attribute()`
+**Line:** 50-64
 
-### 1. RetellCallRecord Type (lib/retell/types.ts)
+**Expected:** `getTenantByAgentId(agentId)` returns tenant
+**Actual:** ❌ FAILS - No tenant has agentId configured
 
-**File:** `lib/retell/types.ts`
-**Line:** 1-51
+**Log:**
+```
+[webhook] webhook.job_start: { callId, agentId, event, stage: "attribute" }
+[webhook] webhook.job_unknown_agent: { error: "no_tenant_for_agent", agentId }
+```
 
-**Expected Fields for Outbound Support:**
-- `direction: "inbound" | "outbound"`
-- `call_type: "phone_call" | "web_call"`
+**Root Cause:**
+- `getTenantByAgentId()` in `lib/tenantService.ts` (line 138-151) queries:
+  ```typescript
+  const tenant = await repoGetTenantByAgentId(agentId);
+  ```
+- `repoGetTenantByAgentId()` in `lib/repositories/tenantPostgresRepository.ts` (line 305-312) queries:
+  ```typescript
+  const row = await prisma.tenant.findFirst({
+    where: { agentIds: { has: agentId } },
+    include: { retellApiKey: true },
+  });
+  ```
+- **This query returns `undefined` when `agentIds` is empty**
 
-**Actual Fields:**
+**File:** `lib/tenantService.ts`
+**Line:** 145-150
+
 ```typescript
-export interface RetellCallRecord {
-  call_id: string;
-  agent_id: string;
-  agent_name?: string;
-  call_status: "ended" | "error" | "ongoing" | "registered";
-  disconnection_reason?: string;
-  start_timestamp: number;
-  end_timestamp: number;
-  duration_seconds: number;
-  from_number?: string;
-  to_number?: string;
-  recording_url?: string;
-  transcript?: string;
-  transcript_object?: RetellTranscriptTurn[];
-  call_analysis?: {
-    call_successful?: boolean;
-    user_sentiment?: "Positive" | "Neutral" | "Negative";
-    call_summary?: string;
-  };
+const tenant = await repoGetTenantByAgentId(agentId);
+if (!tenant) {
+  agentIndex.set(agentId, { tenantId: null, expiresAt: Date.now() + TENANT_CACHE_TTL_MS });
+  return undefined;
 }
 ```
 
-**Status:** ❌ NO `direction` field
-
 ---
 
-### 2. Webhook Parser (app/api/webhooks/retell/route.ts)
+### Stage 3: Webhook Processing Stops
+**File:** `lib/queue/processWebhook.ts`
+**Function:** `processWebhook()`
+**Line:** 173-178
 
-**File:** `app/api/webhooks/retell/route.ts`
-**Function:** `toCallRecord()`
-**Line:** 89-134
-
-**Expected:** Filter outbound calls or handle them separately
-**Actual:** No filtering for outbound calls
+**Expected:** Continue to persist call
+**Actual:** ❌ STOPS HERE - Throws WebhookTerminalError
 
 ```typescript
-function toCallRecord(data: Record<string, unknown>): RetellCallRecord {
-  // ...
-  return {
-    call_id: String(data.call_id ?? data.callId ?? ""),
-    agent_id: String(data.agent_id ?? data.agentId ?? ""),
-    // ... NO direction check
-  };
+// Stage 1: attribute
+const attr = await attribute(agentId, requestId);
+if ("error" in attr) {
+  // Unknown agent → not retryable; surface as a terminal (DLQ) failure.
+  throw new WebhookTerminalError(attr.error, "attribute");
 }
 ```
 
-**Status:** ❌ NO OUTBOUND FILTERING
-
----
-
-### 3. Call Event Filtering (app/api/webhooks/retell/route.ts)
-
-**File:** `app/api/webhooks/retell/route.ts`
-**Line:** 211-221
-
-**Expected:** Only process inbound calls
-**Actual:** Processes all call events
-
-```typescript
-const isCallEvent =
-  event === "call_analyzed" ||
-  event === "call_ended" ||
-  event === "call.completed" ||
-  event.includes("call_analyzed") ||
-  event.includes("call_ended");
+**Log:**
+```
+[webhook] webhook.job_unknown_agent: { error: "no_tenant_for_agent" }
+Error: no_tenant_for_agent
 ```
 
-**Status:** ❌ NO DIRECTION CHECK
-
 ---
 
-### 4. Call Storage (lib/repositories/tenantPostgresRepository.ts)
-
+### Stage 4: Call Storage (NEVER REACHED)
 **File:** `lib/repositories/tenantPostgresRepository.ts`
 **Function:** `appendCallLog()`
-**Line:** 263-282
+**Line:** 315-340
 
-**Expected:** Store direction for filtering
-**Actual:** No direction field stored
+**Expected:** CallLog record created
+**Actual:** ❌ NEVER REACHED - Tenant resolution fails first
 
 ```typescript
 export async function appendCallLog(
   log: CallLog,
-  tenantId: string
-): Promise<{ inserted: boolean }> {
-  // ...
-  // No direction check
-}
-```
-
-**Status:** ❌ NO DIRECTION STORAGE
-
----
-
-### 5. Transform Function (lib/transform.ts)
-
-**File:** `lib/transform.ts`
-**Function:** `transformCallToClientView()`
-**Line:** 25-47
-
-**Expected:** Handle outbound call direction
-**Actual:** No direction handling
-
-```typescript
-export function transformCallToClientView(
-  raw: RetellCallRecord,
-  config: VoicerelyClientConfig
-): VoicerelyCallView {
-  // ...
-  // No direction check
-}
-```
-
-**Status:** ❌ NO DIRECTION HANDLING
-
----
-
-### 6. Metrics Aggregation (app/api/dashboard/metrics/route.ts)
-
-**File:** `app/api/dashboard/metrics/route.ts`
-**Line:** 148-154
-
-**Expected:** Filter by direction for metrics
-**Actual:** No direction filtering
-
-```typescript
-const cycleCalls = calls.filter((call) => {
-  const callTime = new Date(call.timestamp).getTime();
-  const cycleStart = new Date(cycle.start).getTime();
-  const cycleEnd = new Date(cycle.end).getTime();
-  return callTime >= cycleStart && callTime < cycleEnd;
-  // No direction check
-});
-```
-
-**Status:** ❌ NO DIRECTION FILTERING
-
----
-
-## Retell API Documentation
-
-According to Retell AI's webhook documentation, the webhook payload includes:
-
-```json
-{
-  "event": "call_analyzed",
-  "data": {
-    "call_id": "call_123",
-    "agent_id": "agent_456",
-    "direction": "inbound",  // or "outbound"
-    "call_type": "phone_call",  // or "web_call"
-    "call_status": "ended",
-    "from_number": "+15551234567",
-    "to_number": "+18005550100",
-    "duration_seconds": 120,
-    ...
+  actorId?: string
+): Promise<{ log: CallLog; inserted: boolean }> {
+  const requestId = newRequestId();
+  const existing = await prisma.callLog.findUnique({
+    where: { tenantId_callId: { tenantId: log.tenantId, callId: log.callId } },
+  });
+  if (existing) {
+    return { log: existing, inserted: false };
   }
-}
-```
-
-**Key Fields:**
-- `direction`: "inbound" or "outbound"
-- `call_type`: "phone_call" or "web_call"
-
----
-
-## Impact Analysis
-
-### If Outbound Calls Are Made:
-
-1. **Webhook Received:** ✅ Yes (outbound calls trigger webhooks)
-2. **Signature Verified:** ✅ Yes
-3. **Tenant Resolved:** ✅ Yes (if agentId configured)
-4. **Call Stored:** ✅ Yes (outbound calls stored as inbound)
-5. **Metrics Updated:** ✅ Yes (outbound calls counted in metrics)
-
-### Problem:
-
-- **Outbound calls are stored and counted as inbound calls**
-- **No way to distinguish between inbound and outbound**
-- **Metrics will include outbound call minutes in billing**
-
----
-
-## Recommendations
-
-### Option 1: Add Outbound Call Support
-
-**File:** `lib/retell/types.ts`
-**Add:**
-```typescript
-export interface RetellCallRecord {
-  // ... existing fields
-  direction?: "inbound" | "outbound";
-  call_type?: "phone_call" | "web_call";
-}
-```
-
-**File:** `app/api/webhooks/retell/route.ts`
-**Add to `toCallRecord()`:**
-```typescript
-direction: (data.direction as "inbound" | "outbound" | undefined) ?? "inbound",
-call_type: (data.call_type as "phone_call" | "web_call" | undefined) ?? "phone_call",
-```
-
-**File:** `lib/db.ts`
-**Add to `CallLog`:**
-```typescript
-direction?: "inbound" | "outbound";
-```
-
-**File:** `lib/repositories/tenantPostgresRepository.ts`
-**Add to `appendCallLog()`:**
-```typescript
-if (log.direction === "outbound") {
-  // Handle outbound call differently
-}
-```
-
-### Option 2: Filter Out Outbound Calls
-
-**File:** `app/api/webhooks/retell/route.ts`
-**Add to `toCallRecord()` or after parsing:**
-```typescript
-// Skip outbound calls
-if (data.direction === "outbound") {
-  return NextResponse.json({ received: true, status: "ignored" }, { status: 200 });
+  const created = await prisma.callLog.create({ data: log });
+  return { log: created, inserted: true };
 }
 ```
 
 ---
 
-## Current State
+## Exact Line Where Execution Stops
 
-| Component | Outbound Support | Status |
-|-----------|-----------------|--------|
-| RetellCallRecord type | No `direction` field | ❌ Missing |
-| Webhook parser | No direction check | ❌ Missing |
-| Call storage | No direction field | ❌ Missing |
-| Transform function | No direction handling | ❌ Missing |
-| Metrics aggregation | No direction filter | ❌ Missing |
+**File:** `lib/queue/processWebhook.ts`
+**Line:** 177
+
+```typescript
+throw new WebhookTerminalError(attr.error, "attribute");
+```
+
+**Why:** `getTenantByAgentId(agentId)` returns `undefined` because no tenant in the database has the `agentIds` array populated with the webhook's `agent_id`.
 
 ---
 
-## Conclusion
+## Database State Verification
 
-The current integration **treats all calls as inbound**. If the Retell agent is configured for outbound calls, they will be:
-1. Received by the webhook
-2. Stored in the database
-3. Counted in metrics
-4. Billed as inbound calls
+**File:** `prisma/schema.prisma` (database)
+**Query:** `SELECT * FROM "Tenant" WHERE "isAdmin" = false`
 
-**This is a configuration issue, not a code issue.** The integration works correctly for inbound calls. Outbound call support would require adding the `direction` field throughout the stack.
+**Result:**
+```
+- Test Client (test-client)
+  agentIds: []
+  hasRetellKey: false
+
+- Voicerely demo (tenant_cba4ba83040a)
+  agentIds: []
+  hasRetellKey: true
+```
+
+**Expected:** `agentIds: ["agent_xxxxxxxx"]`
+**Actual:** `agentIds: []`
+
+---
+
+## Complete Flow Diagram
+
+```
+Retell Webhook
+    ↓
+[app/api/webhooks/retell/route.ts:POST()]
+    ↓
+Signature Verified ✅
+    ↓
+JSON Parsed ✅
+    ↓
+Event: call_analyzed ✅
+    ↓
+[lib/queue/processWebhook.ts:processWebhook()]
+    ↓
+[lib/queue/processWebhook.ts:attribute()]
+    ↓
+[lib/tenantService.ts:getTenantByAgentId(agentId)]
+    ↓
+[lib/repositories/tenantPostgresRepository.ts:getTenantByAgentId(agentId)]
+    ↓
+prisma.tenant.findFirst({ where: { agentIds: { has: agentId } } })
+    ↓
+❌ RETURNS UNDEFINED (agentIds is empty)
+    ↓
+[lib/queue/processWebhook.ts:177]
+    ↓
+throw new WebhookTerminalError("no_tenant_for_agent", "attribute")
+    ↓
+❌ STOP - Call NOT stored
+```
+
+---
+
+## Why No CallLog Rows Are Created
+
+1. **Webhook is received** ✅
+2. **Signature is verified** ✅
+3. **Payload is parsed** ✅
+4. **Tenant resolution fails** ❌
+   - `getTenantByAgentId(agentId)` returns `undefined`
+   - No tenant has `agentIds` configured
+5. **Webhook processing stops** ❌
+   - `WebhookTerminalError` is thrown
+   - Call is never stored
+
+---
+
+## Fix Required
+
+**File:** `prisma/schema.prisma` (database)
+**Action:** Configure Agent ID for tenant
+
+**Via Admin Portal:**
+1. Go to "All Clients" tab
+2. Click the pencil icon on a tenant
+3. Enter the Retell Agent ID in "Primary Retell Agent ID" field
+4. Click "Save Changes"
+
+**Or via API:**
+```bash
+curl -X PATCH http://localhost:3000/api/admin/tenants/[tenant-id] \
+  -H "Content-Type: application/json" \
+  -d '{"agentId": "agent_xxxxxxxx"}'
+```
+
+---
+
+## Verification After Fix
+
+After configuring the Agent ID:
+
+1. **Webhook received:** ✅
+2. **Signature verified:** ✅
+3. **Tenant resolved:** ✅
+4. **Call stored:** ✅
+5. **Metrics updated:** ✅
+
+**Log:**
+```
+[webhook] webhook.job_start
+[webhook] webhook.job_persisted
+[webhook] webhook.job_billing_rolled
+[webhook] webhook.job_done
+```
+
+---
+
+## Summary
+
+**ROOT CAUSE:** No Agent ID configured in database.
+
+**EXACT LINE:** `lib/queue/processWebhook.ts:177` - `throw new WebhookTerminalError(attr.error, "attribute")`
+
+**REASON:** `getTenantByAgentId(agentId)` returns `undefined` because `prisma.tenant.findFirst({ where: { agentIds: { has: agentId } } })` finds no matching tenant.
+
+**FIX:** Configure the Retell Agent ID for the tenant via Admin Portal or API.

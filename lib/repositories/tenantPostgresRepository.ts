@@ -254,11 +254,17 @@ export async function updateTenant(
     if (conflict) throw new Error(`AGENT_ID_CONFLICT:${conflict.id}`);
   }
 
+  // TRACE: Log Prisma update payload
+  console.log(`[TRACE][${requestId}] Prisma update data.agentIds:`, data.agentIds);
+
   const updated = await prisma.tenant.update({
     where: { id },
     data,
     include: { retellApiKey: true },
   });
+
+  // TRACE: Log database value after update
+  console.log(`[TRACE][${requestId}] Database row after update - agentIds:`, updated.agentIds);
 
   const meta: Record<string, unknown> = {};
   for (const k of Object.keys(patch)) {
