@@ -73,20 +73,35 @@ async function checkDatabase() {
     const callLogCount = await prisma.callLog.count();
     console.log(`✅ CallLog table accessible (${callLogCount} records)`);
     
-    // Check for AuditLog table
-    const auditLogCount = await prisma.auditLog.count();
-    console.log(`✅ AuditLog table accessible (${auditLogCount} records)`);
-    
-    console.log('\n✅ All database health checks passed!');
-    return true;
-    
-  } catch (error) {
-    console.error('❌ Database health check failed:', error.message);
-    return false;
-  } finally {
-    await prisma.$disconnect();
-  }
-}
+     // Check for AuditLog table
+     const auditLogCount = await prisma.auditLog.count();
+     console.log(`✅ AuditLog table accessible (${auditLogCount} records)`);
+     
+     // Check tenant Retell API keys and agent IDs
+     const tenants = await prisma.tenant.findMany({
+       where: { isAdmin: false },
+       include: { retellApiKey: true }
+     });
+     console.log(`\n📋 Client Tenants (${tenants.length}):`);
+     for (const t of tenants) {
+       const hasKey = !!t.retellApiKey?.encrypted;
+       const keyPrefix = t.retellApiKey?.encrypted?.substring(0, 20) + '...';
+       console.log(`   - ${t.clientName} (${t.id})`);
+       console.log(`     agentIds: ${JSON.stringify(t.agentIds)}`);
+       console.log(`     hasRetellKey: ${hasKey}`);
+       if (hasKey) console.log(`     retellKeyPrefix: ${keyPrefix}`);
+     }
+     
+     console.log('\n✅ All database health checks passed!');
+     return true;
+     
+   } catch (error) {
+     console.error('❌ Database health check failed:', error.message);
+     return false;
+   } finally {
+     await prisma.$disconnect();
+   }
+ }
 
-const success = await checkDatabase();
-process.exit(success ? 0 : 1);
+ const success = await checkDatabase();
+ process.exit(success ? 0 : 1);

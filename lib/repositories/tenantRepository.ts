@@ -30,3 +30,4 @@ export const getTenantByAgentId = driver.getTenantByAgentId;
 export const appendCallLog = driver.appendCallLog;
 export const incrementUsedMinutes = driver.incrementUsedMinutes;
 export const listCallLogs = driver.listCallLogs;
+export const listCallRecords = driver.listCallRecords;

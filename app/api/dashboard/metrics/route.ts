@@ -4,20 +4,26 @@
 // Aggregates the call-log ledger for the active billing cycle and computes
 // Total Calls, Minutes Consumed, Average Call Duration, and Current Spend
 // using the tenant's onboarding billing configuration.
+//
+// PRODUCTION ARCHITECTURE:
+// PostgreSQL is the PRIMARY source of truth for all metrics. Retell API is
+// used only for optional background reconciliation to detect missing calls.
 
 import { NextRequest, NextResponse } from "next/server";
 import { getSessionTenant } from "@/lib/auth";
-import { listCalls } from "@/lib/retell/client";
+import { listCallRecords } from "@/lib/repositories/tenantRepository";
 import { transformCallToClientView } from "@/lib/transform";
 import { currentCycle, rollCycleIfNeeded } from "@/lib/billing/cycle";
 import { calculateBillingSummary } from "@/lib/billing/calculate";
-import { getClientConfig } from "@/lib/retell/client";
+import { getClientConfig, listCalls } from "@/lib/retell/client";
 import { safeError } from "@/lib/validation";
+import { newRequestId, audit } from "@/lib/security/logger";
 import type { Tenant } from "@/lib/db";
 import type { BillingCycle } from "@/lib/billing/cycle";
 import type { BillingSummary } from "@/lib/billing/calculate";
 import type { VoicerelyClientConfig } from "@/lib/billing/types";
 import type { VoicerelyCallView } from "@/lib/transform";
+import type { RetellCallRecord } from "@/lib/retell/types";
 
 export const dynamic = "force-dynamic";
 
@@ -63,6 +69,51 @@ function buildDailyTrend(
   return buckets.map((count, i) => ({ day: i + 1, calls: count }));
 }
 
+/** Optional background reconciliation: compare PostgreSQL with Retell API.
+ *  Logs mismatches for monitoring but does NOT modify the response. */
+async function reconcileWithRetell(
+  tenant: Tenant,
+  pgCalls: RetellCallRecord[]
+): Promise<void> {
+  const requestId = newRequestId();
+  try {
+    // Only reconcile if tenant has a Retell API key configured
+    if (!tenant.retellApiKey) {
+      return;
+    }
+    const retellCalls = await listCalls(tenant, { limit: 1000 });
+    const pgCallIds = new Set(pgCalls.map((c) => c.call_id));
+    const retellCallIds = new Set(retellCalls.map((c) => c.call_id));
+
+    // Find calls in Retell but not in PostgreSQL (potential missed webhooks)
+    const missingInPg = retellCalls.filter((c) => !pgCallIds.has(c.call_id));
+    if (missingInPg.length > 0) {
+      audit(requestId, "reconciliation.missing_in_postgres", {
+        success: true,
+        tenantId: tenant.id,
+        meta: { missingCount: missingInPg.length, callIds: missingInPg.map((c) => c.call_id) },
+      });
+    }
+
+    // Find calls in PostgreSQL but not in Retell (potential data drift)
+    const missingInRetell = pgCalls.filter((c) => !retellCallIds.has(c.call_id));
+    if (missingInRetell.length > 0) {
+      audit(requestId, "reconciliation.missing_in_retell", {
+        success: true,
+        tenantId: tenant.id,
+        meta: { missingCount: missingInRetell.length, callIds: missingInRetell.map((c) => c.call_id) },
+      });
+    }
+  } catch (e) {
+    // Log but don't fail the request
+    audit(requestId, "reconciliation.failed", {
+      success: false,
+      tenantId: tenant.id,
+      error: String(e),
+    });
+  }
+}
+
 export async function GET(_req: NextRequest) {
   const sessionTenant = await getSessionTenant();
   if (!sessionTenant) {
@@ -86,8 +137,8 @@ export async function GET(_req: NextRequest) {
     // Get client config for call transformation
     const config = await getClientConfig(rolledTenant);
 
-    // Fetch calls for the current billing cycle
-    const rawCalls = await listCalls(rolledTenant, { limit: 1000 });
+    // PRIMARY SOURCE: Fetch calls from PostgreSQL (webhook-ingested data)
+    const rawCalls = await listCallRecords(rolledTenant.id);
 
     // Transform calls to client view
     const calls: VoicerelyCallView[] = rawCalls.map((c) =>
@@ -125,6 +176,12 @@ export async function GET(_req: NextRequest) {
     const revenueRecovered =
       Math.round(completedCalls * avgBookingValue * CAPTURE_RATE) +
       Math.round(afterHoursCalls * avgBookingValue * CAPTURE_RATE);
+
+    // Optional: Background reconciliation with Retell API (non-blocking)
+    // This helps detect missed webhooks or data drift
+    reconcileWithRetell(rolledTenant, rawCalls).catch(() => {
+      // Silently ignore reconciliation errors
+    });
 
     return NextResponse.json({
       // KPIs

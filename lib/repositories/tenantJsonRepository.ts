@@ -27,8 +27,32 @@ import {
   type Tenant,
   type CallLog,
 } from "@/lib/db";
+import type { RetellCallRecord } from "@/lib/retell/types";
 import { encryptSecret, decryptSecret } from "@/lib/security/crypto";
 import { newRequestId, audit } from "@/lib/security/logger";
+
+/** Converts a stored CallLog to a RetellCallRecord shape for unified processing. */
+function callLogToRetellRecord(log: CallLog): RetellCallRecord {
+  const failed = Boolean(log.disconnectionReason);
+  return {
+    call_id: log.callId,
+    agent_id: log.agentId,
+    call_status: failed ? "error" : "ended",
+    disconnection_reason: log.disconnectionReason ?? undefined,
+    start_timestamp: new Date(log.createdAt).getTime(),
+    end_timestamp: new Date(log.createdAt).getTime() + log.totalDurationSeconds * 1000,
+    duration_seconds: log.totalDurationSeconds,
+    from_number: undefined,
+    to_number: undefined,
+    recording_url: log.audioUrl || undefined,
+    transcript: log.transcript,
+    transcript_object: [],
+    call_analysis: {
+      call_successful: !failed,
+      user_sentiment: log.sentiment as "Positive" | "Neutral" | "Negative" | undefined,
+    },
+  };
+}
 
 // Async write queue — serializes all mutating operations in the JSON driver
 // so concurrent webhook calls don't produce a read-modify-write race.
@@ -311,6 +335,12 @@ export async function incrementUsedMinutes(
 export async function listCallLogs(tenantId: string): Promise<CallLog[]> {
   const map = readCallsRaw();
   return map[tenantId] ?? [];
+}
+
+/** Reads a tenant's call history as RetellCallRecord shapes (for dashboard/metrics). */
+export async function listCallRecords(tenantId: string): Promise<RetellCallRecord[]> {
+  const logs = await listCallLogs(tenantId);
+  return logs.map(callLogToRetellRecord);
 }
 
 /** Safely updates ONLY the password hash for a tenant. */
